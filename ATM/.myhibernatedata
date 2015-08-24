@@ -1,0 +1,20 @@
+#MyEclipse Hibernate Properties
+#Fri Aug 21 19:47:16 CST 2015
+genBasicCompId=false
+sessionFactoryName=com.atm.util.HibernateSessionFactory
+profile=
+daoSFId=
+jndiPath=
+detectM2M=false
+reStrategyClass=
+detectO2O=false
+springDaoFile=
+useJavaTypes=true
+keyGenerator=
+genVersionTag=false
+sessionFactoryId=sessionFactory
+basePersistenceClass=
+genAnnotations=false
+reSettingsFile=/ATMChat111/hibernate.reveng.xml
+configFile=/ATM/src/applicationContext.xml
+createConfigFile=true

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>user.html</title>
+
+<meta name="keywords" content="keyword1,keyword2,keyword3">
+<meta name="description" content="this is my page">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+<!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+<SCRIPT type="text/javascript" src="WebRoot/js/jquery-2.1.1.min.js"></SCRIPT>
+<script type="text/javascript">
+	/* $(function() {
+		$.ajax({
+			type : "POST",
+			url : "ajax/online_userList.action",
+			data : "",
+			dataType : "text", //ajax返回值设置为text（json格式也可用它返回，可打印出结果，也可设置成json）
+			success : function(json) {
+				var obj = $.parseJSON(json); //使用这个方法解析json
+				var string = obj.response; //result是和action中定义的result变量的get方法对应的
+				$("#userList").html(string);
+			},
+			error : function(json) {
+				alert("json=" + json);
+				return false;
+			}
+		});
+	}); */
+	$(function() {
+		//$("#page").append("/5页<button id='jump'>确定</button>");
+		$("#page").html("/5页<button id='jump'>确定</button>");
+	});
+</script>
+
+</head>
+
+<body>
+	用户列表:
+	<div>
+		<table id="userList">
+		</table>
+		<div id="page">
+			<button>上一页</button>
+			<button>下一页</button>
+			每页显示<input type="text" size="3" id="pageNum">条 跳转到第<input
+				type="text" size="3" id="pageNum">
+		</div>
+	</div>
+</body>
+</html>
