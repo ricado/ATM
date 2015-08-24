@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+
+	<table name="crowdRecordView" catalog="atm">
+		<primary-key>
+			<key-column name="recordID" />
+		</primary-key>
+	</table>
+	<table name="&lt;crowdRecordView&gt;" catalog="atm">
+		<primary-key>
+
+
+			<key-column name="recordID" />
+		</primary-key>
+
+	</table>
+	<table name="userLabelView" catalog="atm">
+		<primary-key>
+			<key-column name="userID" />
+			<key-column name="labID" />
+		</primary-key>
+	</table>
+	<table name="recuitView" catalog="atm">
+		<primary-key>
+			<key-column name="reInfoID" />
+		</primary-key>
+	</table>
+	<table name="applyView" catalog="atm">
+		<primary-key>
+			<key-column name="apInfoID" />
+		</primary-key>
+	</table>
+	<table name="crowdIntive" catalog="atm">
+		<primary-key>
+			<generator class="assigned"></generator>
+		</primary-key>
+	</table>
+	<table name="crowdListView" catalog="atm">
+		<primary-key>
+			<key-column name="crowdID" />
+		</primary-key>
+	</table>
+<table name="userBasicInfo" catalog="atm">
+	<primary-key>
+		<key-column name="userID" />
+	</primary-key>
+</table>
+</hibernate-reverse-engineering>

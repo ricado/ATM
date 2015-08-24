@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd"
+	>
+	
+	<bean id="UserDeal" class="com.atm.service.bbs.UserDeal">
+	</bean>
+	<bean id="EssayDeal" class="com.atm.service.bbs.EssayDeal">
+	</bean>
+	<bean id="EssayChangeDeal" class="com.atm.service.bbs.EssayChangeDeal">
+	</bean>
+	<bean id="RelationDeal" class="com.atm.service.bbs.RelationDeal">
+	</bean>
+	<bean id="ReplyDeal" class="com.atm.service.bbs.ReplyDeal">
+	</bean>
+	<bean id="AtmDeal" class="com.atm.service.bbs.AtmDeal">
+	</bean>
+	
+</beans>
