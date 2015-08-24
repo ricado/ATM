@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.ognl.allowStaticMethodAccess" value="true"></constant>
+
+	<package name="user" extends="struts-default" namespace="/">
+		<action name="user_*" class="com.atm.action.UserAction" method="{1}">
+			<result name="success">/success.jsp</result>
+			<result name="error">/error.jsp</result>
+			<result name="forgetPassword">/messageForget.jsp</result>
+			<result name="findUserId">/index.jsp</result>
+		</action>
+		<action name="check_*" class="com.atm.action.MessageAction"
+			method="{1}">
+			<result>/messageForget.jsp</result>
+			<result name="error">/error.jsp</result>
+		</action>
+		<action name="appeal_action" class="com.atm.action.AppealAction"
+			method="appeal">
+			<result>/success.jsp</result>
+			<result name="error">/error.jsp</result>
+		</action>
+		<action name="login_*" class="com.atm.action.LoginAction"
+			method="{1}">
+			<result>/admin/user.html</result>
+		</action>
+		
+		<action name="admin_*" class="com.atm.action.admin.AdminUserInfoAction"
+			method="{1}">
+			<result>/admin/{1}.jsp</result>
+			<result name="userLogin">/admin/onlineManager.html</result>
+		</action>
+		
+		<action name="*_*" class="com.atm.action.chatAction" method="{1}">
+			<result name="success">/welcome.jsp</result>
+			<result name="error">/error.jsp</result>
+		</action>
+	</package>
+	<package name="ajax" extends="json-default" namespace="/ajax">
+		<action name="online_*" class="com.atm.action.OnlineAction" method="{1}">
+			<result type="json"/>
+		</action>
+		<action name="page_*" class="com.atm.action.PageAction"
+			method="{1}">
+			<result type="json"/>
+		</action>
+		<action name="adminJson_*" class="com.atm.action.admin.AdminJsonAction"
+			method="{1}">
+				<result type="json"/>
+		</action>
+	</package>
+</struts>    
