@@ -94,7 +94,7 @@ public class UserDAOImpl implements UserDAO {
 		log.debug("getting User instance with id: " + id);
 		try {
 			User instance = (User) getCurrentSession().get(
-					"com.atm.model.User", id);
+					"com.atm.model.user.User", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -112,8 +112,7 @@ public class UserDAOImpl implements UserDAO {
 		log.debug("finding User instance by example");
 		try {
 
-			List results = getCurrentSession()
-					.createCriteria(User.class)
+			List results = getCurrentSession().createCriteria(User.class)
 					.add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: "
 					+ results.size());
@@ -244,17 +243,13 @@ public class UserDAOImpl implements UserDAO {
 		}
 	}
 
-	public void updateByUser(User user) {
+	public int updateByUser(User user) {
 		log.debug("update user");
-		try {
-			int i = getCurrentSession().createQuery(
-					"update User u set u.userPwd=" + user.getUserPwd()
-							+ " where u.userId=" + user.getUserId())
-					.executeUpdate();
-		} catch (RuntimeException re) {
-			log.error("update failed", re);
-			throw re;
-		}
+		int i = getCurrentSession().createQuery(
+				"update User u set u.userPwd='" + user.getUserPwd() + "'"
+						+ " where u.userId='" + user.getUserId() + "'")
+				.executeUpdate();
+		return i;
 	}
 
 	/*
@@ -320,7 +315,6 @@ public class UserDAOImpl implements UserDAO {
 			log.error("find by property name failed", re);
 			throw re;
 		}
-
 	}
 
 }

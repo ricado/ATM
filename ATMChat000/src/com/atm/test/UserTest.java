@@ -5,13 +5,12 @@ import java.util.List;
 
 import net.sf.json.JSONObject;
 
-import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import antlr.collections.impl.Vector;
+
 import com.atm.dao.SessionDAO;
-import com.atm.dao.impl.user.StudentDAOImpl;
-import com.atm.dao.impl.user.TeacherDAOImpl;
 import com.atm.dao.impl.user.UserDAOImpl;
 import com.atm.dao.user.StudentDAO;
 import com.atm.dao.user.TeacherDAO;
@@ -28,7 +27,8 @@ import com.atm.util.mail.SendDemo;
 public class UserTest implements Application {
 	private static final Logger log = LoggerFactory.getLogger(UserTest.class);
 	public int i = 0;
-	private UserService userService = new UserService();
+	private static UserService userService = new UserService();
+
 	public static void main(String[] args) throws IOException {
 		/*
 		 * UserTest test = new UserTest(); String email = "15622797401@163.com";
@@ -42,7 +42,16 @@ public class UserTest implements Application {
 		 * .getBean("Test");
 		 */
 		// test.saveRegister();
-		UserTest test = new UserTest();
+		// UserTest test = new UserTest();
+
+		// java.util.Vector<Integer> peoples = new java.util.Vector<Integer>();
+		// test.findUserId();
+		// test.isAttetd();
+		// test.findByEmail("116983393@qq.com");
+		// test.getSdmNO();
+		// test.confirm();
+
+		// test.findOtherAttend();
 		/*
 		 * String email = test.findEmailById(); log.debug("email:" + email);
 		 */
@@ -53,22 +62,25 @@ public class UserTest implements Application {
 		// 检验退出登录修改离线时间
 		// test.upateOffTime();
 		// 查找用户
-		//test.findUser();
+		// test.findUser();
 		// 可能感兴趣的用骨灰
 		// test.findInterestIngUser();
-		//我关注的
-		//test.findAttent();
-		//关注我的
-		//test.findAttented();
-		//用户的基本信息
-		//test.getUserBasicInfo();
-		//test.pathTest();
-		
-		test.getUserHeadImage();
+		// 我关注的
+		// test.findAttent();
+		// 关注我的
+		// test.findAttented();
+		// 用户的基本信息
+		// test.getUserBasicInfo();
+		// test.pathTest();
+		// userService.graduateConfirm("091544247", "刘彬", "2009");
+		// test.getUserHeadImage();
+		// 测试分词搜索
+		// userService.findUserA("", 10, 1);
+		userService.findUserB("程序猿 红发");
 	}
 
 	public UserTest() {
-	}
+	} 
 
 	public boolean login(User user) {
 		UserDAO dao = UserDAOImpl.getFromApplicationContext();
@@ -96,6 +108,11 @@ public class UserTest implements Application {
 			}
 		}
 		return "error";
+	}
+
+	public void findUserId() {
+		String json = "[{'email':'550260496@qq.com'}]";
+		userService.findUserId(json);
 	}
 
 	/**
@@ -147,21 +164,41 @@ public class UserTest implements Application {
 	 * @return true or false
 	 */
 	public String findByEmail(String email) {
-		System.out.println(email + "===========");
-		StudentDAO dao = StudentDAOImpl.getFromApplicationContext();
-		String userId = ((Student) dao.findByEmail(email).get(0)).getUserId();
-		System.out.println("=====================" + userId
-				+ "===================");
-		if (userId != null && !userId.equals("")) {
+		/*
+		 * System.out.println(email + "==========="); StudentDAO dao =
+		 * StudentDAOImpl.getFromApplicationContext(); String userId =
+		 * ((Student) dao.findByEmail(email).get(0)).getUserId();
+		 * System.out.println("=====================" + userId +
+		 * "==================="); if (userId != null && !userId.equals("")) {
+		 * return userId; } else { TeacherDAO teacherDao =
+		 * TeacherDAOImpl.getFromApplicationContext(); userId = ((Teacher)
+		 * teacherDao.findByEmail(email).get(0)) .getUserId(); if (userId !=
+		 * null && userId.equals("")) { return userId; } } return "";
+		 */
+
+		log.info(email + "==================");
+		StudentDAO dao = (StudentDAO) context.getBean("StudentDAOImpl");
+		List list = dao.findByEmail(email);
+		String userId = null;
+		if (list.size() > 0) {
+			Student student = (Student) list.get(0);
+			userId = student.getUserId();
+			log.info("=====================" + userId + "===================");
 			return userId;
 		} else {
-			TeacherDAO teacherDao = TeacherDAOImpl.getFromApplicationContext();
-			userId = ((Teacher) teacherDao.findByEmail(email).get(0))
-					.getUserId();
-			if (userId != null && userId.equals("")) {
+			log.info("teacher---------------------------");
+			TeacherDAO teacherDao = (TeacherDAO) context
+					.getBean("TeacherDAOImpl");
+			list = teacherDao.findByEmail(email);
+			if (list.size() > 0) {
+				Teacher teacher = (Teacher) list.get(0);
+				userId = teacher.getUserId();
+				log.info("=====================" + userId
+						+ "===================");
 				return userId;
 			}
 		}
+		log.info("======aaaaaaaa======");
 		return "";
 	}
 
@@ -236,24 +273,29 @@ public class UserTest implements Application {
 		userService.findInterestingUser("10001", 0, 4);
 	}
 
-	public void pathTest(){
-		/*String path = ServletActionContext.getRequest().getContextPath();
-		String basePath = ServletActionContext.getRequest().getScheme() + "://"
-				+ ServletActionContext.getRequest().getServerName() + ":" + ServletActionContext.getRequest().getServerPort()
-				+ path + "/";*/
+	public void pathTest() {
+		/*
+		 * String path = ServletActionContext.getRequest().getContextPath();
+		 * String basePath = ServletActionContext.getRequest().getScheme() +
+		 * "://" + ServletActionContext.getRequest().getServerName() + ":" +
+		 * ServletActionContext.getRequest().getServerPort() + path + "/";
+		 */
 		String string = System.getProperty("catalina.base");
 		log.info("string:" + string);
-		/*log.info("parh:" + path);
-		log.info("basePath:" + basePath);*/
+		/*
+		 * log.info("parh:" + path); log.info("basePath:" + basePath);
+		 */
 	}
-	
-	public void findAttent(){
+
+	public void findAttent() {
 		userService.findMyAttent("10001");
 	}
-	public void findAttented(){
+
+	public void findAttented() {
 		userService.findAttentedMe("10001");
 	}
-	public void getUserBasicInfo(){
+
+	public void getUserBasicInfo() {
 		UserService.getUserBasicInfo("10001");
 		UserService.getUserBasicInfo("10005");
 		UserService.getUserBasicInfo("10006");
@@ -261,9 +303,36 @@ public class UserTest implements Application {
 		UserService.getUserBasicInfo("10008");
 		UserService.getUserBasicInfo("10009");
 		UserService.getUserBasicInfo("10010");
-		
+
 	}
-	public void getUserHeadImage() throws IOException{
+
+	public void getUserHeadImage() throws IOException {
 		userService.getUserSmallHeadByte("10001");
+	}
+
+	public void getSdmNO() {
+		UserInfoDAO userInfoDAO = (UserInfoDAO) context
+				.getBean("UserInfoDAOImpl");
+		List list = userInfoDAO.getSdmNO("广东金融学院", "互联网金融与信息工程系", "计算机科学与技术");
+		Object[] numbers = (Object[]) list.get(0);
+		log.info("sno:" + numbers[0] + ",dNo:" + numbers[1] + ",mno:"
+				+ numbers[2]);
+	}
+
+	public void confirm() {
+		/*
+		 * String json =
+		 * "[{'Num':'131544215','Pwd':'1315CCYa','flag':'2','userId':'10001'}]";
+		 * userService.confirmUser(json);
+		 */
+		userService.userConfirm("131544215", "1315CCYa", "学生");
+	}
+
+	public void findOtherAttend() {
+		userService.findOtherAttented("10001", "10002");
+	}
+
+	public void isAttetd() {
+		userService.getRelationShip("10002", "10004");
 	}
 }

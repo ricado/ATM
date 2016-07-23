@@ -45,4 +45,6 @@ public interface PrivateChatDAO extends AtmDAO{
 
 	public abstract List findByReceiveAndSend(String receiveId, String sendId);
 
+	public abstract void deleteByUserId(String userId);
+
 }

@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 
-import com.atm.model.user.User;
 import com.atm.util.HttpUtil;
 import com.opensymphony.xwork2.ActionSupport;
 /**

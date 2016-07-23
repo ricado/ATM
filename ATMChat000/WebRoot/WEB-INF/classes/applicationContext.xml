@@ -27,7 +27,7 @@
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
 		<!-- 指定连接数据库的URL -->
 		<property name="jdbcUrl"
-			value="jdbc:mysql://127.0.0.1:3306/atm?useUnicode=true&amp;characterEncoding=UTF-8" />
+			value="jdbc:mysql://localhost:3306/atm?useUnicode=true&amp;characterEncoding=UTF-8" />  <!--?useUnicode=true&amp;characterEncoding=UTF-8 -->
 		<!-- 指定连接数据库的用户名 -->
 		<property name="user" value="root" />
 		<!-- 指定连接数据库的密码 -->
@@ -63,7 +63,7 @@
 				<value>com/atm/model/chat/CrowdChat.hbm.xml</value>
 				<value>com/atm/model/chat/ChatRecord.hbm.xml</value>
 				<value>com/atm/model/chat/PrivateChat.hbm.xml</value>
-				
+
 				<!-- define -->
 				<value>com/atm/model/define/chat/CrowdIntive.hbm.xml</value>
 				<value>com/atm/model/define/chat/CrowdListView.hbm.xml</value>
@@ -106,7 +106,6 @@
 				<value>com/atm/model/define/user/UserList.hbm.xml</value>
 				<value>com/atm/model/define/user/UserBasicInfo.hbm.xml</value>
 				<value>com/atm/model/define/user/UserLabelView.hbm.xml</value>
-				
 				<!-- ******************other********************* -->
 				<value>com/atm/model/RecuitType.hbm.xml</value>
 				<value>com/atm/model/Feedback.hbm.xml</value>
@@ -122,6 +121,10 @@
 				<value>com/atm/model/define/RecuitView.hbm.xml</value>
 				<value>com/atm/model/define/ApplyView.hbm.xml</value>
 				<value>com/atm/model/define/procedure.hbm.xml</value>
+				<value>com/atm/model/define/MyMessage.hbm.xml</value>
+				<!-- schoolActive -->
+				<value>com/atm/model/SchoolActive.hbm.xml</value>
+				<value>com/atm/model/define/RecommendSm.hbm.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -150,17 +153,7 @@
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="allManagerMethod" />
 	</aop:config>
 
-	<!-- ///////////////上床下载的配置////////////// -->
-	<!-- <bean name="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"> 
-		设置编码模式 <property name="defaultEncoding" value="UTF-8"/> 限制上文件大小 <property 
-		name="maxUploadSize" value="50000000"/> 设置临时文件夹 <property name="uploadTempDir" 
-		value="upload/temp"/> </bean> 扫描包 <context:component-scan base-package="com.ccy.service" 
-		/> 启动注解 <mvc:annotation-driven /> 静态文件访问 <mvc:default-servlet-handler/> 对模型视图名称的解析，即在模型视图名称添加前后缀 
-		<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" 
-		> <property name="prefix" value="/"/> <property name="suffix" value=".jsp"/> 
-		</bean> -->
-	<!-- /////////////////上传下载配置结束////////////////////// -->
-
+	
 	<!-- <context:component-scan base-package="com.atm.service,com.atm.dao.Impl"> 
 		<context:include-filter type="annotation" expression="org.aspectj.lang.annotation.Aspect"/> 
 		</context:component-scan> <aop:aspectj-autoproxy/> -->
@@ -348,4 +341,30 @@
 		</property>
 	</bean>
 	<import resource="applicationContext_*.xml" />
-</beans>
+	<!-- <import resource="springmvc.xml" /> -->
+	<bean id="SchoolActiveDAO" class="com.atm.dao.SchoolActiveDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="MyMessageDAO" class="com.atm.daoDefined.MyMessageDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="WebSiteDAO" class="com.atm.model.define.WebSiteDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="NewsPageDAO" class="com.atm.model.define.NewsPageDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="RecommendSmDAO"
+		class="com.atm.daoDefined.RecommendSmDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean></beans>

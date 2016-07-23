@@ -1,6 +1,5 @@
 package com.atm.daoDefined;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import org.hibernate.LockOptions;
@@ -11,6 +10,7 @@ import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.atm.model.define.ApplyView;
@@ -26,6 +26,7 @@ import com.atm.model.define.ApplyView;
  * @see com.atm.model.define.ApplyView
  * @author MyEclipse Persistence Tools
  */
+//@Component("ApplyViewDAO")
 @Transactional
 public class ApplyViewDAO {
 	private static final Logger log = LoggerFactory

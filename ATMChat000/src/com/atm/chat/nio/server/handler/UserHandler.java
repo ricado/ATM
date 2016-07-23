@@ -41,8 +41,16 @@ public class UserHandler extends BufferHandler {
 		case Config.USER_GET_ATTENT:// 获取我关注的
 			myAttented();
 			break;
-		case Config.USER_GET_ATTENTED:// 获取关注我的
+		case Config.USER_GET_ATTENTED:// 获取我的
 			attentMe();
+			break;
+		case Config.USER_OTHER_ATTENT:
+			// TODO 别人关注的用户
+			otherAttent();
+			break;
+		case Config.USER_OTHER_FANS:
+			// TODO 别人的粉丝
+			otherFans();
 			break;
 		case Config.USER_CANCEL_ATTENT:// 取消关注
 			cancelAttent();
@@ -58,6 +66,9 @@ public class UserHandler extends BufferHandler {
 			break;
 		case Config.USER_GET_INFO:// 获取用户的基本资料
 			findUserBasicInfo();
+			break;
+		case Config.USER_GET_HEAD:// 获取用户头像
+			userHead();
 			break;
 		default:
 			break;
@@ -135,15 +146,19 @@ public class UserHandler extends BufferHandler {
 			for (int i = 0; i < count; i++) {
 				UserList userList = userLists.get(i);
 				log.info("i:" + i);
+				String path = this.getClass().getResource("/").getPath()
+						.substring(1).replaceFirst("WEB-INF/classes/", "");
+				log.info(path);
 				// 获取用户头像缩略图的头像
-				images[i] = FileUtil
-						.makeFileToByte(userList.getHeadImagePath());
+				images[i] = FileUtil.makeFileToByte(path
+						+ userList.getHeadImagePath());
 				log.info("iamges" + i + ":" + images[i].length);
-				length += 20 + userList.getUserId().getBytes().length
+				length += 24 + userList.getUserId().getBytes().length
 						+ userList.getNickname().getBytes().length
 						+ userList.getdName().getBytes().length
 						+ userList.getSex().getBytes().length
 						+ images[i].length;
+				log.info("length" + i + ":" + length);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -151,7 +166,7 @@ public class UserHandler extends BufferHandler {
 		}
 		length += 12;
 		log.info("开始发送用户列表");
-		buffer = ByteBuffer.allocateDirect(length + 12);
+		buffer = ByteBuffer.allocateDirect(length);
 		log.info("buffer的容量：" + length);
 		buffer.putInt(type);
 		buffer.putInt(Config.SUCCESS);
@@ -162,6 +177,83 @@ public class UserHandler extends BufferHandler {
 			put(userList.getNickname());
 			put(userList.getdName());
 			put(userList.getSex());
+			buffer.putInt(userList.getFlag());
+			buffer.putInt(images[i].length);
+			buffer.put(images[i]);
+		}
+		writeBuffer();
+		log.info("-----------发送结束-------------");
+	}
+
+	/**
+	 * 发送用户列表
+	 * 
+	 * @param userLists
+	 *            用户列表
+	 * @param type
+	 *            发送的结果类型
+	 * @throws IOException
+	 */
+	public void sendUserList(List<UserList> userLists, int type, String userId,
+			String otherUserId) throws IOException {
+		int count = userLists.size();
+		log.info("count:" + count);
+		// 判断userLists是否为空.为空则为没有找到
+		if (userLists.size() == 0) {
+			log.info("没有找到");
+			buffer = ByteBuffer.allocateDirect(8);
+			buffer.putInt(type);
+			buffer.putInt(Config.NOT_FOUND);
+			writeBuffer();
+			return;
+		}
+		log.info("找到记录-------");
+		int length = 0;// buffer 的容量
+		byte[][] images = new byte[count][];
+		try {
+			for (int i = 0; i < count; i++) {
+				UserList userList = userLists.get(i);
+				log.info("i:" + i);
+				String path = this.getClass().getResource("/").getPath()
+						.substring(1).replaceFirst("WEB-INF/classes/", "");
+				log.info(path);
+				// 获取用户头像缩略图的头像
+				images[i] = FileUtil.makeFileToByte(path
+						+ userList.getHeadImagePath());
+				log.info("iamges" + i + ":" + images[i].length);
+				length += 24
+						// 当前用户的id
+						+ userList.getUserId().getBytes().length
+						+ userList.getNickname().getBytes().length
+						+ userList.getdName().getBytes().length
+						+ userList.getSex().getBytes().length
+						+ images[i].length;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		length += userId.getBytes().length + 4
+		// 当前other用户的id
+				+ otherUserId.getBytes().length + 4 + 12;
+		log.info("开始发送用户列表");
+		buffer = ByteBuffer.allocateDirect(length);
+		log.info("buffer的容量：" + length);
+		buffer.putInt(type);
+		buffer.putInt(Config.SUCCESS);
+		// 当前用户
+		put(userId);
+		// 当前other用户的id
+		put(otherUserId);
+		buffer.putInt(count);
+		for (int i = 0; i < count; i++) {
+			UserList userList = userLists.get(i);
+			put(userList.getUserId());
+			put(userList.getNickname());
+			put(userList.getdName());
+			put(userList.getSex());
+			// 是否有关注
+			buffer.putInt(userList.getFlag());
 			buffer.putInt(images[i].length);
 			buffer.put(images[i]);
 		}
@@ -228,6 +320,11 @@ public class UserHandler extends BufferHandler {
 
 	}
 
+	/**
+	 * 取消关注
+	 * 
+	 * @throws Exception
+	 */
 	public void cancelAttent() throws Exception {
 		log.info("---------取消关注------------");
 		String userId = getString();// 关注人
@@ -239,6 +336,58 @@ public class UserHandler extends BufferHandler {
 		} catch (Exception e) {
 			log.info("取消关注失败");
 			sendResultAttent(Config.USER_RESULT_CANCELATTENT, Config.FAILED);
+		}
+	}
+
+	/**
+	 * 获取其他用户关注的列表
+	 * 
+	 * @throws Exception
+	 */
+	public void otherAttent() throws Exception {
+		log.info("--------获取其他用户关注的列表----------");
+		// 当前用户
+		String userId = getString();
+		// 其他用户
+		String otherUserId = getString();
+		try {
+			List<UserList> userLists = userService.findOtherAttented(
+					otherUserId, userId);
+			log.info("获取其他用户的关注列表");
+			sendUserList(userLists, Config.USER_RESULT_OATTENT, userId,
+					otherUserId);
+		} catch (Exception e) {
+			log.info("失败");
+			buffer = ByteBuffer.allocateDirect(8);
+			buffer.putInt(Config.USER_RESULT_OATTENT);
+			buffer.putInt(Config.FAILED);
+			writeBuffer();
+		}
+	}
+
+	/**
+	 * 获取其他用户的粉丝列表
+	 * 
+	 * @throws Exception
+	 */
+	public void otherFans() throws Exception {
+		log.info("-------获取其他用户的粉丝列表---------");
+		// 当前用户
+		String userId = getString();
+		// 其他用户
+		String otherUserId = getString();
+		try {
+			List<UserList> userLists = userService.findOtherFans(otherUserId,
+					userId);
+			log.info("获取其他用户的关注列表");
+			sendUserList(userLists, Config.USER_RESULT_OFANS, userId,
+					otherUserId);
+		} catch (Exception e) {
+			log.info("失败");
+			buffer = ByteBuffer.allocateDirect(8);
+			buffer.putInt(Config.USER_RESULT_OFANS);
+			buffer.putInt(Config.FAILED);
+			writeBuffer();
 		}
 	}
 
@@ -256,14 +405,18 @@ public class UserHandler extends BufferHandler {
 	 */
 	public void findUserBasicInfo() throws Exception {
 		String userId = getString();
-		log.info("====获取" + userId + "的基本资料======");
+		String otherUserId = getString();
+		int relationShip = 0;
+		log.info("====" + userId + "获取" + otherUserId + "的基本资料======");
 		try {
-			UserBasicInfo basicInfo = userService.getUserBasicInfo(userId);
+			UserBasicInfo basicInfo = userService.getUserBasicInfo(otherUserId);
+			relationShip = userService.getRelationShip(userId, otherUserId);
 			if (basicInfo != null) {
-				sendUserBasicInfo(basicInfo);
+				sendUserBasicInfo(basicInfo, relationShip);
 				return;
 			}
 		} catch (Exception e) {
+			log.info(e.getMessage());
 			log.info("获取基本资料失败");
 		}
 		buffer = ByteBuffer.allocateDirect(8);
@@ -273,21 +426,61 @@ public class UserHandler extends BufferHandler {
 	}
 
 	/**
+	 * 获取用户头像的读取方法,接收用户发过来的userId,寻找userId的头像
+	 * 
+	 * @throws Exception
+	 */
+	public void userHead() throws Exception {
+		log.info("获取用户头像");
+		// 获取用户userId
+		String userId = getString();
+		try {
+			// 获取用户头像的路径
+			String path = userService.getUserInfo(userId).getHeadImagePath();
+			// 获取项目路径
+			String basicPath = this.getClass().getResource("/").getPath()
+					.substring(1).replaceFirst("WEB-INF/classes/", "");
+			log.info("path:" + basicPath + path);
+			// 获取用户头像的字节数组
+			byte[] bs = FileUtil.makeFileToByte(basicPath + path);
+			// 发送
+			buffer = ByteBuffer.allocateDirect(8 + bs.length + 4 + 4
+					+ userId.getBytes().length);
+			buffer.putInt(Config.USER_RESULT_GETHEAD);
+			buffer.putInt(Config.SUCCESS);
+			put(userId);
+			buffer.putInt(bs.length);
+			buffer.put(bs);
+			writeBuffer();
+		} catch (Exception e) {
+			buffer.clear();
+			buffer = ByteBuffer.allocateDirect(8);
+			buffer.putInt(Config.USER_RESULT_GETHEAD);
+			buffer.putInt(Config.FAILED);
+			writeBuffer();
+		}
+
+	}
+
+	/**
 	 * 获取用户资料成功。发送用户基本资料信息
 	 * 包括userId,nickname,sign,dname,scname,focusNum,funsNum,image
 	 * 
 	 * @param userBasicInfo
 	 * @throws IOException
 	 */
-	public void sendUserBasicInfo(UserBasicInfo userBasicInfo)
+	public void sendUserBasicInfo(UserBasicInfo userBasicInfo, int relationship)
 			throws IOException {
 		// 关注的人数
 		String focusNum = userBasicInfo.getFocusNum() + "";
 		// 粉丝数
 		String fansNum = userBasicInfo.getFansNum() + "";
+		String path = this.getClass().getResource("/").getPath().substring(1)
+				.replaceFirst("WEB-INF/classes/", "");
+		log.info(path);
 		// 获取用户头像的字节数组
-		byte[] image = FileUtil
-				.makeFileToByte(userBasicInfo.getHeadImagePath());
+		byte[] image = FileUtil.makeFileToByte(path
+				+ userBasicInfo.getHeadImagePath());
 		String publishNum = "24";
 		String publishTitle = "[中国好编程]第三轮敦豪老师为抢人祭出凤姐";
 		String publishContent = "好编程迎来最火爆,广金学子编程艺术惊呆四位导师...";
@@ -295,8 +488,8 @@ public class UserHandler extends BufferHandler {
 		String collectTitle = "[爪哇新闻]敦豪放出豪言，我的学生至少bat";
 		String collectContent = "今日，敦豪老师说他的学生年薪至少六位数,寒冬说他在放屁...";
 
-		int length = 8
-		// id
+		int length = 8 + 4 // 关系
+				// id
 				+ userBasicInfo.getUserId().getBytes().length + 4
 				// 昵称
 				+ userBasicInfo.getNickname().getBytes().length + 4
@@ -351,6 +544,8 @@ public class UserHandler extends BufferHandler {
 		put(userBasicInfo.getScName());
 		// 8 用户系别
 		put(userBasicInfo.getDname());
+		// 用户关系
+		buffer.putInt(relationship);
 		// 9发帖数量
 		put(publishNum);
 		// 10发帖标题

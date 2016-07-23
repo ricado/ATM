@@ -1,11 +1,20 @@
 package com.atm.model.define.user;
 
+import com.atm.chat.nio.server.util.Config;
+
 public class UserList {
 	private String userId;
 	private String nickname;
 	private String dName;
 	private String headImagePath;
 	private String sex;
+	private int flag = Config.RELATIONSHIP_NO_MATTER;
+	public int getFlag() {
+		return flag;
+	}
+	public void setFlag(int flag) {
+		this.flag = flag;
+	}
 	public UserList(){
 		
 	}

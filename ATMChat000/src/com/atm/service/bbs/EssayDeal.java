@@ -114,11 +114,11 @@ public class EssayDeal implements ObjectInterface{
 	//TODO 获取关注人和标签的贴
 	public JSONArray getAttendEssay(HttpServletRequest request,String userId,int index) throws JSONException, IOException{
 		PeopleAttentionAssociationDAO attendDao = 
-				context.getBean("PeopleAttentionAssociationDAO",PeopleAttentionAssociationDAO.class);
+				context.getBean("PeopleAttentionAssociationDAOImpl",PeopleAttentionAssociationDAO.class);
 		EssayOuterDAO essayDao = 
 				context.getBean("EssayOuterDAO",EssayOuterDAO.class);
 		LabelAttentionAssociationDAO labelAttDao = 
-				context.getBean("LabelAttentionAssociationDAO",LabelAttentionAssociationDAO.class);
+				context.getBean("LabelAttentionAssociationDAOImpl",LabelAttentionAssociationDAO.class);
 		boolean haveSomething = false;
 		
 		log.debug("获取关注者账号集合"+userId);

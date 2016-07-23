@@ -241,4 +241,24 @@ public class TeacherDAOImpl implements TeacherDAO  {
 			throw re;
 		}
 	}
+	
+	/**
+	 * 修改学生的学号
+	 * @param userId
+	 * @param number
+	 * @return
+	 */
+	@Override
+	public int updateTno(String userId,String number){
+		log.debug("update sno");
+		try{
+			String sql = "update Teacher t set t.tno='" + number + "'"
+					+ " where t.userId='" + userId + "'";
+			int i = getCurrentSession().createQuery(sql).executeUpdate();
+			return i;
+		}catch(Exception e){
+			log.debug("update error");
+			throw e;
+		}
+	}
 }

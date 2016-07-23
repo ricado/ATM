@@ -5,7 +5,7 @@ import java.io.IOException;
 import com.atm.chat.nio.admin.AdminClient;
 import com.atm.chat.nio.admin.AdminWriteHandler;
 import com.atm.model.user.User;
-import com.atm.service.AdminService;
+import com.atm.service.admin.AdminService;
 import com.atm.service.user.UserService;
 import com.opensymphony.xwork2.ActionSupport;
 

@@ -73,4 +73,10 @@ public interface UserInfoDAO extends AtmDAO{
 	public abstract List searchPeople(Object userName);
 
 	public abstract String getUserHeadPath(String userId);
+
+	public abstract List getSdmNO(String sName, String dName, String mName);
+
+	public abstract int deleteByUserId(String userId);
+
+	public abstract int saveNumAndName(String userId, String number, String name);
 }

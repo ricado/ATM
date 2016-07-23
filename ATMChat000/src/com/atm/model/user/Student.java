@@ -14,7 +14,7 @@ public class Student  implements java.io.Serializable {
 
      private String userId;
      private String sno;
-     private Timestamp entranceYear;
+     private String entranceYear;
      private String email;
      private Timestamp loginTime;
 
@@ -31,7 +31,7 @@ public class Student  implements java.io.Serializable {
     }
     
     /** full constructor */
-    public Student(String userId, String sno, Timestamp entranceYear, String email, Timestamp loginTime) {
+    public Student(String userId, String sno, String entranceYear, String email, Timestamp loginTime) {
         this.userId = userId;
         this.sno = sno;
         this.entranceYear = entranceYear;
@@ -58,11 +58,11 @@ public class Student  implements java.io.Serializable {
         this.sno = sno;
     }
 
-    public Timestamp getEntranceYear() {
+    public String getEntranceYear() {
         return this.entranceYear;
     }
     
-    public void setEntranceYear(Timestamp entranceYear) {
+    public void setEntranceYear(String entranceYear) {
         this.entranceYear = entranceYear;
     }
 

@@ -278,6 +278,5 @@ public class AppealDAOImpl implements AppealDAO  {
 			log.error("error");
 			throw re;
 		}
-	}
-	
+	}	
 }

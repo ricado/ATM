@@ -5,6 +5,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -16,14 +17,14 @@ import com.atm.chat.nio.server.util.ScMap;
 public class AcceptSelector implements ScMap {
 	private static final Logger log = LoggerFactory
 			.getLogger(AcceptSelector.class);
-	private Selector selector = null;
+	private Selector selector;
 	private ServerSocketChannel server = null;
 	static final int port = 23457;
 	private SelectionKey selectionKey;
-	private ReadSelector readSelector = null;
 	private SocketChannel socketChannel;
-	//private List<ReadSelector> readSelectors= new ArrayList<ReadSelector>();
-	
+
+	private ArrayList<ReadSelector> selectors = new ArrayList<ReadSelector>();
+
 	public AcceptSelector(Selector selector, ServerSocketChannel server) {
 		this.selector = selector;
 		this.server = server;
@@ -32,7 +33,7 @@ public class AcceptSelector implements ScMap {
 	public void receive() throws IOException {
 		log.info("acceptselector 开启 receive");
 		while (true) {
-			int readyChannels = selector.select(10);
+			int readyChannels = selector.select(20);
 			if (readyChannels == 0)
 				continue;
 			Set<SelectionKey> selectedKeys = selector.selectedKeys(); // 可以通过这个方法，知道可用通道的集合
@@ -43,54 +44,47 @@ public class AcceptSelector implements ScMap {
 				// 判断是否接收
 				if (selectionKey.isAcceptable()) {
 					socketChannel = server.accept();
-					managerReader();
+					managerSelector();
 					// 将此对应的channel设置为准备接受其他客户端请求
+					log.info("将此对应的channel设置为准备接受其他客户端请求");
 					selectionKey.interestOps(SelectionKey.OP_ACCEPT);
+					log.info("----------ok--------");
 				}
 			}
 		}
 	}
 
 	/**
-	 * 监听所有的readSelector,检测其selector里的管道的数量。然后进行一系列的整合。
+	 * 管理readSelector
 	 * 
-	 * @author ye
-	 * @2015.8.11
+	 * @throws IOException
 	 */
-	public void listenSelector() {
-		// TODO 未完成 listenSeletor
-		for (Iterator<ReadSelector> iterator = readSelectors.iterator(); iterator
+	public void managerSelector() throws IOException {
+		boolean flag = true;
+
+		for (Iterator<ReadSelector> readSelectors = selectors.iterator(); readSelectors
 				.hasNext();) {
-			ReadSelector readSelector = iterator.next();
-
-		}
-	}
-
-	public void managerReader() {
-		ReadSelector read = null;
-		// int i = 1;
-		log.info("进入了managerReader..." + readSelectors.size());
-		// for (Iterator<ReadSelector> iterator = readSelectors.iterator();
-		// iterator.hasNext();) {
-		int i = 0;
-		for (; i < readSelectors.size(); i++) {
-			// read = iterator.next();
-			read = readSelectors.get(i);
-			log.info("第" + i + "个readSelectors");
-			log.info("num:" + channelNums.get(i));
-			if (channelNums.get(i) < 3) {
-				read.register(socketChannel);
-				log.info("新接的socketChannel加入到第" + i + "个readSelector,当前有"
-						+ readSelectors.size() + "个readSelector");
-				return;
+			ReadSelector readSelector = (ReadSelector) readSelectors.next();
+			System.out.println("当前readSocketor的数量:" + readSelector.getSize());
+			// readSelector的socketChannel的数量小于40
+			if (readSelector.getSize() <= 1) {
+				readSelectors.remove();
+				System.out.println("移除了一个selector");
+			} else if (readSelector.getSize() < 30) {
+				readSelector.register(socketChannel);
+				flag = false;
 			}
 		}
-		// if(readSelector == null) {
-		log.info("开启新的selector");
-		channelNums.add(0);
-		readSelector = new ReadSelector(server, socketChannel, i);
-		readSelectors.add(readSelector);
-		readSelector.start();
-		// }
+		if (flag) {
+			System.out.println("开启新的readSelector....");
+			// 所有selector的socketChannel的数量都超过
+			ReadSelector readSelector = new ReadSelector(server, socketChannel);
+			// add readSelector to selectors
+			selectors.add(readSelector);
+			Thread thread = new Thread(readSelector);
+			thread.start();
+			System.out.println("size:" + readSelector.getSize());
+		}
 	}
+
 }

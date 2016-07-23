@@ -5,8 +5,8 @@ import java.io.UnsupportedEncodingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atm.service.AdminService;
 import com.atm.service.OnlineService;
+import com.atm.service.admin.AdminService;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class OnlineAction extends ActionSupport {

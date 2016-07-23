@@ -35,10 +35,14 @@ public interface Config {
 	public static final int CROWD_MESSAGE_SUCCESS = 1107;// 群聊消息发送成功
 	public static final int CROWD_MESSAGE_FAILED = 1108; // 群聊消息发送失败
 	
+	public static final int MY_OFF_MESSAGE = 1151; // 群聊消息发送失败
+	public static final int MY_RESULT_MESSAGE = 1152; // 群聊消息发送失败
+	
 	/** 基本的请求类型 **/
 	public static final int REQUEST_LOGIN = 100;// 登录
 	public static final int REQUEST_REGIST = 101;// 注册
 	public static final int REQUEST_EXIT = 102;
+	public static final int REQUEST_BE_OFF = 103;
 
 	public static final int REQUEST_UI = 99; // 更新UI视图 *敦豪的
 
@@ -95,7 +99,9 @@ public interface Config {
 	public static final int USER_SET_HEAD = 1409;// 修改头像
 	public static final int USER_FIND = 1410;// 查找用户
 	public static final int USER_FOUND = 1411;//查找可能感兴趣的群
-	
+	public static final int USER_OTHER_ATTENT = 1412;//别人关注的
+	public static final int USER_OTHER_FANS = 1413;//别人的粉丝
+
 	// 用户操作结果
 	public static final int USER_RESULT_LIST = 1501;// 用户列表
 	public static final int USER_RESULT_GETATTENT = 1502;// 我关注的
@@ -108,18 +114,25 @@ public interface Config {
 	public static final int USER_RESULT_SETHEAD = 1509;// 修改头像
 	public static final int USER_RESULT_FIND = 1510;// 查找用户
 	public static final int USER_RESULT_FOUND = 1511;//查找感兴趣的群的结果
+	public static final int USER_RESULT_OATTENT = 1512;//获取别人的关注的结果
+	public static final int USER_RESULT_OFANS = 1513;//获取别人的粉丝的结果
 
 	// 其他
 	public static final int USER_NO_FOUND = 1520;// 用户没找到
 	public static final int USER_LOGIN_ALREADY = 1521;// 用户已登录
 	public static final int USER_NO_ONLINE = 1522; // 用户不在线
 
+	public static final int RELATIONSHIP_ATTENTION=2002;//关注标志
+	public static final int RELATIONSHIP_FOLLOER=2003;//粉丝标志
+	public static final int RELATIONSHIP_NO_MATTER=2004;//没有关系的标志
+	
 	// other
 	public static final int USER_MOVE = 9998;// 移动用户
 	public static final int MAP_INFO = 9999;
 	/**
 	 * 对许多操作的同意回复
 	 */
+	public static final int USED = 6;
 	public static final int SUCCESS = 1;
 	public static final int FAILED = 0;
 	public static final int NOT_FOUND = 2;//对搜索的操作的回复--没有找到

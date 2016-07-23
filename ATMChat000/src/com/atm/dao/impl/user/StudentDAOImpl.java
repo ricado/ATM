@@ -113,7 +113,7 @@ public class StudentDAOImpl implements StudentDAO  {
 	 */
     @Override
 	public List findByProperty(String propertyName, Object value) {
-      log.debug("finding Student instance with property: " + propertyName
+      log.info("finding Student instance with property: " + propertyName
             + ", value: " + value);
       try {
          String queryString = "from Student as model where model." 
@@ -146,6 +146,7 @@ public class StudentDAOImpl implements StudentDAO  {
 	@Override
 	public List findByEmail(Object email
 	) {
+		log.info("find by email");
 		return findByProperty(EMAIL, email
 		);
 	}
@@ -242,6 +243,25 @@ public class StudentDAOImpl implements StudentDAO  {
 		}catch(RuntimeException re){
 			log.error("error");
 			throw re;
+		}
+	}
+	/**
+	 * 修改学生的学号
+	 * @param userId
+	 * @param number
+	 * @return
+	 */
+	@Override
+	public int updateSno(String userId,String number){
+		log.debug("update sno");
+		try{
+			String sql = "update Student s set s.sno='" + number + "'"
+					+ " where s.userId='" + userId + "'";
+			int i = getCurrentSession().createQuery(sql).executeUpdate();
+			return i;
+		}catch(Exception e){
+			log.debug("update error");
+			throw e;
 		}
 	}
 }

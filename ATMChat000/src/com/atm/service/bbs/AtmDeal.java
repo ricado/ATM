@@ -22,7 +22,7 @@ import com.atm.util.bbs.ObjectInterface;
 public class AtmDeal implements ObjectInterface{
 	Logger log = Logger.getLogger(getClass()); 
 	public JSONArray getDeptList(String scNo) throws JSONException, IOException{
-		DepartmentDAO deptDao = context.getBean("DepartmentDAO",DepartmentDAO.class);
+		DepartmentDAO deptDao = context.getBean("DepartmentDAOImpl",DepartmentDAO.class);
 		List list = deptDao.findDeptList(scNo);
 		if(list.size()==0){
 			return null;

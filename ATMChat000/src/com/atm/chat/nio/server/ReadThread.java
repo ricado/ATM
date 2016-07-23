@@ -12,12 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atm.chat.nio.server.util.ScMap;
-import com.atm.service.OnlineService;
 import com.atm.service.user.UserService;
 
-public class ReadThread extends Thread implements ScMap{
-	public static final Logger log = LoggerFactory
-			.getLogger(ReadThread.class);
+public class ReadThread extends Thread implements ScMap {
+	public static final Logger log = LoggerFactory.getLogger(ReadThread.class);
 	public Charset charset = Charset.forName("UTF-8");
 	public byte[] bytes;
 	static final int port = 23457;
@@ -26,6 +24,7 @@ public class ReadThread extends Thread implements ScMap{
 	public SocketChannel socketChannel;
 	public ByteBuffer buffer = null;
 	public int number;// 表明这是第几个readSeletor
+
 	/**
 	 * 获取登录map的信息
 	 */
@@ -57,46 +56,56 @@ public class ReadThread extends Thread implements ScMap{
 	 */
 	public void removeUser(SocketChannel sc) throws IOException {
 		log.info("用户下线");
+		sc.socket().close();
 		sc.close();
-		selectionKey.cancel();
-		channelNums.set(number, channelNums.get(number) - 1);
-		log.info(channelNums.get(number) + "--------------");
-		Set<String> keys = map.keySet();
-		for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();) {
-			String key = (String) iterator.next();
-			if (map.get(key).equals(sc)) {
-				OnlineService.deleteLogin(key, number);
-				UserService.exit(key);// 用户退出，修改离线时间
-				iterator.remove();
-				mapkey.remove(key);
-				getMapInfo();
+		for (String userId : map.keySet()) {
+			if (map.get(userId) == sc) {
+				log.info("找到userId:" + userId);
+				UserService.exit(userId);
+				/*sc.socket().close();
+				// 关闭
+				sc.close();*/
+				map.remove(userId);
+				mapkey.remove(userId);		
+				//selectionKey.cancel();
+				break;
 			}
 		}
+		getMapInfo();
+	}
+
+	public void exit(String userId) {
+		try {
+			UserService.exit(userId);// 用户退出，修改离线时间
+			// socketChannel.shutdownInput();
+			// socketChannel.shutdownOutput();
+			// OnlineService.deleteLogin(userId, number);
+			map.get(userId).socket().close();
+			map.get(userId).close();
+			mapkey.get(userId).cancel();
+			log.info("exit....");
+		} catch (Exception e) {
+			log.info("close error");
+		}
+		map.remove(userId);
+		mapkey.remove(userId);
+		log.info("exit success");
 	}
 
 	/**
 	 * 用户退出
 	 */
 	public void exit() {
+		getMapInfo();
 		String userId = getString();
-		try {
-			channelNums.set(number, channelNums.get(number) - 1);
-			UserService.exit(userId);// 用户退出，修改离线时间
-			// socketChannel.shutdownInput();
-			// socketChannel.shutdownOutput();
-			OnlineService.deleteLogin(userId, number);
-			mapkey.get(userId).cancel();
-			map.get(userId).close();
-		} catch (Exception e) {
-			log.info("close error");
-		}
-		map.remove(userId);
-		mapkey.remove(userId);
-		/*
-		 * buffer = ByteBuffer.allocateDirect(4);
-		 * buffer.putInt(Config.EXIT_SUCCESS);
-		 */
-		log.info("exit success");
+		log.info("userId : " + userId);
+		exit(userId);
+		getMapInfo();
+
+		// //返回发送请求
+		// buffer.clear();
+		// buffer.putInt(Config.REQUEST_EXIT);
+		// writeBuffer();
 	}
 
 	/**
@@ -179,10 +188,10 @@ public class ReadThread extends Thread implements ScMap{
 		}
 	}
 
-	public void readOver(){
+	public void readOver() {
 		try {
 			buffer = ByteBuffer.allocateDirect(1024);
-			while((size = socketChannel.read(buffer)) >= 0) {
+			while ((size = socketChannel.read(buffer)) >= 0) {
 				buffer.clear();
 			}
 		} catch (Exception e) {
@@ -206,17 +215,7 @@ public class ReadThread extends Thread implements ScMap{
 	 */
 	public void writeBuffer() {
 		// TODO writeBuffer
-		buffer.flip();// 对buffer进行转换
-		while(buffer.hasRemaining()){
-			try {
-				int y = socketChannel.write(buffer);
-				log.info("y:" + y);
-				log.info("写入成功");
-			} catch (Exception e) {
-				log.info("写入失败");
-			}
-		}
-		buffer.clear();
+		writeBuffer(socketChannel);
 	}
 
 	/**
@@ -225,12 +224,23 @@ public class ReadThread extends Thread implements ScMap{
 	public void writeBuffer(SocketChannel channel) {
 		// TODO writeBuffer
 		buffer.flip();// 对buffer进行转换
-		try {
-			channel.write(buffer);
-			buffer.clear();
-			log.info("写入成功");
-		} catch (Exception e) {
-			log.info("写入失败");
+		int num = 0;
+		if (channel == null) {
+			return;
 		}
+		while (buffer.hasRemaining()) {
+			try {
+				int y = channel.write(buffer);
+				log.info("y:" + y);
+				log.info("写入成功");
+			} catch (Exception e) {
+				num++;
+				log.info("写入失败");
+				if (num == 5) {
+					break;
+				}
+			}
+		}
+		buffer.clear();
 	}
 }

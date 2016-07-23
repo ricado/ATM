@@ -41,21 +41,22 @@ public class MessageService implements Application {
 		PrivateChatRecordDAO chatDAO = (PrivateChatRecordDAO) context
 				.getBean("PrivateChatRecordDAO");
 		List<PrivateChatRecord> chatList = chatDAO.findByUserReceiveId(userId);
+		PrivateChatDAO privateChatDAO = (PrivateChatDAO) context
+				.getBean("PrivateChatDAOImpl");
+		privateChatDAO.deleteByUserId(userId);
 		return chatList;
 	}
-	/*public static List<Object[]> getOffLineCrowdMessage(String userId) {
-			MySessionDAO mySessionDAO = (MySessionDAO) context
-					.getBean("MySessionDAO");
-			List<Object[]> list = mySessionDAO.getCrowdOffRecord(userId);
-			for (Iterator<Object[]> iterator = list.iterator(); iterator.hasNext();) {
-				Object[] objects = iterator.next();
-				Timestamp timestamp = (Timestamp) objects[2];
-				log.info("crowdId:" + objects[0]);
-				log.info("content:" + objects[1]);
-				log.info("time: " + TimeUtil.getDateFormat(timestamp));
-			}
-			return list;
-		}*/
+
+	/*
+	 * public static List<Object[]> getOffLineCrowdMessage(String userId) {
+	 * MySessionDAO mySessionDAO = (MySessionDAO) context
+	 * .getBean("MySessionDAO"); List<Object[]> list =
+	 * mySessionDAO.getCrowdOffRecord(userId); for (Iterator<Object[]> iterator
+	 * = list.iterator(); iterator.hasNext();) { Object[] objects =
+	 * iterator.next(); Timestamp timestamp = (Timestamp) objects[2];
+	 * log.info("crowdId:" + objects[0]); log.info("content:" + objects[1]);
+	 * log.info("time: " + TimeUtil.getDateFormat(timestamp)); } return list; }
+	 */
 	/**
 	 * 查找用户的群的离线消息
 	 * 
@@ -66,7 +67,8 @@ public class MessageService implements Application {
 		MySessionDAO mySessionDAO = (MySessionDAO) context
 				.getBean("MySessionDAO");
 		List<CrowdChatRecord> list = mySessionDAO.getCrowdOffRecord(userId);
-		for (Iterator<CrowdChatRecord> iterator = list.iterator(); iterator.hasNext();) {
+		for (Iterator<CrowdChatRecord> iterator = list.iterator(); iterator
+				.hasNext();) {
 			CrowdChatRecord chat = iterator.next();
 			Timestamp timestamp = chat.getSendTime();
 			log.info("crowdId:" + chat.getCrowdId());
@@ -124,7 +126,8 @@ public class MessageService implements Application {
 		} catch (Exception e) {
 			log.info("保存失败");
 		}
-	} 
+	}
+
 	/**
 	 * 保存群聊的聊天
 	 * 
@@ -133,7 +136,8 @@ public class MessageService implements Application {
 	 * @param sendContent
 	 *            发送内容
 	 */
-	public static void saveCrowdRecord(int crowdId, String userId,String sendContent) {
+	public static void saveCrowdRecord(int crowdId, String userId,
+			String sendContent) {
 		ChatRecord chatRecord = new ChatRecord();
 		chatRecord.setUserId(userId);
 		chatRecord.setCrowdId(crowdId);

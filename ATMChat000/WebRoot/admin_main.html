@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>主页面</title>
+
+<meta name="viewport" content="width=device-width" />
+<meta name="keywords" content="keyword1,keyword2,keyword3">
+<meta name="description" content="this is my page">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+<link rel="stylesheet" type="text/css" href="css/admin/main_user.css">
+<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$(".naviga").click(function() {
+			$(".naviga").css("background-color", "orange");
+			$(this).css("background-color", "rgb(11, 252, 218)");
+		});
+	});
+</script>
+<style type="text/css">
+body {
+	background-color: green;
+	padding: 0px;
+	margin: 0px;
+}
+
+#navigationTable {
+	background-color: gray;
+}
+
+#navigationTable, #towNavigation {
+	width: 100%;
+	width: -moz-max-content;
+}
+
+#navigationTable tr th {
+	background-color: orange;
+	padding: 6px;
+	text-align: center;
+}
+
+#navigationTable tr th: {
+	background-color: rgb(11, 252, 218);
+}
+
+#towNavigation tr th {
+	background-color: rgb(11, 252, 218);
+	border: solid;
+	padding: 5px;
+}
+</style>
+</head>
+<body>
+	<div>
+		<div id="navigation">
+			<table id="navigationTable">
+				<tr>
+					<th id="user" class="naviga">用户</th>
+
+					<th id="crowd" class="naviga">群聊</th>
+
+					<th id="bbs" class="naviga">论坛</th>
+
+					<th id="recruit" class="naviga">招聘</th>
+				</tr>
+			</table>
+			<table id="towNavigation">
+				<tr id="userList">
+					<th id="all">全部</th>
+					<th id="online">在线</th>
+					<th id="appeal">申述</th>
+				</tr>
+			</table>
+		</div>
+		<div id="content">
+			<table class="userIcon">
+				<tr>
+					<td class='headImage'><img src='image/ccy.png'></td>
+					<td><div class="table_div"><p>创业去哪儿</p>ff</div></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

@@ -37,4 +37,6 @@ public interface TeacherDAO extends AtmDAO{
 
 	public abstract void attachClean(Teacher instance);
 
+	public abstract int updateTno(String userId, String number);
+
 }

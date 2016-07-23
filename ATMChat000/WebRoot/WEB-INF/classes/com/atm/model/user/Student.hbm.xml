@@ -15,8 +15,8 @@
                 <comment>学生学号</comment>
             </column>
         </property>
-        <property name="entranceYear" type="java.sql.Timestamp">
-            <column name="entranceYear" length="19">
+        <property name="entranceYear" type="java.lang.String">
+            <column name="entranceYear" length="10">
                 <comment>入学年份</comment>
             </column>
         </property>

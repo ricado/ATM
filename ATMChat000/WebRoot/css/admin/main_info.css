@@ -1,0 +1,49 @@
+@CHARSET "UTF-8";
+/* 信息的css */
+#info {
+	background-color: blue;
+	height: 100%;
+}
+/* 导航条的主配置 */
+#info #navigation {
+	background-color: rgb(93, 104, 95);
+	float: left;
+	width: 200px;
+	height: 100%;
+}
+/* 初始化导航条列表 */
+#info #navigation dl, dd {
+	margin: 0px;
+	padding: 0px;
+}
+/*列表修饰*/
+#info #navigation .head {
+	background-color: rgb(52, 60, 52);
+}
+
+#info #navigation .head dd {
+	border-bottom: 1px solid black;
+	text-align: left;
+	padding: 10px 10px 10px 30px;
+}
+
+#info #navigation .navigationlist dd {
+	background-color: gray; 
+	border-bottom : 1px solid black;
+	text-align: left;
+	padding: 8px 10px 5px 30px;
+	border-bottom: 1px solid black;
+}
+/* 隐藏导航列表的子列表 */
+#info #navigation .navigationList {
+	display: none;
+}
+/* 鼠标移动到导航条的某个选项上 */
+#info #navigation dd:HOVER {
+	background-color: rgb(132, 138, 123);
+	width: 170px;
+}
+/* 内容内的主配置 */
+#info #content {
+	background-color: #ffff80;
+}

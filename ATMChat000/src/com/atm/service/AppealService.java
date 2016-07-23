@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.atm.dao.AppealDAO;
 import com.atm.dao.impl.AppealDAOImpl;
 import com.atm.model.Appeal;
+import com.atm.util.Application;
 import com.atm.util.JsonUtil;
 
 /**
@@ -20,7 +21,7 @@ import com.atm.util.JsonUtil;
  * @author ye
  * @2015.08.02
  */
-public class AppealService {
+public class AppealService implements Application{
 	private static final Logger log = LoggerFactory.getLogger(AppealService.class);
 	
 	/**
@@ -33,7 +34,7 @@ public class AppealService {
 	public String saveAppeal(String json,HttpServletRequest request,
 			HttpServletResponse response){
 		//ªÒ»°DAO
-		AppealDAO appealDao = AppealDAOImpl.getFromApplicationContext();
+		AppealDAO appealDao = (AppealDAO)context.getBean("AppealDAOImpl");
 		Appeal appeal = (Appeal)JsonUtil.jsonToObject(json, Appeal.class);
 		log.debug("=======" + appeal.getPhotoPath());
 		try{

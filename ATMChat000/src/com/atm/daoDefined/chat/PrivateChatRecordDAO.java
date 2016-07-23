@@ -188,4 +188,16 @@ public class PrivateChatRecordDAO {
 			ApplicationContext ctx) {
 		return (PrivateChatRecordDAO) ctx.getBean("PrivateChatRecordDAO");
 	}
+	
+	public void deleteByUserId(String userId){
+		log.info("delete by userId :" + userId);
+		try {
+			String sql = "delete PrivateChatRecord as model where model.userReceiveId ='" + userId +"'";
+			int i = getCurrentSession().createQuery(sql).executeUpdate();
+			log.info("success");
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.info("error");
+		}
+	}
 }

@@ -5,7 +5,7 @@
 	<constant name="struts.devMode" value="true" />
 	<constant name="struts.ognl.allowStaticMethodAccess" value="true"></constant>
 
-	<package name="user" extends="struts-default" namespace="/">
+	<!-- <package name="user" extends="struts-default" namespace="/ccy">
 		<action name="user_*" class="com.atm.action.UserAction" method="{1}">
 			<result name="success">/success.jsp</result>
 			<result name="error">/error.jsp</result>
@@ -37,7 +37,7 @@
 			<result name="success">/welcome.jsp</result>
 			<result name="error">/error.jsp</result>
 		</action>
-	</package>
+	</package> -->
 	<package name="ajax" extends="json-default" namespace="/ajax">
 		<action name="online_*" class="com.atm.action.OnlineAction" method="{1}">
 			<result type="json"/>
@@ -51,4 +51,10 @@
 				<result type="json"/>
 		</action>
 	</package>
+	<package name="user" extends="json-default" namespace="/user">
+		<action name="user_*" class="com.atm.action.UserAction" method="{1}">
+			<result type="json"/>
+		</action>
+	</package>
+	<include file="struts_*xml"/>
 </struts>    

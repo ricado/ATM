@@ -10,7 +10,7 @@ import java.nio.channels.SocketChannel;
 public class NIOClient {
 
 	private Selector selector = null;
-	static final int port = 23456;
+	static final int port = 23457;
 	private SocketChannel sc = null;
 	//
 	private FileChannel fileChannel = null;
@@ -18,6 +18,7 @@ public class NIOClient {
 	public void init() throws IOException {
 		selector = Selector.open();
 		// 连接远程主机的IP和端口
+		//sc = SocketChannel.open(new InetSocketAddress("139.129.131.179", port));
 		sc = SocketChannel.open(new InetSocketAddress("127.0.0.1", port));
 		sc.configureBlocking(false);
 		sc.register(selector, SelectionKey.OP_READ);

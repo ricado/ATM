@@ -6,6 +6,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.Date;
@@ -17,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 public class FileUtil {
 	private static final Logger log = LoggerFactory.getLogger(FileUtil.class);
-	private static String basicPath = "G:/myeclipse/apache-tomcat-7.0.27/webapps/ATM/WEB-INF/image/";
+	private static String basicPath = "C:/websoft/tomcat7_64/webapps/ATM/image/";
 	
 	/**
 	 * 获取群头像缩略图文件名
@@ -90,6 +94,11 @@ public class FileUtil {
 	 */
 	public static byte[] makeFileToByte(String fileFath) throws IOException {
 		File file = new File(fileFath);
+		byte[] bytes = makeFileToByte(file);
+		return bytes;
+	}
+
+	public static byte[] makeFileToByte(File file) throws IOException {
 		FileInputStream fis = new FileInputStream(file);
 		int length = (int) file.length();
 		byte[] bytes = new byte[length];
@@ -106,7 +115,7 @@ public class FileUtil {
 		fis.close();
 		return bytes;
 	}
-
+	
 	/**
 	 * 获取文件的byte数组
 	 * 
@@ -333,4 +342,43 @@ public class FileUtil {
 		log.info(path + "/" + filename);
 		return path + "/" + filename;
 	}
+	
+	/**
+	 * 下载网络上的文件
+	 * 
+	 * @param urlString
+	 * @param savePath
+	 * @param filename
+	 * @throws IOException
+	 */
+	public static void download(String urlString, String savePath, String filename)
+			throws IOException {
+		// 构造URL
+		URL url = new URL(urlString);
+		// 打开连接
+		URLConnection con = url.openConnection();
+		// 设置请求超时为10s
+		con.setConnectTimeout(10 * 1000);
+		// 输入流
+		InputStream is = con.getInputStream();
+
+		// 1K的数据缓冲
+		byte[] bs = new byte[1024];
+		// 读取到的数据长度
+		int len;
+		// 输出的文件流
+		File sf = new File(savePath);
+		if (!sf.exists()) {
+			sf.mkdirs();
+		}
+		OutputStream os = new FileOutputStream(sf.getPath() + "\\" + filename);
+		// 开始读取
+		while ((len = is.read(bs)) != -1) {
+			os.write(bs, 0, len);
+		}
+		// 完毕，关闭所有链接
+		os.close();
+		is.close();
+	}
+
 }

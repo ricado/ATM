@@ -32,6 +32,27 @@ import com.atm.util.Application;
 public class test implements Application{
 	private static final Logger log = LoggerFactory.getLogger(test.class);
 	
+	public static void main(String[] args) {
+		test test = new test();
+		String path = test.getPath();
+		log.info(path);
+		
+		String string = "8.jpg";
+		String[] strings = string.split("\\.");
+		log.info("length:" + strings.length);
+		for (int i = 0; i < strings.length; i++) {
+			log.info(strings[i]);
+		}
+		
+	}
+	public String getPath() {
+		// String path =
+		// this.getClass().getClassLoader().getResource("/").getPath();
+		String path = this.getClass().getResource("/").getPath();
+		path = path.substring(1);
+		path = path.replaceFirst("WEB-INF/classes/", "");
+		return path;
+	}
 	/*public static void main(String[] args) throws Exception{*/
 		/*String userId = "111005050228";
 		String userPwd = "131544215";

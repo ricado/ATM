@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>管理员登录</title>
+<meta name="viewport" content="width=device-width" />
+<meta name="keywords" content="keyword1,keyword2,keyword3">
+<meta name="description" content="this is my page">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+<!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+<link href="css/jquery.mobile-1.4.5.min.css" rel="Stylesheet"
+	type="text/css" />
+<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$("#loginButton").click(function() {
+			var userId = $("#userId").val();
+			var password = $("#password").val();
+			$("#tip").html("-----------------")
+			var params = {
+				userId : userId,
+				password : password
+			}
+			$.ajax({
+				type : "POST",
+				url : "admin/login.do",
+				data : params,
+				dataType : "json", //ajax返回值设置为text（json格式也可用它返回，可打印出结果，也可设置成json）
+				success : function(data) {
+					if (data.tip == "success") {
+						$("#tip").html("success");
+					} else {
+						$("#tip").html("账号或者密码错误");
+					}
+				},
+				error : function(data) {
+					$("#tip").html("网络错误");
+				}
+			});
+		});
+	});
+</script>
+<style type="text/css">
+body {
+	background-color: orange;
+}
+
+#header {
+	background: rgb(36, 248, 53) linear-gradient(rgb(81, 206, 42),
+		rgb(31, 251, 17)) repeat scroll 0% 0%;
+}
+
+.ui-footer.ui-bar-a {
+	display: none;
+}
+
+#loginTable, #loginButton {
+	text-align: center;
+	margin: 0 auto;
+}
+
+#loginButton { //
+	font-size: x-large;
+	width: 300px;
+	height: 40px;
+}
+</style>
+</head>
+<body>
+	<div data-role="page" id="pageone">
+		<div id="header" data-role="header" data-theme="d">
+			<h1>ATM管理员</h1>
+		</div>
+
+		<div data-role="content">
+			<table id="loginTable">
+				<tr>
+					<th>账号:</th>
+					<td><input type="text" id="userId" name="userId"></td>
+				</tr>
+				<tr>
+					<th>密码:</th>
+					<td><input type="password" id="password" name="password"></td>
+				</tr>
+			</table>
+			<div id="loginButton" data-role="button">登录</div>
+			<p id="tip"></p>
+		</div>
+		<div data-role="footer"></div>
+	</div>
+</body>
+</html>

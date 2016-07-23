@@ -7,7 +7,6 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.util.Set;
 
-import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,15 +21,15 @@ import com.atm.chat.nio.server.util.ScMap;
 public class NIOServer implements ScMap {
 	private static final Logger log = LoggerFactory.getLogger(NIOServer.class);
 	private Selector selector = null;
-	static final int port = 23458;
-	/*public NIOServer() throws IOException{
-		log.info("------------------");
-		String path = ServletActionContext.getRequest().getContextPath();
+	static final int port = 23457;
+	public NIOServer() throws IOException{
+		log.info("---------开启socketServer---------");
+		/*String path = ServletActionContext.getRequest().getContextPath();
 		String basicPath = ServletActionContext.getRequest().getRealPath("/");
 		log.info("path:" + path);
-		log.info("basicPath:" + path);
+		log.info("basicPath:" + path);*/
 		init();
-	}*/
+	}
 	// 用来记录在线人数，以及昵称
 	/*
 	 * private static HashSet<String> users = new HashSet<String>(); private

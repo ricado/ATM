@@ -327,4 +327,17 @@ public class PrivateChatDAOImpl implements PrivateChatDAO {
 			throw re;
 		}
 	}
+	
+	@Override
+	public void deleteByUserId(String userId){
+		log.info("delete by userId :" + userId);
+		try {
+			String sql = "delete PrivateChat as model where model.userReceiveId ='" + userId +"'";
+			int i = getCurrentSession().createQuery(sql).executeUpdate();
+			log.info("success");
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.info("error");
+		}
+	}
 }

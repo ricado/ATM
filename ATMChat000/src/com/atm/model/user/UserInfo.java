@@ -150,5 +150,13 @@ public class UserInfo  implements java.io.Serializable {
 	public void setOffTime(Timestamp offTime) {
 		this.offTime = offTime;
 	}
+
+	@Override
+	public String toString() {
+		return "UserInfo [userId=" + userId + ", headImagePath="
+				+ headImagePath + ", sign=" + sign + ", name=" + name
+				+ ", nickname=" + nickname + ", sex=" + sex + ", jobTitle="
+				+ jobTitle + ", flag=" + flag + ", offTime=" + offTime + "]";
+	}
    
 }

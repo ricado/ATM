@@ -61,8 +61,9 @@ public class BufferHandler implements ScMap {
 				buffer.clear();
 				log.info("String:" + new String(bytes, "UTF-8"));
 			}
-			return new String(bytes, "GBK");
+			return new String(bytes, "UTF-8");
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.info("read error");
 			throw e;
 		}
@@ -108,12 +109,19 @@ public class BufferHandler implements ScMap {
 		while (buffer.hasRemaining()) {
 			try {
 				// socketChannel.configureBlocking(true);
+				if (socketChannel == null) {
+					log.info("socketChannel为空");
+					return;
+				}
 				int y = socketChannel.write(buffer);
-				log.info("---buffer.limit:" + buffer.limit());
-				log.info("---buffer.position:" + buffer.position());
-				log.info("Y:" + y);
-				log.info("写入成功");
+				if (y > 0) {
+					log.info("---buffer.limit:" + buffer.limit());
+					log.info("---buffer.position:" + buffer.position());
+					log.info("Y:" + y);
+					log.info("写入成功");
+				}
 			} catch (Exception e) {
+				log.info(e.getMessage());
 				e.printStackTrace();
 				log.info("写入失败");
 			}
@@ -151,13 +159,30 @@ public class BufferHandler implements ScMap {
 	public void writeBuffer(SocketChannel channel) {
 		// TODO writeBuffer
 		buffer.flip();// 对buffer进行转换
-		try {
-			channel.write(buffer);
-			buffer.clear();
-			log.info("写入成功");
-		} catch (Exception e) {
-			log.info("写入失败");
+		/*
+		 * ByteBuffer[] buffers = null; int l = buffer.limit()/200000;
+		 */
+		while (buffer.hasRemaining()) {
+			try {
+				// socketChannel.configureBlocking(true);
+				if (channel == null) {
+					log.info("channel为空");
+					return;
+				}
+				int y = channel.write(buffer);
+				if (y > 0) {
+					log.info("---buffer.limit:" + buffer.limit());
+					log.info("---buffer.position:" + buffer.position());
+					log.info("Y:" + y);
+					log.info("写入成功");
+				}
+			} catch (Exception e) {
+				log.info(e.getMessage());
+				e.printStackTrace();
+				log.info("写入失败");
+			}
 		}
+		buffer.clear();
 	}
 
 	/**
@@ -192,4 +217,13 @@ public class BufferHandler implements ScMap {
 	public void setSocketChannel(SocketChannel socketChannel) {
 		this.socketChannel = socketChannel;
 	}
+
+	public boolean isExit() {
+		if (socketChannel == null) {
+			log.info("socketChannel为空");
+			return false;
+		}
+		return true;
+	}
+
 }

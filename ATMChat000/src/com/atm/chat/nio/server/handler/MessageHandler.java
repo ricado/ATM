@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atm.chat.nio.server.util.Config;
-import com.atm.model.chat.ChatRecord;
 import com.atm.model.define.chat.CrowdChatRecord;
 import com.atm.model.define.chat.MenberList;
 import com.atm.model.define.chat.PrivateChatRecord;
@@ -41,7 +40,8 @@ public class MessageHandler extends BufferHandler {
 			break;
 		case Config.CROWD_MESSAGE_TO:// 群聊消息
 			receiveCrowdMessage();
-		case Config.MESSAGE_OFFLINE://离线消息
+			break;
+		case Config.MESSAGE_OFFLINE:// 离线消息
 			sendOffLineMessage();
 			break;
 		default:
@@ -61,22 +61,28 @@ public class MessageHandler extends BufferHandler {
 		String time = getString();
 		log.info("接收消息时间:" + time);
 		String content = null;
-		//获取发信人的信息
+		// 获取发信人的信息
 		UserInfo userInfo = userService.getUserInfo(userId);
-		//发信人头像缩略图字节数组
-		byte[] image = FileUtil.makeFileToByte(userInfo.getHeadImagePath());
-		//创建私聊实例
+		// 发信人头像缩略图字节数组
+		String path = this.getClass().getResource("/").getPath().substring(1)
+				.replaceFirst("WEB-INF/classes/", "");
+		log.info(path + userInfo.getHeadImagePath());
+		// 获取用户头像的字节数组
+		byte[] image = FileUtil.makeFileToByte(path
+				+ userInfo.getHeadImagePath());
+		// 创建私聊实例
 		PrivateChatRecord chat = new PrivateChatRecord();
 		chat.setUserSendId(userId);
 		chat.setUserReceiveId(friendId);
 		chat.setNickname(userInfo.getNickname());
-		//时间
+		// 时间
 		chat.setSendTime(TimeUtil.getTimestamp());
 		log.info(">>>>判断消息类型");
 		if (messageType == Config.MESSAGE_TEXT) {
 			log.info(">>>>为文本类型");
 			chat.setFlag(0);
 			content = receivePrivateTextMessage(userId, friendId);
+			log.info("content:" + content);
 		} else if (messageType == Config.MESSAGE_IMG) {
 			log.info(">>>>为图片消息");
 			chat.setFlag(1);
@@ -112,6 +118,7 @@ public class MessageHandler extends BufferHandler {
 			throws Exception {
 		log.info("接收图片消息");
 		String filename = getString();
+		log.info("filename:" + filename);
 		int imageLength = getInt();
 		byte[] imagebytes = FileUtil.getFileBytes(socketChannel, imageLength);
 		String path = FileUtil.getPrivateChatPath(filename, userId, friendId,
@@ -150,13 +157,15 @@ public class MessageHandler extends BufferHandler {
 	private void sendTextMessage(PrivateChatRecord chat, byte[] image)
 			throws UnsupportedEncodingException {
 		log.info("=========私信======发送文本消息================");
-
+		log.info("〉〉〉〉〉〉〉〉nickname:" + chat.getNickname());
+		log.info(".............content:" + chat.getSendContent());
 		buffer = ByteBuffer.allocateDirect(32
 				+ chat.getUserSendId().getBytes().length
 				+ chat.getNickname().getBytes().length
 				+ chat.getUserReceiveId().getBytes().length
-				+ chat.getSendTime().toString().getBytes().length
-				+ chat.getSendContent().getBytes().length + image.length);
+				+ TimeUtil.getDateFormat(chat.getSendTime()).toString()
+						.getBytes().length
+				+ chat.getSendContent().getBytes("GBK").length + image.length);
 		buffer.putInt(Config.MESSAGE_FROM);
 		buffer.putInt(Config.MESSAGE_TEXT);
 		// userId
@@ -166,7 +175,7 @@ public class MessageHandler extends BufferHandler {
 		// 接受者id
 		put(chat.getUserReceiveId());
 		// 时间
-		put(chat.getSendTime().toString());
+		put(TimeUtil.getDateFormat(chat.getSendTime()).toString());
 		// 文本
 		put(chat.getSendContent());
 		// 头像缩略图
@@ -184,28 +193,30 @@ public class MessageHandler extends BufferHandler {
 	 */
 	private void sendImageMessage(PrivateChatRecord chat, byte[] image)
 			throws IOException {
+		log.info("私信=======图片消息");
 		byte[] imageBytes = FileUtil.makeFileToByte(chat.getSendContent());
 		String filename = new File(chat.getSendContent()).getName();
 		log.info("=========私信======发送图片消息================");
-		buffer = ByteBuffer
-				.allocateDirect(32 + chat.getUserSendId().getBytes().length
-						+ chat.getUserReceiveId().getBytes().length
-						+ chat.getNickname().getBytes().length
-						+ chat.getSendTime().toString().getBytes().length
-						+ filename.getBytes().length + imageBytes.length
-						+ image.length);
+		buffer = ByteBuffer.allocateDirect(36
+				+ chat.getUserSendId().getBytes().length
+				+ chat.getUserReceiveId().getBytes().length
+				+ chat.getNickname().getBytes().length
+				+ TimeUtil.getDateFormat(chat.getSendTime()).toString().getBytes().length 
+				+ filename.getBytes().length
+				+ imageBytes.length 
+				+ image.length);
 
-		buffer.putInt(Config.MESSAGE_TO);
+		buffer.putInt(Config.MESSAGE_FROM);
 		buffer.putInt(Config.MESSAGE_IMG);
 		put(chat.getUserSendId());
-		put(chat.getUserReceiveId());
 		put(chat.getNickname());
-		put(chat.getSendTime().toString());
+		put(chat.getUserReceiveId());
+		put(TimeUtil.getDateFormat(chat.getSendTime()).toString());
 		put(filename);
-		buffer.putInt(imageBytes.length);
-		buffer.put(imageBytes);
 		buffer.putInt(image.length);
 		buffer.put(image);
+		buffer.putInt(imageBytes.length);
+		buffer.put(imageBytes);
 
 		writeBuffer(map.get(chat.getUserReceiveId()));
 		log.info("=============success==================");
@@ -231,7 +242,8 @@ public class MessageHandler extends BufferHandler {
 			PrivateChatRecord chat = iterator.next();
 			// 查看map中是否已经存在userId的头像
 			if (mapImage.get(chat.getUserSendId()) == null) {
-				images = UserService.getUserSmallHeadByte(chat.getUserSendId());
+				images = new UserService().getUserSmallHeadByte(chat
+						.getUserSendId());
 				mapImage.put(chat.getUserSendId(), images);
 			}
 			sendMessage(chat, mapImage.get(chat.getUserSendId()));
@@ -251,7 +263,11 @@ public class MessageHandler extends BufferHandler {
 		String content = null;
 		UserInfo userInfo = userService.getUserInfo(userId);
 		// 头像图片的缩略图
-		byte[] image = FileUtil.makeFileToByte(userInfo.getHeadImagePath());
+		String path = this.getClass().getResource("/").getPath().substring(1)
+				.replaceFirst("WEB-INF/classes/", "");
+		log.info(path);
+		byte[] image = FileUtil.makeFileToByte(path
+				+ userInfo.getHeadImagePath());
 
 		// 打印消息
 		log.info("-----------群聊" + crowdId + "------------------");
@@ -274,6 +290,7 @@ public class MessageHandler extends BufferHandler {
 		log.info("-------------end---------------");
 
 		sendCrowdMessage(chat, image);
+		log.info("结束发送群聊消息");
 	}
 
 	/**
@@ -332,6 +349,7 @@ public class MessageHandler extends BufferHandler {
 			} else if (socketChannel.equals(channel)) {
 				log.info("用户本身");
 			} else {
+				log.info("发送给" + userIds.get(i).getUserId());
 				sendMessage(chat, image, channel);
 			}
 		}
@@ -388,8 +406,8 @@ public class MessageHandler extends BufferHandler {
 				+ chat.getUserId().getBytes().length
 				+ chat.getNickname().getBytes().length
 				+ chat.getSendContent().getBytes().length
-				+ chat.getSendTime().toString().getBytes().length
-				+ image.length);
+				+ TimeUtil.getDateFormat(chat.getSendTime()).toString()
+						.getBytes().length + image.length);
 
 		log.info("sendMessage:" + chat.getUserId() + " to " + chat.getCrowdId()
 				+ " content:" + chat.getSendContent());
@@ -399,11 +417,10 @@ public class MessageHandler extends BufferHandler {
 		put(chat.getUserId());
 		put(chat.getNickname());
 		buffer.putInt(chat.getCrowdId());
-		put(chat.getSendTime().toString());
+		put(TimeUtil.getDateFormat(chat.getSendTime()).toString());
 		put(chat.getSendContent());
 		buffer.putInt(image.length);
 		buffer.put(image);
-
 		writeBuffer(channel);
 	}
 
@@ -421,9 +438,10 @@ public class MessageHandler extends BufferHandler {
 		buffer = ByteBuffer.allocateDirect(36
 				+ chat.getUserId().getBytes().length
 				+ chat.getNickname().getBytes().length
-				+ filename.getBytes().length + imageBytes.length
-				+ chat.getSendTime().toString().getBytes().length
-				+ image.length);
+				+ filename.getBytes().length
+				+ imageBytes.length
+				+ TimeUtil.getDateFormat(chat.getSendTime()).toString()
+						.getBytes().length + image.length);
 
 		log.info("sendMessage:" + chat.getUserId() + " to " + chat.getCrowdId()
 				+ " content:");
@@ -434,7 +452,7 @@ public class MessageHandler extends BufferHandler {
 		put(chat.getUserId());
 		put(chat.getNickname());
 		buffer.putInt(chat.getCrowdId());
-		put(chat.getSendTime().toString());
+		put(TimeUtil.getDateFormat(chat.getSendTime()).toString());
 		put(filename);
 		buffer.putInt(imageBytes.length);
 		buffer.put(imageBytes);
@@ -463,7 +481,8 @@ public class MessageHandler extends BufferHandler {
 				.hasNext();) {
 			CrowdChatRecord chat = (CrowdChatRecord) iterator.next();
 			if (mapImage.get(chat.getUserId()) == null) {
-				images = UserService.getUserSmallHeadByte(chat.getUserId());
+				images = new UserService().getUserSmallHeadByte(chat
+						.getUserId());
 				mapImage.put(chat.getUserId(), images);
 			}
 			sendCrowdMessage(chat, mapImage.get(chat.getUserId()));
@@ -477,14 +496,19 @@ public class MessageHandler extends BufferHandler {
 	 * @param userId
 	 * @throws Exception
 	 */
-	public void sendOffLineMessage()
-			throws Exception {
-		String userId = getString();
+	public void sendOffLineMessage() throws Exception {
+		String userId = "";
+		try {
+			userId = getString();
+		} catch (Exception e) {
+			log.info("获取离线消息....");
+		}
+		log.info("userId:" + userId);
 		// 发送私聊离线消息
 		log.info("============发送私聊离线消息=============");
 		sendPrivateOffLineMessage(userId);
 		// 群聊离线消息
 		log.info("============发送群聊离线消息=============");
-		//sendCrowdOffLineMessage(userId);
+		// sendCrowdOffLineMessage(userId);
 	}
 }

@@ -16,13 +16,16 @@
 		</primary-key>
 
 	</table>
-	<table name="userLabelView" catalog="atm">
-		<primary-key>
-			<key-column name="userID" />
-			<key-column name="labID" />
-		</primary-key>
-	</table>
-	<table name="recuitView" catalog="atm">
+<table name="userLabelView" catalog="atm">
+	<primary-key>
+		<generator class="identity"></generator>
+
+
+	</primary-key>
+	<column name="userID"></column>
+	<column name="labID"></column>
+</table>
+<table name="recuitView" catalog="atm">
 		<primary-key>
 			<key-column name="reInfoID" />
 		</primary-key>
@@ -56,9 +59,9 @@
 		<column name="userSendID"></column>
 		<column name="userReceiveID"></column>
 	</table>
-<table name="CrowdChatRecord" catalog="atm">
-	<primary-key>
-		<key-column name="recordID" />
-	</primary-key>
-</table>
+	<table name="CrowdChatRecord" catalog="atm">
+		<primary-key>
+			<key-column name="recordID" />
+		</primary-key>
+	</table>
 </hibernate-reverse-engineering>

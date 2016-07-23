@@ -32,7 +32,7 @@ import com.atm.util.ApplicationUtil;
 @Transactional
 public class UserInfoDAOImpl implements UserInfoDAO {
 	private static final Logger log = LoggerFactory
-			.getLogger(ClickGoodDAOImpl.class);
+			.getLogger(UserInfoDAOImpl.class);
 	private SessionFactory sessionFactory;
 
 	/*
@@ -450,6 +450,55 @@ public class UserInfoDAOImpl implements UserInfoDAO {
 		}catch(Exception e){
 			log.info("error");
 			throw e;
+		}
+	}
+	
+	@Override
+	public List getSdmNO(String sName,String dName,String mName){
+		log.info("获取学校系别专业相关编号");
+		try{
+			List list = getCurrentSession().createSQLQuery("{call sdmNO(?,?,?)}")
+					.setString(0, sName)
+					.setString(1, dName)
+					.setString(2, mName)
+					.list();
+			return list;
+		}catch(Exception e){
+			log.info("获取失败");
+			throw e;
+		}
+	}
+	/**
+	 * 删除某一个用户
+	 * @param userId
+	 * @return
+	 */
+	@Override
+	public int deleteByUserId(String userId){
+		log.info("删除用户");
+		try{
+			String sql = "delete from UserInfo u where u.userId='" + userId + "'";
+			return getCurrentSession().createQuery(sql).executeUpdate();
+		}catch(Exception e){
+			log.info("删除失败");
+			throw e;
+		}
+	}
+	
+	@Override
+	public int saveNumAndName(String userId,String number,String name){
+		log.info("插入学号以及真实姓名");
+		try {
+			int i=getCurrentSession().createSQLQuery("{call nameAndNum(?,?,?)}")
+				.setString(0, userId)
+				.setString(1, number)
+				.setString(2, name)
+				.executeUpdate();
+			log.info("i:" + i);
+			return i;
+		} catch (Exception e) {
+			// TODO: handle exception
+			return -1;
 		}
 	}
 }

@@ -234,6 +234,13 @@ public class PeopleAttentionAssociationDAOImpl implements PeopleAttentionAssocia
 		}
 	}
 	
+	/**
+	 * type为0表示查看我关注的
+	 * 1表示查看我的粉丝
+	 * @param userId
+	 * @param type
+	 * @return
+	 */
 	private List<UserList> getAttent(String userId,int type){
 		log.info("find attend");
 		try{
