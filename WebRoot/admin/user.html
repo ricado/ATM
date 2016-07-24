@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>user.html</title>
+
+<meta name="keywords" content="keyword1,keyword2,keyword3">
+<meta name="description" content="this is my page">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+<!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+<style type="text/css">
+table {
+	border-collapse: collapse;
+	border-radius: 10px;
+}
+
+table, td, th {
+	border: 1px solid black;
+}
+
+#table_head {
+	background-color: #55FA9C;
+}
+
+#div_table {
+	box-shadow: 0px 0px 7px 1px #333;
+	border-radius: 8px;
+	width: -moz-max-content;
+}
+/* 连接不要下划线 */
+a{
+	TEXT-DECORATION:none;
+}
+</style>
+<SCRIPT type="text/javascript" src="js/jquery-2.1.1.min.js"></SCRIPT>
+<script type="text/javascript">
+	$(function() {
+		//$.sendAjax("page_userList", "");
+		//上一页
+		//$("#tip").html("currentPage:" + currentPage + "pageNum :" + pageNum);
+		$.getUserList(0);
+		$("#next").click(function() {
+			$.getUserList(1);
+		});
+		//下一页 
+		$("#last").click(function() {
+			$.getUserList(-1);
+		});
+		//跳转
+		$("#jump").click(function() {
+			$.getUserList(0);
+		});
+		//更换显示的记录数
+		$("#pageNum").changer(function() {
+			$.getUserList(0);
+		});
+		$("#fresh").click(function() {
+			$.getUserList(0);
+		});
+
+	});
+
+	$.sendAjax = function(url, params) {
+		$.ajax({
+			type : "POST",
+			url : "ajax/" + url + ".action",
+			data : params,
+			dataType : "text", //ajax返回值设置为text（json格式也可用它返回，可打印出结果，也可设置成json）
+			success : function(json) {
+				var obj = $.parseJSON(json); //使用这个方法解析json
+				var list = obj.list; //result是和action中定义的result变量的get方法对应的
+				var maxPage = obj.maxPage;
+				var pageNum = obj.pageNum;
+				var currentPage = obj.currentPage;
+				if (currentPage > maxPage) {
+					var params = {
+						curretnPage : maxPage,
+						pageNum : pageNum
+					}
+					$.sendAjax("page_userList", params);
+				} else {
+					$("#userList").html(list);
+					$("#current").val(currentPage);
+					$("#pageNum").val(pageNum);
+					$("#max").val(maxPage);
+					$("#maxPage").html(maxPage);
+				}
+			},
+			error : function(json) {
+				alert("json=111" + json);
+				return false;
+			}
+		});
+	};
+
+	$.getParams = function(i) {
+		//var currentPage = $("#currentPage").attr("value");
+		var currentPage = $("#current").val();
+		var max = $("#max").val();
+		var pageNum = $("#pageNum").val();
+		$("#tip").html(
+				"currentPage:" + currentPage + "pageNum :" + pageNum + " max:"
+						+ max);
+		if (i == 1) {
+			currentPage++;
+		} else if (i == -1) {
+			currentPage--;
+		}
+		if (currentPage >= 1 && currentPage <= max) {
+		} else if (currentPage < 1) {
+			currentPage = 1;
+		} else {
+			currentPage = max;
+		}
+		var params = {
+			currentPage : currentPage,
+			pageNum : pageNum
+		}
+		return params;
+	}
+	$.getUserList = function(i) {
+		var params = $.getParams(i);
+		if (params == false) {
+			$("#tip").html("无法下一页或者上一页");
+		} else {
+			$.sendAjax("page_userList", params);
+		}
+	}
+</script>
+
+</head>
+
+<body>
+	<div align="center">
+		用户列表:
+		<button id="fresh">刷新</button>
+		<div>
+			<div id="div_table">
+				<table id="userList" border="1">
+				</table>
+			</div>
+			<a href="admin_userInfo.action?userId=10001">查看资料</a>
+			<div id="page">
+				<input type="hidden" value="1" id="max">
+				<button id="last">上一页</button>
+				<button id="next">下一页</button>
+				每页显示<input type="text" size="3" value="20" id="pageNum">条
+				跳转到第 <input type="text" size="3" value="1" id="current">/<b
+					id="maxPage"></b>页
+				<button id="jump">确定</button>
+			</div>
+			<form action="admin_userLogin.action" method="post">
+				<input type="submit" value="跳到登录表">
+			</form>
+			<form action="admin/test.html" method="post">
+				<input type="submit" value="跳到哦哦哦">
+			</form>
+		</div>
+		<p id="tip"></p>
+	</div>
+</body>
+</html>
