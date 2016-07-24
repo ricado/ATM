@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>login.html</title>
+
+<meta name="keywords" content="keyword1,keyword2,keyword3">
+<meta name="description" content="this is my page">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+<!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+<style type="text/css">
+body {
+	margin: 0px;
+	padding: 0px;
+}
+
+#main {
+	width: -moz-max-content;
+	margin: auto;
+	box-shadow: 0px 0px 7px 1px #333;
+	border-radius: 8px;
+}
+
+#loginText {
+	text-align: center;
+	padding: 5px;
+	font-size: 20px;
+	background-color: rgb(32, 234, 35);
+	border-radius: 7px 7px 0px 1px;
+	margin-top: 158px;
+}
+
+#button {
+	border-radius: 0px 0px 7px 7px;
+	background-color: rgb(32, 234, 35);
+	font-size: 20PX;
+}
+
+#button_Table {
+	text-align: center;
+	width: 264px;
+}
+
+#button_Table td:HOVER {
+	background-color: rgb(32, 200, 35);
+}
+
+#table th {
+	font-size: 20px;
+}
+
+#table input {
+	font-size: 18px;
+}
+
+#input_userId {
+	border-bottom: 1px solid rgb(240, 240, 240);
+}
+</style>
+
+<SCRIPT type="text/javascript" src="js/jquery-2.1.1.min.js"></SCRIPT>
+<script type="text/javascript">
+	$(function(){
+		alert("aaaa");
+		$("#login").click(function(){
+			alert("login");
+		});
+		$("#register").click(function(){
+			alert("register");
+		});
+	});
+</script>
+</head>
+<body>
+	<div id="main">
+		<div id="loginText">登录</div>
+		<div id="table">
+			<table id="inputTable">
+				<tr>
+					<th>账号:</th>
+					<td><input type="text" name="userId" id="userId"></td>
+				</tr>
+				<tr>
+					<th>密码:</th>
+					<td><input type="password" name="userPwd" id="userPwd"></td>
+				</tr>
+			</table>
+		</div>
+		<div id="button">
+			<table id="button_Table">
+				<tr>
+					<td id="login"><b id="login">登录</b></td>
+					<td id="register"><b id="register">注册</b></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

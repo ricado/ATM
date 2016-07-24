@@ -1,0 +1,370 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.1.xsd 
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+	http://www.springframework.org/schema/mvc 
+	http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+
+
+	<!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"> 
+		<property name="url" value="jdbc:mysql://127.0.0.1:3306/atm?characterEncoding=UTF-8"> 
+		useUnicode=true </property> <property name="username" value="root"></property> 
+		</bean> -->
+
+	<!-- 指定数据源Bean,使用C3P0数据源实现 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<!-- 指定连接数据库的驱动 -->
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<!-- 指定连接数据库的URL -->
+		<property name="jdbcUrl"
+			value="jdbc:mysql://139.129.131.179:3306/atm?useUnicode=true&amp;characterEncoding=UTF-8" />  <!--?useUnicode=true&amp;characterEncoding=UTF-8  -->
+		<!-- 指定连接数据库的用户名 -->
+		<property name="user" value="atm" />
+		<!-- 指定连接数据库的密码 PsZKABzzWs-->
+		<property name="password" value="atm" />
+		<!-- 指定连接数据库连接池的最大连接数 -->
+		<property name="maxPoolSize" value="40" />
+	 <!-- 指定连接数据库连接池的最小连接数 -->
+		<property name="minPoolSize" value="1" />
+		<!-- 指定连接数据库的连接池的初始化连接数 -->
+		<property name="initialPoolSize" value="2" />
+		<!-- 指定连接数据库连接池的连接最大空间 -->
+		<property name="maxIdleTime" value="20" />
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+			</props>
+		</property>
+		
+		<property name="mappingResources">
+			<list>
+				<!-- ******************chat******************** -->
+				<value>com/atm/model/chat/CrowdMenber.hbm.xml</value>
+				<value>com/atm/model/chat/CrowdAtMe.hbm.xml</value>
+				<value>com/atm/model/chat/CrowdRole.hbm.xml</value>
+				<value>com/atm/model/chat/CrowdChat.hbm.xml</value>
+				<value>com/atm/model/chat/ChatRecord.hbm.xml</value>
+				<value>com/atm/model/chat/PrivateChat.hbm.xml</value>
+				
+				<!-- define -->
+				<value>com/atm/model/define/chat/CrowdIntive.hbm.xml</value>
+				<value>com/atm/model/define/chat/CrowdListView.hbm.xml</value>
+				<value>com/atm/model/define/chat/Menber.hbm.xml</value>
+				<value>com/atm/model/define/chat/CrowdRecordView.hbm.xml</value>
+				<value>com/atm/model/define/chat/PrivateChatRecord.hbm.xml</value>
+				<value>com/atm/model/define/chat/CrowdChatRecord.hbm.xml</value>
+				<!-- ******************bbs********************* -->
+				<value>com/atm/model/bbs/EssayType.hbm.xml</value>
+				<value>com/atm/model/bbs/EssayAtMe.hbm.xml</value>
+				<value>com/atm/model/bbs/CollectEssay.hbm.xml</value>
+				<value>com/atm/model/bbs/EssayPhoto.hbm.xml</value>
+				<value>com/atm/model/bbs/LabelAttentionAssociation.hbm.xml</value>
+				<value>com/atm/model/bbs/ClickGood.hbm.xml</value>
+				<value>com/atm/model/bbs/Essay.hbm.xml</value>
+				<value>com/atm/model/bbs/EssayClick.hbm.xml</value>
+				<value>com/atm/model/bbs/Label.hbm.xml</value>
+				<value>com/atm/model/bbs/ReplyPhoto.hbm.xml</value>
+				<value>com/atm/model/bbs/Reply.hbm.xml</value>
+	<value>com/atm/model/bbs/RecuitClick.hbm.xml</value>					<value>com/atm/model/bbs/ApplyClick.hbm.xml</value>   <value>com/atm/model/bbs/Report.hbm.xml</value>		<!-- define -->
+				<value>com/atm/model/define/bbs/ClickGoodView.hbm.xml</value>
+				<value>com/atm/model/define/bbs/CollectEssayView.hbm.xml</value>
+				<value>com/atm/model/define/bbs/EssayDetailView.hbm.xml</value>
+				<value>com/atm/model/define/bbs/EssayOuter.hbm.xml</value>
+				<value>com/atm/model/define/bbs/IsReplyClickGoodView.hbm.xml</value>
+				<value>com/atm/model/define/bbs/LabelRelationView.hbm.xml</value>
+				<value>com/atm/model/define/bbs/LabelView.hbm.xml</value>
+				<value>com/atm/model/define/bbs/PeopleRelationView.hbm.xml</value>
+				<value>com/atm/model/define/bbs/ReplyClickGood.hbm.xml</value>
+				<value>com/atm/model/define/bbs/ReplyView.hbm.xml</value>
+				<!-- ******************user******************** -->
+				<value>com/atm/model/user/UserInfo.hbm.xml</value>
+				<value>com/atm/model/user/Teacher.hbm.xml</value>
+				<value>com/atm/model/user/School.hbm.xml</value>
+				<value>com/atm/model/user/Student.hbm.xml</value>
+				<value>com/atm/model/user/Major.hbm.xml</value>
+				<value>com/atm/model/user/User.hbm.xml</value>
+				<value>com/atm/model/user/Department.hbm.xml</value>
+				<!-- define -->
+				<value>com/atm/model/define/user/UserList.hbm.xml</value>
+				<value>com/atm/model/define/user/UserBasicInfo.hbm.xml</value>
+				<value>com/atm/model/define/user/UserLabelView.hbm.xml</value>
+				
+				<!-- ******************other********************* -->
+				<value>com/atm/model/RecuitType.hbm.xml</value>
+				<value>com/atm/model/Feedback.hbm.xml</value>
+				<value>com/atm/model/ApplyInfoContent.hbm.xml</value>
+				<value>com/atm/model/PeopleAttentionAssociation.hbm.xml</value>
+				<value>com/atm/model/WorkType.hbm.xml</value>
+				<value>com/atm/model/VerifyInfo.hbm.xml</value>
+				<value>com/atm/model/RecuitInfoContent.hbm.xml</value>
+				<value>com/atm/model/Appeal.hbm.xml</value>
+				<value>com/atm/model/SystemInfo.hbm.xml</value>
+				<!-- define -->
+				<value>com/atm/model/define/Login.hbm.xml</value>
+				<value>com/atm/model/define/RecuitView.hbm.xml</value>
+				<value>com/atm/model/define/ApplyView.hbm.xml</value>
+				<value>com/atm/model/define/procedure.hbm.xml</value>
+
+<!-- schoolActive -->
+				<value>com/atm/model/SchoolActive.hbm.xml</value><value>com/atm/model/define/RecommendSm.hbm.xml</value>			</list>
+		</property>
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<!-- 配置事务特性 ，配置save、delete和update开始的方法，事务传播特性为required -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="run*" propagation="REQUIRED" />
+			<tx:method name="*" propagation="REQUIRED" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+	<!-- 配置那些类的方法进行事务管理，还需要参考tx:advice的设置 -->
+	<aop:config>
+		<aop:pointcut id="allManagerMethod" expression="execution (* com.atm.service.*.*.*(..)) or execution(* com.atm.service.*.*(..)) " />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="allManagerMethod" />
+	</aop:config>
+
+	<!-- ///////////////上床下载的配置////////////// -->
+	<!-- <bean name="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"> 
+		设置编码模式 <property name="defaultEncoding" value="UTF-8"/> 限制上文件大小 <property 
+		name="maxUploadSize" value="50000000"/> 设置临时文件夹 <property name="uploadTempDir" 
+		value="upload/temp"/> </bean> 扫描包 <context:component-scan base-package="com.ccy.service" 
+		/> 启动注解 <mvc:annotation-driven /> 静态文件访问 <mvc:default-servlet-handler/> 对模型视图名称的解析，即在模型视图名称添加前后缀 
+		<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" 
+		> <property name="prefix" value="/"/> <property name="suffix" value=".jsp"/> 
+		</bean> -->
+	<!-- /////////////////上传下载配置结束////////////////////// -->
+
+	<!-- <context:component-scan base-package="com.atm.service,com.atm.dao.Impl"> 
+		<context:include-filter type="annotation" expression="org.aspectj.lang.annotation.Aspect"/> 
+		</context:component-scan> <aop:aspectj-autoproxy/> -->
+
+	<bean id="Test" class="com.atm.test.test" />
+
+	<bean id="CrowdMenberDAOImpl" class="com.atm.dao.impl.chat.CrowdMenberDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="CrowdAtMeDAOImpl" class="com.atm.dao.impl.chat.CrowdAtMeDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="EssayTypeDAOImpl" class="com.atm.dao.impl.bbs.EssayTypeDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="UserInfoDAOImpl" class="com.atm.dao.impl.user.UserInfoDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="CrowdRoleDAOImpl" class="com.atm.dao.impl.chat.CrowdRoleDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="FeedbackDAOImpl" class="com.atm.dao.impl.FeedbackDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="TeacherDAOImpl" class="com.atm.dao.impl.user.TeacherDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="CrowdChatDAOImpl" class="com.atm.dao.impl.chat.CrowdChatDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="ReplyPhotoDAOImpl" class="com.atm.dao.impl.bbs.ReplyPhotoDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="RecuitTypeDAOImpl" class="com.atm.dao.impl.RecuitTypeDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="SchoolDAOImpl" class="com.atm.dao.impl.user.SchoolDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="StudentDAOImpl" class="com.atm.dao.impl.user.StudentDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="MajorDAOImpl" class="com.atm.dao.impl.user.MajorDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="EssayAtMeDAOImpl" class="com.atm.dao.impl.bbs.EssayAtMeDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="LabelDAOImpl" class="com.atm.dao.impl.bbs.LabelDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="ApplyInfoContentDAOImpl" class="com.atm.dao.impl.ApplyInfoContentDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="CollectEssayDAOImpl" class="com.atm.dao.impl.bbs.CollectEssayDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="WorkTypeDAOImpl" class="com.atm.dao.impl.WorkTypeDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="VerifyInfoDAOImpl" class="com.atm.dao.impl.VerifyInfoDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="UserDAOImpl" class="com.atm.dao.impl.user.UserDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="RecuitInfoContentDAOImpl" class="com.atm.dao.impl.RecuitInfoContentDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="ChatRecordDAOImpl" class="com.atm.dao.impl.chat.ChatRecordDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="PrivateChatDAOImpl" class="com.atm.dao.impl.chat.PrivateChatDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="ReplyDAOImpl" class="com.atm.dao.impl.bbs.ReplyDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="EssayPhotoDAOImpl" class="com.atm.dao.impl.bbs.EssayPhotoDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="PeopleAttentionAssociationDAOImpl" class="com.atm.dao.impl.PeopleAttentionAssociationDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="LabelAttentionAssociationDAOImpl" class="com.atm.dao.impl.bbs.LabelAttentionAssociationDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="AppealDAOImpl" class="com.atm.dao.impl.AppealDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="DepartmentDAOImpl" class="com.atm.dao.impl.user.DepartmentDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="SystemInfoDAOImpl" class="com.atm.dao.impl.SystemInfoDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="ClickGoodDAOImpl" class="com.atm.dao.impl.bbs.ClickGoodDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="EssayDAOImpl" class="com.atm.dao.impl.bbs.EssayDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="TransactionDaoImpl" class="com.atm.dao.impl.TransactionDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="SessionDAOImpl" class="com.atm.dao.impl.SessionDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="CrowdIntiveDAO" class="com.atm.daoDefined.chat.CrowdIntiveDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="LoginDAO" class="com.atm.daoDefined.LoginDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<import resource="applicationContext_*.xml" />
+
+<bean id="SchoolActiveDAO" class="com.atm.dao.SchoolActiveDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+<bean id="ReportDAO" class="com.atm.dao.impl.bbs.ReportDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+<bean id="RecommendSmDAO"
+		class="com.atm.daoDefined.RecommendSmDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+</beans>

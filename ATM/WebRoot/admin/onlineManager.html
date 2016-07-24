@@ -1,0 +1,240 @@
+<!DOCTYPE html >
+<html>
+<head>
+<title>OnlineManager.html</title>
+<meta name="keywords" content="keyword1,keyword2,keyword3">
+<meta name="description" content="this is my page">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<!--<
+link rel="stylesheet" type="text/css" href="./styles.css">-->
+<SCRIPT type="text/javascript" src="js/jquery-2.1.1.min.js"></SCRIPT>
+<!-- <script type="text/javascript">
+	function deleteLogin(i) {
+		alert(i);
+		var userId = $("#userId" + i).attr("value");
+		var params = {
+			userId : userId
+		}
+		alert(userId);
+		$.ajax({
+			type : "POST",
+			url : "ajax/online_delete.action",
+			data : params,
+			dataType : "text", //ajax返回值设置为text（json格式也可用它返回，可打印出结果，也可设置成json）
+			success : function(json) {
+				var obj = $.parseJSON(json); //使用这个方法解析json
+				var string = obj.response; //result是和action中定义的result变量的get方法对应的
+				$("#userTable").html(string);
+			},
+			error : function(json) {
+				alert("json=" + json);
+				return false;
+			}
+		});
+	}
+
+	function sendAjax(urlstr, params) {
+		$.ajax({
+			type : "POST",
+			url : "ajax/online_delete.action",
+			data : params,
+			dataType : "text", //ajax返回值设置为text（json格式也可用它返回，可打印出结果，也可设置成json）
+			success : function(json) {
+				var obj = $.parseJSON(json); //使用这个方法解析json
+				var string = obj.response; //result是和action中定义的result变量的get方法对应的
+				$("#userTable").html(string);
+			},
+			error : function(json) {
+				alert("json=" + json);
+				return false;
+			}
+		});
+	}
+
+	$(function() {
+		//初始化调用的方法
+		alert("aaaa");
+		$.ajax({
+			type : "POST",
+			url : "ajax/online_getLoginList.action",
+			data : "",
+			dataType : "text", //ajax返回值设置为text（json格式也可用它返回，可打印出结果，也可设置成json）
+			success : function(json) {
+				var obj = $.parseJSON(json); //使用这个方法解析json
+				var string = obj.response; //result是和action中定义的result变量的get方法对应的
+				$("#userTable").html(string);
+			},
+			error : function(json) {
+				alert("json=" + json);
+				return false;
+			}
+		});
+		//移动用户对应的socketchannel到别的ReadSelector
+		$("#move").click(function() {
+			var i = 0;
+			var user = $("#user").val();
+			var num = $("num").val();
+			$("#tip1").html(user + "   1111  " + num);
+			var params = {
+				userId : user,//$("#user").attr("value"),
+				number : num
+			//$("#num").attr("value")
+			}
+			//发送Ajax
+			$.ajax({
+				type : "POST",
+				url : "ajax/online_move.action",
+				data : params,
+				dataType : "text", //ajax返回值设置为text（json格式也可用它返回，可打印出结果，也可设置成json）
+				success : function(json) {
+					$("#button").click();
+				},
+				error : function(json) {
+					alert("json=" + json);
+					return false;
+				}
+			});
+		});
+		$("#fresh").click(function() {
+			$.ajax({
+				type : "POST",
+				url : "ajax/online_getLoginList.action",
+				data : "",
+				dataType : "text", //ajax返回值设置为text（json格式也可用它返回，可打印出结果，也可设置成json）
+				success : function(json) {
+					var obj = $.parseJSON(json); //使用这个方法解析json
+					var string = obj.response; //result是和action中定义的result变量的get方法对应的
+					$("#userTable").html(string);
+				},
+				error : function(json) {
+					alert("json=" + json);
+					return false;
+				}
+			});
+		});
+	});
+</script> -->
+<script type="text/javascript">
+	$(function() {
+		$("#tip").html("999999999999999999999");
+		$.getLoginList(0);
+		alert("success");
+		$("#next").click(function() {
+			$.getLoginList(1);
+		});
+		//下一页 
+		$("#last").click(function() {
+			$.getLoginList(-1);
+		});
+		//跳转
+		$("#jump").click(function() {
+			$.getLoginList(0);
+		});
+		//更换显示的记录数
+		$("#pageNum").changer(function() {
+			$.getLoginList(0);
+		});
+		$("#fresh").click(function() {
+			$.getLoginList(0);
+		});
+	});
+	$.getParams = function(i) {
+		var currentPage = $("#current").val();
+		var max = $("#max").attr("value");
+		var pageNum = $("#pageNum").val();
+		$("#tip").html(
+				"currentPage:" + currentPage + "pageNum :" + pageNum + " max:"
+						+ max);
+		if (i == 1) {
+			currentPage++;
+		} else if (i == -1) {
+			currentPage--;
+		}
+
+		if (currentPage >= 1 && currentPage <= max) {
+			//var pageNum = $("#pageNum").attr("value");	
+			$("#getP").html(
+					"currentPage:" + currentPage + "pageNum :" + pageNum
+							+ " max:" + max);
+			//$("#tip").append("params" + params);
+			//
+		} else if (currentPage < 1) {
+			currentPage = 1;
+		} else {
+			currentPage = max;
+		}
+		var params = {
+			currentPage : currentPage,
+			pageNum : pageNum
+		}
+		return params;
+	}
+	$.getLoginList = function(i) {
+		var params = $.getParams(i);
+		if (params == false) {
+			$("#send").html("无法下一页或者上一页");
+		} else {
+			$("#send").html("send to ajax");
+			$.sendAjax(params);
+		}
+	}
+	//发送AJAX消息
+	$.sendAjax = function(params) {
+		$.ajax({
+			type : "POST",
+			url : "ajax/page_loginList.action",
+			data : params,
+			dataType : "text", //ajax返回值设置为text（json格式也可用它返回，可打印出结果，也可设置成json）
+			success : function(json) {
+				var json = $.parseJSON(json);
+				var list = json.list;//表格内容
+				var currentPage = json.currentPage;
+				var pageNum = json.pageNum;
+				var max = json.maxPage;
+				if (currentPage > max) {
+					currentpage = max;
+					var params = {
+						curretnPage : max,
+						pageNum : pageNum
+					}
+					$.sendAjax(params);
+				} else {
+					$("#userTable").html(list);
+					$("#current").val(currentPage);
+					$("#pageNum").val(pageNum);
+					$("#max").val(max);
+					$("#maxPage").html(max);
+				}
+			},
+			error : function(json) {
+				alert("json=" + json);
+				return false;
+			}
+		});
+	}
+</script>
+
+</head>
+
+<body>
+	登录表
+	<button id="fresh">刷新查看</button>
+	<table id="userTable" border="1">
+	</table>
+	<div id="page">
+		<input type="hidden" value="1" id="max">
+		<button id="last">上一页</button>
+		<button id="next">下一页</button>
+		每页显示<input type="text" size="3" value="20" id="pageNum">条 跳转到第
+		<input type="text" size="3" value="1" id="current">/<b
+			id="maxPage"></b>页
+		<button id="jump">确定</button>
+	</div>
+	<button id="show">确定</button>
+	<p id="tip">tt</p>
+	<p id="getP">1</p>
+	<p id="send">1</p>
+</body>
+</html>
+
