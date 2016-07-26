@@ -30,7 +30,7 @@
                 <comment>个人简介</comment>
             </column>
         </property>
-        <property name="publicTime" type="java.sql.Timestamp">
+        <property name="publishTime" type="java.lang.String">
             <column name="publicTime" length="19">
                 <comment>发布时间</comment>
             </column>
@@ -57,6 +57,16 @@
         </property>
         <property name="userId" type="java.lang.String">
             <column name="userID" length="15" not-null="true" />
+        </property>
+         <property name="headImagePath" type="java.lang.String">
+            <column name="headImagePath" length="100">
+                <comment>头像路径</comment>
+            </column>
+        </property>
+         <property name="clickNum" type="java.lang.Integer">
+            <column name="clickNum" length="11">
+                <comment>点击数</comment>
+            </column>
         </property>
     </class>
 </hibernate-mapping>

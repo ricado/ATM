@@ -1,12 +1,12 @@
 package com.atm.model.define;
 
-import java.sql.Timestamp;
+import com.atm.util.bbs.ObjectInterface;
 
 /**
  * ApplyView entity. @author MyEclipse Persistence Tools
  */
 
-public class ApplyView implements java.io.Serializable {
+public class ApplyView implements java.io.Serializable,ObjectInterface {
 
 	// Fields
 
@@ -15,12 +15,14 @@ public class ApplyView implements java.io.Serializable {
 	private String expectSalary;
 	private String telephone;
 	private String personalInfo;
-	private Timestamp publicTime;
+	private String publishTime;
 	private String reTypeName;
 	private String woTypeName;
 	private String name;
 	private String nickname;
 	private String userId;
+	private Integer clickNum;
+	private String headImagePath;
 
 	// Constructors
 
@@ -34,9 +36,27 @@ public class ApplyView implements java.io.Serializable {
 		this.userId = userId;
 	}
 
+	/**
+	 * @param apInfoId
+	 * @param expectSalary
+	 * @param publishTime
+	 * @param reTypeName
+	 * @param woTypeName
+	 */
+	public ApplyView(Integer apInfoId, String expectSalary, String publishTime,
+			String reTypeName, String woTypeName) {
+		super();
+		this.apInfoId = apInfoId;
+		this.expectSalary = expectSalary;
+		this.publishTime = publishTime;
+		this.publishTime = commonUtil.subTime(publishTime);
+		this.reTypeName = reTypeName;
+		this.woTypeName = woTypeName;
+	}
+
 	/** full constructor */
 	public ApplyView(Integer apInfoId, String publisherId, String expectSalary,
-			String telephone, String personalInfo, Timestamp publicTime,
+			String telephone, String personalInfo, String publishTime,
 			String reTypeName, String woTypeName, String name, String nickname,
 			String userId) {
 		this.apInfoId = apInfoId;
@@ -44,7 +64,7 @@ public class ApplyView implements java.io.Serializable {
 		this.expectSalary = expectSalary;
 		this.telephone = telephone;
 		this.personalInfo = personalInfo;
-		this.publicTime = publicTime;
+		this.publishTime = publishTime;
 		this.reTypeName = reTypeName;
 		this.woTypeName = woTypeName;
 		this.name = name;
@@ -94,12 +114,12 @@ public class ApplyView implements java.io.Serializable {
 		this.personalInfo = personalInfo;
 	}
 
-	public Timestamp getPublicTime() {
-		return this.publicTime;
+	public String getPublishTime() {
+		return this.publishTime;
 	}
 
-	public void setPublicTime(Timestamp publicTime) {
-		this.publicTime = publicTime;
+	public void setPublishTime(String publishTime) {
+		this.publishTime = publishTime;
 	}
 
 	public String getReTypeName() {
@@ -140,6 +160,22 @@ public class ApplyView implements java.io.Serializable {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public Integer getClickNum() {
+		return clickNum;
+	}
+
+	public void setClickNum(Integer clickNum) {
+		this.clickNum = clickNum;
+	}
+
+	public String getHeadImagePath() {
+		return headImagePath;
+	}
+
+	public void setHeadImagePath(String headImagePath) {
+		this.headImagePath = headImagePath;
 	}
 
 }

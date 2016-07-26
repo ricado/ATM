@@ -1,5 +1,6 @@
 package com.atm.daoDefined;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.hibernate.LockOptions;
@@ -10,7 +11,6 @@ import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.atm.model.define.ApplyView;
@@ -26,7 +26,6 @@ import com.atm.model.define.ApplyView;
  * @see com.atm.model.define.ApplyView
  * @author MyEclipse Persistence Tools
  */
-//@Component("ApplyViewDAO")
 @Transactional
 public class ApplyViewDAO {
 	private static final Logger log = LoggerFactory
@@ -221,24 +220,25 @@ public class ApplyViewDAO {
 			return list;		
 		}catch(RuntimeException e){
 			log.debug("find fail");
+			log.debug(e.getMessage());
 			throw e;
 		}
 	}
 	
 	public List findList(int first,int max){
-		String HQL = "select a.apInfoId,a.reTypeName,a.woTypeName,"
-				+ "a.publisherId,a.publishTime,a.expectSalary"
+		String HQL = "select new ApplyView(apInfoId,expectSalary,"
+				+"publishTime,reTypeName,woTypeName)"
 				+ " from ApplyView a ";
 		return findListByHQL(HQL,first, max);
 	}
 	
-	public List findList(String str,int first,int max){
-		String HQL = "select a.apInfoId,a.reTypeName,a.woTypeName,"
-				+ "a.publisherId,a.publishTime,a.expectSalary"
+	public List findList(Object str,int first,int max){
+		String HQL = "select new ApplyView(apInfoId,expectSalary,"
+				+"publishTime,reTypeName,woTypeName)"
 				+ " from ApplyView a ";
-		if(str.length()>0){
-			HQL += "where reTypeNmae like '%" + str + "%' " + 
-					"or workTypeName like '%" + str + "%'";
+		if(str.toString().length()>0){
+			HQL += "where reTypeName like '%" + str + "%' " + 
+					"or woTypeName like '%" + str + "%'";
 		}
 		return findListByHQL(HQL, first, max);
 	}

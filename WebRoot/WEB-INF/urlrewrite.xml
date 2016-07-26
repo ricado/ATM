@@ -21,4 +21,14 @@
 <from>^/replyList/(\d+)\.html$</from> 
 <to type="forward">/replyList.jsp?essayId=$1</to> 
 </rule>
+
+<rule> 
+<from>^/recuit/(\d+)\.html$</from> 
+<to type="forward">/recuit_detail.action?reInfoId=$1</to>
+</rule>
+<rule> 
+<from>^/apply/(\d+)\.html$</from> 
+<to type="forward">/apply_detail.action?apInfoId=$1</to>
+</rule>
+
 </urlrewrite>

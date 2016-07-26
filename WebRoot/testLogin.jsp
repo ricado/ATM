@@ -192,6 +192,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	<input type="submit" value="收藏测试"/>
  </form>
  
+  <form action="<%= basePath %>essay_collectedEssay.action" method="post">
+ 	 page:<input type="text" name="page" id="page" value="1"/>
+ 	<input type="submit" value="收藏的贴测试"/>
+ </form>
+ 
   <%-- <form action="<%= basePath %>essay_publishEssay.action" method="post"> --%>
  <form action="<%= basePath %>essay/publish.do" method="post" enctype="multipart/form-data">
  	 类型:<input type="text" name="type" id="type"/>
