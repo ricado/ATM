@@ -46,7 +46,7 @@ public class StudentDAOImpl implements StudentDAO  {
 	}
     
     /* (non-Javadoc)
-	 * @see com.atm.dao.StudentDAO#save(com.atm.model.Student)
+	 * @see com.atm.dao.StudentDAO#save(com.atm.model.user.Student)
 	 */
     @Override
 	public void save(Student transientInstance) {
@@ -61,7 +61,7 @@ public class StudentDAOImpl implements StudentDAO  {
     }
     
 	/* (non-Javadoc)
-	 * @see com.atm.dao.StudentDAO#delete(com.atm.model.Student)
+	 * @see com.atm.dao.StudentDAO#delete(com.atm.model.user.Student)
 	 */
 	@Override
 	public void delete(Student persistentInstance) {
@@ -83,7 +83,7 @@ public class StudentDAOImpl implements StudentDAO  {
         log.debug("getting Student instance with id: " + id);
         try {
             Student instance = (Student) getCurrentSession()
-                    .get("com.atm.model.Student", id);
+                    .get("com.atm.model.user.Student", id);
             return instance;
         } catch (RuntimeException re) {
             log.error("get failed", re);
@@ -93,13 +93,13 @@ public class StudentDAOImpl implements StudentDAO  {
     
     
     /* (non-Javadoc)
-	 * @see com.atm.dao.StudentDAO#findByExample(com.atm.model.Student)
+	 * @see com.atm.dao.StudentDAO#findByExample(com.atm.model.user.Student)
 	 */
     @Override
 	public List findByExample(Student instance) {
         log.debug("finding Student instance by example");
         try {
-            List results = getCurrentSession().createCriteria("com.atm.model.Student") .add(Example.create(instance)).list();
+            List results = getCurrentSession().createCriteria("com.atm.model.user.Student") .add(Example.create(instance)).list();
             log.debug("find by example successful, result size: " + results.size());
             return results;
         } catch (RuntimeException re) {
@@ -169,7 +169,7 @@ public class StudentDAOImpl implements StudentDAO  {
 	}
 	
     /* (non-Javadoc)
-	 * @see com.atm.dao.StudentDAO#merge(com.atm.model.Student)
+	 * @see com.atm.dao.StudentDAO#merge(com.atm.model.user.Student)
 	 */
     @Override
 	public Student merge(Student detachedInstance) {
@@ -186,7 +186,7 @@ public class StudentDAOImpl implements StudentDAO  {
     }
 
     /* (non-Javadoc)
-	 * @see com.atm.dao.StudentDAO#attachDirty(com.atm.model.Student)
+	 * @see com.atm.dao.StudentDAO#attachDirty(com.atm.model.user.Student)
 	 */
     @Override
 	public void attachDirty(Student instance) {
@@ -201,7 +201,7 @@ public class StudentDAOImpl implements StudentDAO  {
     }
     
     /* (non-Javadoc)
-	 * @see com.atm.dao.StudentDAO#attachClean(com.atm.model.Student)
+	 * @see com.atm.dao.StudentDAO#attachClean(com.atm.model.user.Student)
 	 */
     @Override
 	public void attachClean(Student instance) {

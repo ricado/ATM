@@ -46,7 +46,7 @@ public class TeacherDAOImpl implements TeacherDAO  {
 	}
     
     /* (non-Javadoc)
-	 * @see com.atm.dao.TeacherDAO#save(com.atm.model.Teacher)
+	 * @see com.atm.dao.TeacherDAO#save(com.atm.model.user.Teacher)
 	 */
     @Override
 	public void save(Teacher transientInstance) {
@@ -61,7 +61,7 @@ public class TeacherDAOImpl implements TeacherDAO  {
     }
     
 	/* (non-Javadoc)
-	 * @see com.atm.dao.TeacherDAO#delete(com.atm.model.Teacher)
+	 * @see com.atm.dao.TeacherDAO#delete(com.atm.model.user.Teacher)
 	 */
 	@Override
 	public void delete(Teacher persistentInstance) {
@@ -83,7 +83,7 @@ public class TeacherDAOImpl implements TeacherDAO  {
         log.debug("getting Teacher instance with id: " + id);
         try {
             Teacher instance = (Teacher) getCurrentSession()
-                    .get("com.atm.model.Teacher", id);
+                    .get("com.atm.model.user.Teacher", id);
             return instance;
         } catch (RuntimeException re) {
             log.error("get failed", re);
@@ -93,13 +93,13 @@ public class TeacherDAOImpl implements TeacherDAO  {
     
     
     /* (non-Javadoc)
-	 * @see com.atm.dao.TeacherDAO#findByExample(com.atm.model.Teacher)
+	 * @see com.atm.dao.TeacherDAO#findByExample(com.atm.model.user.Teacher)
 	 */
     @Override
 	public List findByExample(Teacher instance) {
         log.debug("finding Teacher instance by example");
         try {
-            List results = getCurrentSession().createCriteria("com.atm.model.Teacher") .add(Example.create(instance)).list();
+            List results = getCurrentSession().createCriteria("com.atm.model.user.Teacher") .add(Example.create(instance)).list();
             log.debug("find by example successful, result size: " + results.size());
             return results;
         } catch (RuntimeException re) {
@@ -165,7 +165,7 @@ public class TeacherDAOImpl implements TeacherDAO  {
 	}
 	
     /* (non-Javadoc)
-	 * @see com.atm.dao.TeacherDAO#merge(com.atm.model.Teacher)
+	 * @see com.atm.dao.TeacherDAO#merge(com.atm.model.user.Teacher)
 	 */
     @Override
 	public Teacher merge(Teacher detachedInstance) {
@@ -182,7 +182,7 @@ public class TeacherDAOImpl implements TeacherDAO  {
     }
 
     /* (non-Javadoc)
-	 * @see com.atm.dao.TeacherDAO#attachDirty(com.atm.model.Teacher)
+	 * @see com.atm.dao.TeacherDAO#attachDirty(com.atm.model.user.Teacher)
 	 */
     @Override
 	public void attachDirty(Teacher instance) {
@@ -197,7 +197,7 @@ public class TeacherDAOImpl implements TeacherDAO  {
     }
     
     /* (non-Javadoc)
-	 * @see com.atm.dao.TeacherDAO#attachClean(com.atm.model.Teacher)
+	 * @see com.atm.dao.TeacherDAO#attachClean(com.atm.model.user.Teacher)
 	 */
     @Override
 	public void attachClean(Teacher instance) {
