@@ -236,5 +236,30 @@ public class EssayOuterDAO {
     	        throw re;
     	   }
     }
+  
+  //TODO 获取用户回复过的帖子
+	public List getRepliedEssay(Object userId,int rows,int page){
+		log.debug("获取回复过的帖子：userId:"+userId);
+		try {
+			String queryString = "select new map(e.essayId as essayId,e.essayType as essayType,"
+					+"e.title as title,e.labName as labName,e.labColor as labColor,"
+					+"e.someContent as someContent,e.nickname as nickname,"
+					+"date_format(e.publishTime,'%Y-%c-%e %T') as publishTime,e.clickGoodNum as clickGoodNum,"
+					+"e.replyNum as replyNum,e.publisherId as publisherId,"
+					+"e.headImagePath as headImagePath,r.repContent as repContent,date_format(r.repTime,'%Y-%c-%e %T') as repTime) "
+					+"from EssayOuter e,Reply r "
+					+"where e.essayId=r.essayId "
+					+"and r.userId = ? "
+					+"group by(r.essayId) order by r.repTime desc";
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			queryObject.setParameter(0, userId);
+			queryObject.setFirstResult((page-1)*rows>=0?(page-1)*rows:0);
+			queryObject.setMaxResults(rows);
+			return queryObject.list();
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
+			throw re;
+		}
+	}
 }
 

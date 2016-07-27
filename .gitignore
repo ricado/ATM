@@ -2,3 +2,4 @@ Test.txt
 .classpath
 .settings/org.eclipse.wst.common.project.facet.core.xml
 *.class
+*.class

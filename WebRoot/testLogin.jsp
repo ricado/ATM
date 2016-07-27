@@ -277,5 +277,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	<input type="submit" value="获取求职帖子测试"/>
  </form>
  
+   <form action="<%= basePath %>atm_hotDeptLabel.action" method="post">
+ 	 系别号:<input type="text" name="id" />
+ 	<input type="submit" value="获取系别热门标签"/>
+ </form>
+ 
+    <form action="<%= basePath %>essay_repliedEssay.action" method="post">
+ 	 页数:<input type="text" name="page" />
+ 	  行数:<input type="text" name="rows" />
+ 	<input type="submit" value="获取用户评论过的帖子"/>
+ </form>
 </body>
 </html>

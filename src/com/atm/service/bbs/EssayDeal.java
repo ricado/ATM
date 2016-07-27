@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import com.atm.dao.PeopleAttentionAssociationDAO;
 import com.atm.dao.bbs.ClickGoodDAO;
 import com.atm.dao.bbs.CollectEssayDAO;
+import com.atm.dao.bbs.EssayDAO;
 import com.atm.dao.bbs.EssayPhotoDAO;
 import com.atm.dao.bbs.LabelAttentionAssociationDAO;
 import com.atm.dao.user.DepartmentDAO;
@@ -30,7 +31,6 @@ import com.atm.model.bbs.ClickGood;
 import com.atm.model.bbs.ClickGoodId;
 import com.atm.model.bbs.CollectEssay;
 import com.atm.model.bbs.CollectEssayId;
-import com.atm.model.bbs.Essay;
 import com.atm.model.bbs.EssayPhoto;
 import com.atm.model.bbs.LabelAttentionAssociation;
 import com.atm.model.define.bbs.ClickGoodView;
@@ -258,8 +258,18 @@ public class EssayDeal implements ObjectInterface{
 		if(list.size()==0){ //获取不到帖子了，返回null
 			return null;
 		}
-		
-		
+		return jsonUtil.objectToArray(list,false);
+	}
+	
+	//TODO 用户评论过的帖子
+	public JSONArray getRepliedEssay(String userId,int page,int rows) throws JSONException, IOException{
+		init();
+		EssayOuterDAO essayOuterDao = 
+				context.getBean("EssayOuterDAO",EssayOuterDAO.class);
+		List<String> list = essayOuterDao.getRepliedEssay(userId, rows, page);
+		if(list.size()==0){ //获取不到帖子了，返回null
+			return null;
+		}
 		return jsonUtil.objectToArray(list,false);
 	}
 	

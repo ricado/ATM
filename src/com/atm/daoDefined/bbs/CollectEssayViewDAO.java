@@ -117,9 +117,13 @@ public class CollectEssayViewDAO {
 				+ propertyName + ", value: " + value);
 		try {
 			//只取出需要显示的部分
+//			String queryString = 
+//					"select new CollectEssayView(essayId,essayType,title,"+
+//			"labName,labColor,nickname,clickGoodNum,replyNum,someContent,publishTime) "+
+//							"from CollectEssayView as model where model."
+//					+ propertyName + "= ? order by publishTime desc";
 			String queryString = 
-					"select new CollectEssayView(essayId,essayType,title,"+
-			"labName,labColor,nickname,clickGoodNum,replyNum,someContent,publishTime) "+
+					//"select new CollectEssayView() "+
 							"from CollectEssayView as model where model."
 					+ propertyName + "= ? order by publishTime desc";
 			Query queryObject = getCurrentSession().createQuery(queryString);

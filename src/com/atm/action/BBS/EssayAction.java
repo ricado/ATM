@@ -26,6 +26,7 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 	private int first = 0;//起始位置
 	private int page = 0;//帖子列表已显示帖子数
 	private String id;
+	private int rows = 0;
 	
 	private boolean clickGood;//是否点赞
 	private boolean collect;//是否收藏
@@ -240,10 +241,10 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 	}
 	//跳转获取用户收藏的帖子
 	/*
-	 * 需要客户端传入参数：index:查询位置
+	 * 需要客户端传入参数：page:查询位置
 	 */
 	public String collectedEssay(){
-		log.debug("获取收藏的帖子请求");
+		log.debug("获取收藏的帖子请求page:"+getPage());
 		init();
 		//获取用户登陆信息
 		UserInfo user = (UserInfo) request.getSession().getAttribute("user");
@@ -264,6 +265,32 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 		log.debug("收藏方法结束");
 		return null;
 	}
+	
+	//跳转获取用户评论的帖子
+		/*
+		 * 需要客户端传入参数：page,rows
+		 */
+		public String repliedEssay(){
+			log.debug("获取评论的帖子请求page:"+getPage()+":rows:"+getRows());
+			init();
+			//获取用户登陆信息
+			UserInfo user = (UserInfo) request.getSession().getAttribute("user");
+			if(user==null){
+				mess = "未登录";
+				send();
+				return null;
+			}
+			try{
+				resultArray = deal.getRepliedEssay(user.getUserId(),page,rows);
+				check();
+			}catch(Exception e){
+				mess = "获取发生错误";
+				log.error(e);
+			}
+			send();
+			log.debug("方法结束");
+			return null;
+		}
 	
 	//跳转用户发布的帖子
 	/*
@@ -529,6 +556,12 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 	}
 	public void setTag(String tag) {
 		this.tag = tag;
+	}
+	public int getRows() {
+		return rows;
+	}
+	public void setRows(int rows) {
+		this.rows = rows;
 	}
 	
 
