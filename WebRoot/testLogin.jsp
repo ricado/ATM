@@ -287,5 +287,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	  行数:<input type="text" name="rows" />
  	<input type="submit" value="获取用户评论过的帖子"/>
  </form>
+ 
+     <form action="<%= basePath %>essay_deleteBatch.action" method="post">
+ 	  ids(以逗号分隔):<input type="text" value="1,2,3" name="ids" />
+ 	<input type="submit" value="批量删除帖子测试"/>
+ </form>
+ 	 <form action="<%= basePath %>essay_collectBatch.action" method="post">
+ 	 ids:<input type="text" name="ids" id="ids" value="2,3,4"/>
+ 	 是否已收藏(若为true则是取消收藏操作)：<input type="text" name="collect" id="collect" value="false"/>
+ 	<input type="submit" value="收藏测试"/>
+ </form>
 </body>
 </html>

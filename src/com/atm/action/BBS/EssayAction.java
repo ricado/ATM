@@ -21,7 +21,7 @@ import com.opensymphony.xwork2.ActionSupport;
 public class EssayAction extends ActionSupport implements ServletResponseAware,ServletRequestAware,ObjectInterface {
 	Logger log = Logger.getLogger(getClass());
 	
-	
+	private String ids; //批量id
 	private int essayId;
 	private int first = 0;//起始位置
 	private int page = 0;//帖子列表已显示帖子数
@@ -430,6 +430,38 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 		}
 	}
 	
+	//TODO 批量收藏方法
+	public void collectBatch(){
+		log.debug("获取批量收藏请求");
+		init();
+		UserInfo user = (UserInfo) request.getSession(true).getAttribute("user");
+		if(user==null){
+			mess = "未登录";
+			send();
+			return;
+		}
+		try {
+			if(ids==null){
+				mess = "未选择收藏的帖子";
+				send("delEssay");
+				return;
+			}
+			String[] idList = ids.split(",");
+			String tempMess = null;
+			for(String oneId:idList){
+				mess = deal.saveOrDeleteCollect(request, Integer.valueOf(oneId.trim()), isCollect(),user.getUserId());
+				tempMess = mess.equals("success")?tempMess:mess;
+			}
+			mess = tempMess==null?mess:tempMess;
+			send();
+		} catch (Exception e) {
+			mess = "获取错误："+e.getMessage();
+			log.debug(mess, e);
+			send();
+		} 
+		
+	}
+	
 	//TODO***********************修改相关的操作
 	
 	//发布帖子
@@ -453,18 +485,53 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 	}
 	//TODO 删除一条帖子
 		public void deleteEssay(){
-			log.debug("获取删除帖子请求"+essayId);
+			log.debug("获取批量删除帖子请求"+essayId);
 			init();
 			UserInfo user = (UserInfo) request.getSession(true).getAttribute("user");
 			if(user==null){
 				mess = "未登录";	
 				send("delEssay");
+				return;
 			}
 			try {
 				mess = changeDeal.deleteEssay(user.getUserId(), essayId);
 				log.debug("删除结束"+mess);
 			} catch (Exception e) {
 				mess = "获取错误";
+				log.debug(mess, e);
+			} 
+			send("delEssay");
+		}
+		
+		//TODO 批量删除帖子
+		public void deleteBatch(){
+			log.debug("获取删除帖子请求"+ids);
+			init();
+			UserInfo user = (UserInfo) request.getSession(true).getAttribute("user");
+			if(user==null){
+				mess = "未登录";	
+				send("delEssay");
+				return;
+			}
+			try {
+				if(ids==null){
+					mess = "未选择删除的帖子";
+					send("delEssay");
+					return;
+				}
+				String[] idList = ids.split(",");
+				String errorMess = null;
+				for(String oneId:idList){
+					mess = changeDeal.deleteEssay(user.getUserId(), Integer.valueOf(oneId.trim()));
+					log.debug("----------删除一条帖子（"+oneId+"："+mess+")");
+					if(!mess.equals("success")){
+						errorMess = mess;
+					}
+				}
+				mess = errorMess==null?mess:errorMess;
+				log.debug("删除结束"+mess);
+			} catch (Exception e) {
+				mess = "获取错误"+e.getMessage();
 				log.debug(mess, e);
 			} 
 			send("delEssay");
@@ -562,6 +629,12 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 	}
 	public void setRows(int rows) {
 		this.rows = rows;
+	}
+	public String getIds() {
+		return ids;
+	}
+	public void setIds(String ids) {
+		this.ids = ids;
 	}
 	
 
