@@ -27,14 +27,14 @@
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
 		<!-- 指定连接数据库的URL -->
 		<property name="jdbcUrl"
-			value="jdbc:mysql://139.129.131.179:3306/atm?useUnicode=true&amp;characterEncoding=UTF-8" />  <!--?useUnicode=true&amp;characterEncoding=UTF-8  -->
+			value="jdbc:mysql://139.129.131.179:3306/atm?useUnicode=true&amp;characterEncoding=UTF-8" />  <!--?useUnicode=true&amp;characterEncoding=UTF-8 -->
 		<!-- 指定连接数据库的用户名 -->
 		<property name="user" value="atm" />
-		<!-- 指定连接数据库的密码 PsZKABzzWs-->
+		<!-- 指定连接数据库的密码 PsZKABzzWs -->
 		<property name="password" value="atm" />
 		<!-- 指定连接数据库连接池的最大连接数 -->
 		<property name="maxPoolSize" value="40" />
-	 <!-- 指定连接数据库连接池的最小连接数 -->
+		<!-- 指定连接数据库连接池的最小连接数 -->
 		<property name="minPoolSize" value="1" />
 		<!-- 指定连接数据库的连接池的初始化连接数 -->
 		<property name="initialPoolSize" value="2" />
@@ -54,7 +54,7 @@
 				</prop>
 			</props>
 		</property>
-		
+
 		<property name="mappingResources">
 			<list>
 				<!-- ******************chat******************** -->
@@ -64,7 +64,7 @@
 				<value>com/atm/model/chat/CrowdChat.hbm.xml</value>
 				<value>com/atm/model/chat/ChatRecord.hbm.xml</value>
 				<value>com/atm/model/chat/PrivateChat.hbm.xml</value>
-				
+
 				<!-- define -->
 				<value>com/atm/model/define/chat/CrowdIntive.hbm.xml</value>
 				<value>com/atm/model/define/chat/CrowdListView.hbm.xml</value>
@@ -84,7 +84,9 @@
 				<value>com/atm/model/bbs/Label.hbm.xml</value>
 				<value>com/atm/model/bbs/ReplyPhoto.hbm.xml</value>
 				<value>com/atm/model/bbs/Reply.hbm.xml</value>
-	<value>com/atm/model/bbs/RecuitClick.hbm.xml</value>					<value>com/atm/model/bbs/ApplyClick.hbm.xml</value>   <value>com/atm/model/bbs/Report.hbm.xml</value>		<!-- define -->
+				<value>com/atm/model/bbs/RecuitClick.hbm.xml</value>
+				<value>com/atm/model/bbs/ApplyClick.hbm.xml</value>
+				<value>com/atm/model/bbs/Report.hbm.xml</value>		<!-- define -->
 				<value>com/atm/model/define/bbs/ClickGoodView.hbm.xml</value>
 				<value>com/atm/model/define/bbs/CollectEssayView.hbm.xml</value>
 				<value>com/atm/model/define/bbs/EssayDetailView.hbm.xml</value>
@@ -107,7 +109,7 @@
 				<value>com/atm/model/define/user/UserList.hbm.xml</value>
 				<value>com/atm/model/define/user/UserBasicInfo.hbm.xml</value>
 				<value>com/atm/model/define/user/UserLabelView.hbm.xml</value>
-				
+
 				<!-- ******************other********************* -->
 				<value>com/atm/model/RecuitType.hbm.xml</value>
 				<value>com/atm/model/Feedback.hbm.xml</value>
@@ -123,9 +125,11 @@
 				<value>com/atm/model/define/RecuitView.hbm.xml</value>
 				<value>com/atm/model/define/ApplyView.hbm.xml</value>
 				<value>com/atm/model/define/procedure.hbm.xml</value>
-
-<!-- schoolActive -->
-				<value>com/atm/model/SchoolActive.hbm.xml</value><value>com/atm/model/define/RecommendSm.hbm.xml</value>			</list>
+				<value>com/atm/model/define/MyMessage.hbm.xml</value>
+				<!-- schoolActive -->
+				<value>com/atm/model/SchoolActive.hbm.xml</value>
+				<value>com/atm/model/define/RecommendSm.hbm.xml</value>
+			</list>
 		</property>
 	</bean>
 
@@ -148,7 +152,8 @@
 	</tx:advice>
 	<!-- 配置那些类的方法进行事务管理，还需要参考tx:advice的设置 -->
 	<aop:config>
-		<aop:pointcut id="allManagerMethod" expression="execution (* com.atm.service.*.*.*(..)) or execution(* com.atm.service.*.*(..)) " />
+		<aop:pointcut id="allManagerMethod"
+			expression="execution (* com.atm.service.*.*.*(..)) or execution(* com.atm.service.*.*(..)) " />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="allManagerMethod" />
 	</aop:config>
 
@@ -350,19 +355,22 @@
 		</property>
 	</bean>
 	<import resource="applicationContext_*.xml" />
-
-<bean id="SchoolActiveDAO" class="com.atm.dao.SchoolActiveDAO">
+	<bean id="SchoolActiveDAO" class="com.atm.dao.SchoolActiveDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-<bean id="ReportDAO" class="com.atm.dao.impl.bbs.ReportDAO">
+	<bean id="ReportDAO" class="com.atm.dao.impl.bbs.ReportDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-<bean id="RecommendSmDAO"
-		class="com.atm.daoDefined.RecommendSmDAO">
+	<bean id="RecommendSmDAO" class="com.atm.daoDefined.RecommendSmDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="MyMessageDAO" class="com.atm.daoDefined.MyMessageDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>

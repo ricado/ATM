@@ -15,6 +15,13 @@ import com.atm.daoDefined.MyMessageDAO;
 import com.atm.model.define.MyMessage;
 import com.atm.util.Application;
 
+/**
+ * 我的消息 使用json
+ * 
+ * @author ye
+ *
+ * @data 2016-7-31
+ */
 public class MyMessageHandler extends BufferHandler implements Application {
 
 	private static final Logger log = LoggerFactory
@@ -23,22 +30,15 @@ public class MyMessageHandler extends BufferHandler implements Application {
 	private static MyMessageDAO myMessageDAO = (MyMessageDAO) context
 			.getBean("MyMessageDAO");
 
-	public void opera(int config) {
-		switch (config) {
-		case Config.MY_OFF_MESSAGE:
-			sendOffMyMessage();
-			break;
-		default:
-			break;
-		}
-	}
-
 	/**
-	 * 发送消息
+	 * 发送我的消息
 	 * 
 	 * @param userId
+	 *            接受者
 	 * @param type
+	 *            我的消息类型(@我的,回复我的或评论我的，系统消息)
 	 * @param content
+	 *            消息内容(json格式 内容包含自定)
 	 * @throws JSONException
 	 */
 	public void sendMyMessage(String userId, int type, String content)
@@ -59,9 +59,8 @@ public class MyMessageHandler extends BufferHandler implements Application {
 	 * 
 	 * @throws Exception
 	 */
-	public void sendOffMyMessage() {
+	public void sendOffMyMessage(String userId) {
 		try {
-			String userId = getString();
 			List<MyMessage> myMessages = new ArrayList<MyMessage>();
 			if (userId != null && !userId.equals("")) {
 				myMessages = myMessageDAO.findByUserId(userId);
@@ -78,7 +77,6 @@ public class MyMessageHandler extends BufferHandler implements Application {
 			buffer.putInt(Config.MY_RESULT_MESSAGE);
 			buffer.putInt(Config.FAILED);
 		}
-
 	}
 
 	/**
@@ -92,13 +90,14 @@ public class MyMessageHandler extends BufferHandler implements Application {
 		log.info("发送我的消息:userId:" + myMessage.getUserId() + "type:"
 				+ myMessage.getType());
 
-		//封装成json
+		// 封装成json
+		jsonObject = new JSONObject();
 		jsonObject.put("userId", myMessage.getUserId());
 		jsonObject.put("type", myMessage.getType());
 		jsonObject.put("content", myMessage.getContent());
 		String json = jsonObject.toString();
 
-		//写进buffer
+		// 写进buffer
 		buffer = ByteBuffer.allocateDirect(8 + json.getBytes().length);
 		buffer.putInt(Config.MY_OFF_MESSAGE);
 		put(json);

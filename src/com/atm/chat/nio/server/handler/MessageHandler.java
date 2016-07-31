@@ -201,10 +201,9 @@ public class MessageHandler extends BufferHandler {
 				+ chat.getUserSendId().getBytes().length
 				+ chat.getUserReceiveId().getBytes().length
 				+ chat.getNickname().getBytes().length
-				+ TimeUtil.getDateFormat(chat.getSendTime()).toString().getBytes().length 
-				+ filename.getBytes().length
-				+ imageBytes.length 
-				+ image.length);
+				+ TimeUtil.getDateFormat(chat.getSendTime()).toString()
+						.getBytes().length + filename.getBytes().length
+				+ imageBytes.length + image.length);
 
 		buffer.putInt(Config.MESSAGE_FROM);
 		buffer.putInt(Config.MESSAGE_IMG);
@@ -507,6 +506,9 @@ public class MessageHandler extends BufferHandler {
 		// 发送私聊离线消息
 		log.info("============发送私聊离线消息=============");
 		sendPrivateOffLineMessage(userId);
+		// 发送我的消息离线消息
+		log.info("============发送私聊离线消息=============");
+		new MyMessageHandler().sendOffMyMessage(userId);
 		// 群聊离线消息
 		log.info("============发送群聊离线消息=============");
 		// sendCrowdOffLineMessage(userId);
