@@ -1,59 +1,68 @@
 package com.atm.chat.nio.server.util;
 
 /**
- * ¹æ»®ÕûÀíConfig.¸ü¼ÓÏµÍ³µØÃ¶¾ÙÃ¿Ò»¸ö¿ÉÄÜÊÂ¼ş {ÁÄÌìÏûÏ¢ÀàĞÍ(1001-1110)} {»ù±¾ÀàĞÍ²Ù×÷(100-999)}
- * {Èº²Ù×÷(1200-1399)} {ÓÃ»§²Ù×÷(1400-1599)}{³É¹¦:1,Ê§°Ü:0}
+ * è§„åˆ’æ•´ç†Config.æ›´åŠ ç³»ç»Ÿåœ°æšä¸¾æ¯ä¸€ä¸ªå¯èƒ½äº‹ä»¶ {èŠå¤©æ¶ˆæ¯ç±»å‹(1001-1110)} {åŸºæœ¬ç±»å‹æ“ä½œ(100-999)}
+ * {ç¾¤æ“ä½œ(1200-1399)} {ç”¨æˆ·æ“ä½œ(1400-1599)}{æˆåŠŸ:1,å¤±è´¥:0}
  * 
  * @version 2.0
- * @author ye
- * @2015.8.18
+ * @author ye @2015.8.18
  */
 public interface Config {
 
-	// * ÓĞ*×ÖÑù±íÊ¾Ãû×ÖÓĞ¸Ä¶¯
+	// * æœ‰*å­—æ ·è¡¨ç¤ºåå­—æœ‰æ”¹åŠ¨
 	/**
-	 * ÁÄÌìÏûÏ¢ÀàĞÍ
+	 * èŠå¤©æ¶ˆæ¯ç±»å‹
 	 */
-	// Ë½ÁÄ
-	public static final int MESSAGE_TO = 1001;// ·¢ËÍË½ÁÄÏûÏ¢
-	public static final int MESSAGE_FROM = 1002;// ½ÓÊÕË½ÁÄÏûÏ¢
-	public static final int MESSAGE_TEXT = 10003;// *Ë½ÁÄÎÄ±¾ÏûÏ¢
-	public static final int MESSAGE_IMG = 1004;// *Ë½ÁÄÍ¼Æ¬ÏûÏ¢
-	public static final int MESSAGE_SOUND = 1005;// * ÈºÁÄÓïÒôÏûÏ¢(Î´¿ª·¢£¬¾´ÇëÆÚ´ı)
-	public static final int MESSAGE_AUDIO = 1006;// *ÈºÁÄÊÓÆÁÏûÏ¢(Î´¿ª·¢£¬¾´ÇëÆÚ´ı)
-	public static final int MESSAGE_SUCCESS = 1007;// ÏûÏ¢·¢ËÍ³É¹¦
-	public static final int MESSAGE_FAILED = 1008; // ÏûÏ¢·¢ËÍÊ§°Ü
-	public static final int MESSAGE_OFFLINE = 1009;// »ñÈ¡ÀëÏßÏûÏ¢
+	// ç§èŠ
+	public static final int MESSAGE_TO = 1001;// å‘é€ç§èŠæ¶ˆæ¯
+	public static final int MESSAGE_FROM = 1002;// æ¥æ”¶ç§èŠæ¶ˆæ¯
+	public static final int MESSAGE_TEXT = 10003;// *ç§èŠæ–‡æœ¬æ¶ˆæ¯
+	public static final int MESSAGE_IMG = 1004;// *ç§èŠå›¾ç‰‡æ¶ˆæ¯
+	public static final int MESSAGE_SOUND = 1005;// * ç¾¤èŠè¯­éŸ³æ¶ˆæ¯(æœªå¼€å‘ï¼Œæ•¬è¯·æœŸå¾…)
+	public static final int MESSAGE_AUDIO = 1006;// *ç¾¤èŠè§†å±æ¶ˆæ¯(æœªå¼€å‘ï¼Œæ•¬è¯·æœŸå¾…)
+	public static final int MESSAGE_SUCCESS = 1007;// æ¶ˆæ¯å‘é€æˆåŠŸ
+	public static final int MESSAGE_FAILED = 1008; // æ¶ˆæ¯å‘é€å¤±è´¥
+	public static final int MESSAGE_OFFLINE = 1009;// è·å–ç¦»çº¿æ¶ˆæ¯
 
-	// ÈºÁÄÌì
-	public static final int CROWD_MESSAGE_TO = 1101; // ·¢ËÍÈºÁÄÏûÏ¢
-	public static final int CROWD_MESSAGE_FROM = 1102;// ½ÓÊÕÈºÁÄÏûÏ¢
-	public static final int CROWD_MESSAGE_TEXT = 1103; // ÈºÁÄÎÄ±¾ÏûÏ¢
-	public static final int CROWD_MESSAGE_IMG = 1104;// ÈºÁÄÍ¼Æ¬ÏûÏ¢
-	public static final int CROWD_MESSAGE_SOUND = 1105;// ÈºÁÄÓïÒôÏûÏ¢(Î´¿ª·¢£¬¾´ÇëÆÚ´ı)
-	public static final int CROWD_MESSAGE_AUDIO = 1106;// ÈºÁÄÊÓÆÁÏûÏ¢(Î´¿ª·¢£¬¾´ÇëÆÚ´ı)
-	public static final int CROWD_MESSAGE_SUCCESS = 1107;// ÈºÁÄÏûÏ¢·¢ËÍ³É¹¦
-	public static final int CROWD_MESSAGE_FAILED = 1108; // ÈºÁÄÏûÏ¢·¢ËÍÊ§°Ü
+	// ç¾¤èŠå¤©
+	public static final int CROWD_MESSAGE_TO = 1101; // å‘é€ç¾¤èŠæ¶ˆæ¯
+	public static final int CROWD_MESSAGE_FROM = 1102;// æ¥æ”¶ç¾¤èŠæ¶ˆæ¯
+	public static final int CROWD_MESSAGE_TEXT = 1103; // ç¾¤èŠæ–‡æœ¬æ¶ˆæ¯
+	public static final int CROWD_MESSAGE_IMG = 1104;// ç¾¤èŠå›¾ç‰‡æ¶ˆæ¯
+	public static final int CROWD_MESSAGE_SOUND = 1105;// ç¾¤èŠè¯­éŸ³æ¶ˆæ¯(æœªå¼€å‘ï¼Œæ•¬è¯·æœŸå¾…)
+	public static final int CROWD_MESSAGE_AUDIO = 1106;// ç¾¤èŠè§†å±æ¶ˆæ¯(æœªå¼€å‘ï¼Œæ•¬è¯·æœŸå¾…)
+	public static final int CROWD_MESSAGE_SUCCESS = 1107;// ç¾¤èŠæ¶ˆæ¯å‘é€æˆåŠŸ
+	public static final int CROWD_MESSAGE_FAILED = 1108; // ç¾¤èŠæ¶ˆæ¯å‘é€å¤±è´¥
 
 	/**
-	 * ÎÒµÄÏûÏ¢--ÀëÏß
+	 * æˆ‘çš„æ¶ˆæ¯--ç¦»çº¿
 	 */
 	public static final int MY_OFF_MESSAGE = 1151;
 
-	public static final int MY_RESULT_MESSAGE = 1152; // ÈºÁÄÏûÏ¢·¢ËÍÊ§°Ü
-	
-	/**
-	 * ÊÕµ½ÎÒµÄÏûÏ¢
-	 */
-	public static final int MY_MESSAGE = 1153; // ÎÒµÄÏûÏ¢
+	public static final int MY_RESULT_MESSAGE = 1152; // ç¾¤èŠæ¶ˆæ¯å‘é€å¤±è´¥
 
-	/** »ù±¾µÄÇëÇóÀàĞÍ **/
-	public static final int REQUEST_LOGIN = 100;// µÇÂ¼
-	public static final int REQUEST_REGIST = 101;// ×¢²á
+	public static final int ISHAS_NEW_MYMESSAGE = 1153; // æ˜¯å¦æœ‰æ–°çš„æˆ‘çš„æ¶ˆæ¯
+
+	public static final int MYMESSAGE = 1154;// æˆ‘çš„æ¶ˆæ¯
+
+	public static final int AT_ME = 1155; // @æˆ‘çš„
+
+	public static final int SYSTEM_MESSAGE = 1156; // ç³»ç»Ÿæ¶ˆæ¯
+
+	public static final int REPLY_ME = 1157;// å›å¤æˆ‘çš„
+
+	/**
+	 * æ”¶åˆ°æˆ‘çš„æ¶ˆæ¯
+	 */
+	public static final int MY_MESSAGE = 1153; // æˆ‘çš„æ¶ˆæ¯
+
+	/** åŸºæœ¬çš„è¯·æ±‚ç±»å‹ **/
+	public static final int REQUEST_LOGIN = 100;// ç™»å½•
+	public static final int REQUEST_REGIST = 101;// æ³¨å†Œ
 	public static final int REQUEST_EXIT = 102;
 	public static final int REQUEST_BE_OFF = 103;
 
-	public static final int REQUEST_UI = 99; // ¸üĞÂUIÊÓÍ¼ *¶ØºÀµÄ
+	public static final int REQUEST_UI = 99; // æ›´æ–°UIè§†å›¾ *æ•¦è±ªçš„
 
 	public static final int RESULT_LOGIN = 200;
 	public static final int RESULT_REGIST = 201;
@@ -63,86 +72,86 @@ public interface Config {
 	public static final int IMG_NO_UPDATE = 601;
 
 	/**
-	 * ÈºµÄ²Ù×÷
+	 * ç¾¤çš„æ“ä½œ
 	 */
-	public static final int CROWD_CREATE = 1201;// ´´½¨ÈºÁÄ
-	public static final int CROWD_MY = 1202;// ²éÕÒÎÒµÄÈº
-	public static final int CROWD_FIND = 1203;// ²éÕÒÈº
-	public static final int CROWD_INTIVE = 1204;// ÑûÇë½øÈº
-	public static final int CROWD_APPLY = 1205;// ÉêÇë½øÈº
-	public static final int CROWD_GET_INFO = 1206;// ÈºĞÅÏ¢
-	public static final int CROWD_GET_HEAD = 1207;// »ñÈ¡ÈºÍ·Ïñ
-	public static final int CROWD_SET_INFO = 1208;// ÈºÔ±ÒÑ¾­ÔÚÈºÖĞ
-	public static final int CROWD_SET_HEAD = 1209;// ÉèÖÃÈºÍ·Ïñ
-	public static final int CROWD_FOUND = 1210;// foundÈº ¿ÉÄÜ¸ĞĞËÈ¤µÄÈº»òÕßÈÈÃÅÈº
+	public static final int CROWD_CREATE = 1201;// åˆ›å»ºç¾¤èŠ
+	public static final int CROWD_MY = 1202;// æŸ¥æ‰¾æˆ‘çš„ç¾¤
+	public static final int CROWD_FIND = 1203;// æŸ¥æ‰¾ç¾¤
+	public static final int CROWD_INTIVE = 1204;// é‚€è¯·è¿›ç¾¤
+	public static final int CROWD_APPLY = 1205;// ç”³è¯·è¿›ç¾¤
+	public static final int CROWD_GET_INFO = 1206;// ç¾¤ä¿¡æ¯
+	public static final int CROWD_GET_HEAD = 1207;// è·å–ç¾¤å¤´åƒ
+	public static final int CROWD_SET_INFO = 1208;// ç¾¤å‘˜å·²ç»åœ¨ç¾¤ä¸­
+	public static final int CROWD_SET_HEAD = 1209;// è®¾ç½®ç¾¤å¤´åƒ
+	public static final int CROWD_FOUND = 1210;// foundç¾¤ å¯èƒ½æ„Ÿå…´è¶£çš„ç¾¤æˆ–è€…çƒ­é—¨ç¾¤
 
 	/**
-	 * Èº²Ù×÷µÄ»Ø¸´
+	 * ç¾¤æ“ä½œçš„å›å¤
 	 */
-	public static final int CROWD_RESULT_CREATE = 1301; // ´´½¨ÈºÁÄ½á¹û
-	public static final int CROWD_RESULT_MY = 1302;// ²éÕÒÎÒµÄÈºµÄ½á¹û
-	public static final int CROWD_RESULT_FIND = 1303;// ²éÕÒÈºµÄ½á¹û
-	public static final int CROWD_RESULT_INTIVE = 1304; // ÑûÇë½á¹û
-	public static final int CROWD_RESULT_APPLY = 1305;// ÉêÇë½øÈº½á¹û
-	public static final int CROWD_RESULT_GETINFO = 1306;// ÈºÏûÏ¢
-	public static final int CROWD_RESULT_GETHEAD = 1307;// ÉêÇë½øÈº½á¹û
-	public static final int CROWD_RESULT_SETINFO = 1308;// ÉêÇë½øÈº½á¹û
-	public static final int CROWD_RESULT_SETHEAD = 1309;// ÉêÇë½øÈº½á¹û
-	public static final int CROWD_RESULT_FOUND = 1310;// ÉêÇë½øÈº½á¹û
+	public static final int CROWD_RESULT_CREATE = 1301; // åˆ›å»ºç¾¤èŠç»“æœ
+	public static final int CROWD_RESULT_MY = 1302;// æŸ¥æ‰¾æˆ‘çš„ç¾¤çš„ç»“æœ
+	public static final int CROWD_RESULT_FIND = 1303;// æŸ¥æ‰¾ç¾¤çš„ç»“æœ
+	public static final int CROWD_RESULT_INTIVE = 1304; // é‚€è¯·ç»“æœ
+	public static final int CROWD_RESULT_APPLY = 1305;// ç”³è¯·è¿›ç¾¤ç»“æœ
+	public static final int CROWD_RESULT_GETINFO = 1306;// ç¾¤æ¶ˆæ¯
+	public static final int CROWD_RESULT_GETHEAD = 1307;// ç”³è¯·è¿›ç¾¤ç»“æœ
+	public static final int CROWD_RESULT_SETINFO = 1308;// ç”³è¯·è¿›ç¾¤ç»“æœ
+	public static final int CROWD_RESULT_SETHEAD = 1309;// ç”³è¯·è¿›ç¾¤ç»“æœ
+	public static final int CROWD_RESULT_FOUND = 1310;// ç”³è¯·è¿›ç¾¤ç»“æœ
 
-	public static final int CROWD_LIST = 1321; // ÈºÁĞ±í
-	public static final int CROWD_USER_ALREADY = 1322; // ÈºÔ±ÒÑ¾­ÔÚÈºÖĞ
-	public static final int CROWD_FULL = 1323; // ÈºÂúÈË
-	public static final int CROWD_NO_EXIST = 1324;// Èº²»´æÔÚ
+	public static final int CROWD_LIST = 1321; // ç¾¤åˆ—è¡¨
+	public static final int CROWD_USER_ALREADY = 1322; // ç¾¤å‘˜å·²ç»åœ¨ç¾¤ä¸­
+	public static final int CROWD_FULL = 1323; // ç¾¤æ»¡äºº
+	public static final int CROWD_NO_EXIST = 1324;// ç¾¤ä¸å­˜åœ¨
 	/**
-	 * ÓÃ»§²Ù×÷
+	 * ç”¨æˆ·æ“ä½œ
 	 */
-	public static final int USER_LIST = 1401;// ÓÃ»§ÁĞ±í
-	public static final int USER_GET_ATTENT = 1402;// ÎÒ¹Ø×¢µÄ
-	public static final int USER_GET_ATTENTED = 1403;// ¹Ø×¢ÎÒµÄ
-	public static final int USER_GET_INFO = 1404;// ÓÃ»§ĞÅÏ¢
-	public static final int USER_GET_HEAD = 1405;// ÓÃ»§Í·Ïñ
-	public static final int USER_ADD_ATTENT = 1406;// Ìí¼Ó¹Ø×¢
-	public static final int USER_CANCEL_ATTENT = 1407;// È¡Ïû¹Ø×¢
-	public static final int USER_SET_INFO = 1408;// ĞŞ¸Ä×ÊÁÏ
-	public static final int USER_SET_HEAD = 1409;// ĞŞ¸ÄÍ·Ïñ
-	public static final int USER_FIND = 1410;// ²éÕÒÓÃ»§
-	public static final int USER_FOUND = 1411;// ²éÕÒ¿ÉÄÜ¸ĞĞËÈ¤µÄÈº
-	public static final int USER_OTHER_ATTENT = 1412;// ±ğÈË¹Ø×¢µÄ
-	public static final int USER_OTHER_FANS = 1413;// ±ğÈËµÄ·ÛË¿
+	public static final int USER_LIST = 1401;// ç”¨æˆ·åˆ—è¡¨
+	public static final int USER_GET_ATTENT = 1402;// æˆ‘å…³æ³¨çš„
+	public static final int USER_GET_ATTENTED = 1403;// å…³æ³¨æˆ‘çš„
+	public static final int USER_GET_INFO = 1404;// ç”¨æˆ·ä¿¡æ¯
+	public static final int USER_GET_HEAD = 1405;// ç”¨æˆ·å¤´åƒ
+	public static final int USER_ADD_ATTENT = 1406;// æ·»åŠ å…³æ³¨
+	public static final int USER_CANCEL_ATTENT = 1407;// å–æ¶ˆå…³æ³¨
+	public static final int USER_SET_INFO = 1408;// ä¿®æ”¹èµ„æ–™
+	public static final int USER_SET_HEAD = 1409;// ä¿®æ”¹å¤´åƒ
+	public static final int USER_FIND = 1410;// æŸ¥æ‰¾ç”¨æˆ·
+	public static final int USER_FOUND = 1411;// æŸ¥æ‰¾å¯èƒ½æ„Ÿå…´è¶£çš„ç¾¤
+	public static final int USER_OTHER_ATTENT = 1412;// åˆ«äººå…³æ³¨çš„
+	public static final int USER_OTHER_FANS = 1413;// åˆ«äººçš„ç²‰ä¸
 
-	// ÓÃ»§²Ù×÷½á¹û
-	public static final int USER_RESULT_LIST = 1501;// ÓÃ»§ÁĞ±í
-	public static final int USER_RESULT_GETATTENT = 1502;// ÎÒ¹Ø×¢µÄ
-	public static final int USER_RESULT_GETATTENTED = 1503;// ¹Ø×¢ÎÒµÄ
-	public static final int USER_RESULT_GETINFO = 1504;// ÓÃ»§ĞÅÏ¢
-	public static final int USER_RESULT_GETHEAD = 1505;// ÓÃ»§Í·Ïñ
-	public static final int USER_RESULT_ADDATTENT = 1506;// Ìí¼Ó¹Ø×¢
-	public static final int USER_RESULT_CANCELATTENT = 1507;// È¡Ïû¹Ø×¢
-	public static final int USER_RESULT_SETINFO = 1508;// ĞŞ¸Ä×ÊÁÏ
-	public static final int USER_RESULT_SETHEAD = 1509;// ĞŞ¸ÄÍ·Ïñ
-	public static final int USER_RESULT_FIND = 1510;// ²éÕÒÓÃ»§
-	public static final int USER_RESULT_FOUND = 1511;// ²éÕÒ¸ĞĞËÈ¤µÄÈºµÄ½á¹û
-	public static final int USER_RESULT_OATTENT = 1512;// »ñÈ¡±ğÈËµÄ¹Ø×¢µÄ½á¹û
-	public static final int USER_RESULT_OFANS = 1513;// »ñÈ¡±ğÈËµÄ·ÛË¿µÄ½á¹û
+	// ç”¨æˆ·æ“ä½œç»“æœ
+	public static final int USER_RESULT_LIST = 1501;// ç”¨æˆ·åˆ—è¡¨
+	public static final int USER_RESULT_GETATTENT = 1502;// æˆ‘å…³æ³¨çš„
+	public static final int USER_RESULT_GETATTENTED = 1503;// å…³æ³¨æˆ‘çš„
+	public static final int USER_RESULT_GETINFO = 1504;// ç”¨æˆ·ä¿¡æ¯
+	public static final int USER_RESULT_GETHEAD = 1505;// ç”¨æˆ·å¤´åƒ
+	public static final int USER_RESULT_ADDATTENT = 1506;// æ·»åŠ å…³æ³¨
+	public static final int USER_RESULT_CANCELATTENT = 1507;// å–æ¶ˆå…³æ³¨
+	public static final int USER_RESULT_SETINFO = 1508;// ä¿®æ”¹èµ„æ–™
+	public static final int USER_RESULT_SETHEAD = 1509;// ä¿®æ”¹å¤´åƒ
+	public static final int USER_RESULT_FIND = 1510;// æŸ¥æ‰¾ç”¨æˆ·
+	public static final int USER_RESULT_FOUND = 1511;// æŸ¥æ‰¾æ„Ÿå…´è¶£çš„ç¾¤çš„ç»“æœ
+	public static final int USER_RESULT_OATTENT = 1512;// è·å–åˆ«äººçš„å…³æ³¨çš„ç»“æœ
+	public static final int USER_RESULT_OFANS = 1513;// è·å–åˆ«äººçš„ç²‰ä¸çš„ç»“æœ
 
-	// ÆäËû
-	public static final int USER_NO_FOUND = 1520;// ÓÃ»§Ã»ÕÒµ½
-	public static final int USER_LOGIN_ALREADY = 1521;// ÓÃ»§ÒÑµÇÂ¼
-	public static final int USER_NO_ONLINE = 1522; // ÓÃ»§²»ÔÚÏß
+	// å…¶ä»–
+	public static final int USER_NO_FOUND = 1520;// ç”¨æˆ·æ²¡æ‰¾åˆ°
+	public static final int USER_LOGIN_ALREADY = 1521;// ç”¨æˆ·å·²ç™»å½•
+	public static final int USER_NO_ONLINE = 1522; // ç”¨æˆ·ä¸åœ¨çº¿
 
-	public static final int RELATIONSHIP_ATTENTION = 2002;// ¹Ø×¢±êÖ¾
-	public static final int RELATIONSHIP_FOLLOER = 2003;// ·ÛË¿±êÖ¾
-	public static final int RELATIONSHIP_NO_MATTER = 2004;// Ã»ÓĞ¹ØÏµµÄ±êÖ¾
+	public static final int RELATIONSHIP_ATTENTION = 2002;// å…³æ³¨æ ‡å¿—
+	public static final int RELATIONSHIP_FOLLOER = 2003;// ç²‰ä¸æ ‡å¿—
+	public static final int RELATIONSHIP_NO_MATTER = 2004;// æ²¡æœ‰å…³ç³»çš„æ ‡å¿—
 
 	// other
-	public static final int USER_MOVE = 9998;// ÒÆ¶¯ÓÃ»§
+	public static final int USER_MOVE = 9998;// ç§»åŠ¨ç”¨æˆ·
 	public static final int MAP_INFO = 9999;
 	/**
-	 * ¶ÔĞí¶à²Ù×÷µÄÍ¬Òâ»Ø¸´
+	 * å¯¹è®¸å¤šæ“ä½œçš„åŒæ„å›å¤
 	 */
 	public static final int USED = 6;
 	public static final int SUCCESS = 1;
 	public static final int FAILED = 0;
-	public static final int NOT_FOUND = 2;// ¶ÔËÑË÷µÄ²Ù×÷µÄ»Ø¸´--Ã»ÓĞÕÒµ½
+	public static final int NOT_FOUND = 2;// å¯¹æœç´¢çš„æ“ä½œçš„å›å¤--æ²¡æœ‰æ‰¾åˆ°
 }

@@ -14,6 +14,7 @@ import com.atm.chat.nio.server.util.Config;
 import com.atm.daoDefined.MyMessageDAO;
 import com.atm.model.define.MyMessage;
 import com.atm.util.Application;
+import com.atm.util.JsonUtil;
 
 /**
  * 我的消息 使用json
@@ -24,11 +25,48 @@ import com.atm.util.Application;
  */
 public class MyMessageHandler extends BufferHandler implements Application {
 
-	private static final Logger log = LoggerFactory
-			.getLogger(MyMessageHandler.class);
+	private static final Logger log = LoggerFactory.getLogger(MyMessageHandler.class);
 	private static JSONObject jsonObject = new JSONObject();
-	private static MyMessageDAO myMessageDAO = (MyMessageDAO) context
-			.getBean("MyMessageDAO");
+	private static MyMessageDAO myMessageDAO = (MyMessageDAO) context.getBean("MyMessageDAO");
+
+	public MyMessageHandler() {
+	}
+
+	public void operate(int type) throws Exception {
+		switch (type) {
+		case Config.ISHAS_NEW_MYMESSAGE:
+			isHasNewMessage();
+			break;
+		case Config.MYMESSAGE:
+			sendMyMessage();
+			break;
+		default:
+			break;
+		}
+	}
+
+	/**
+	 * 0,@ 1：回复 2系统
+	 * 
+	 * @throws Exception
+	 */
+	public void isHasNewMessage() throws Exception {
+		JSONObject json = new JSONObject(getString());
+		String userId = json.getString("userId");
+		isHasNewMessage(userId);
+	}
+
+	public void isHasNewMessage(String userId) throws JSONException {
+		JSONObject json = new JSONObject();
+		List<MyMessage> myMessages = new ArrayList<MyMessage>();
+		for (int i = 0; i < 3; i++) {
+			// 查找@我的
+			myMessages = myMessageDAO.findMyMessage(userId, i);
+			json.put(i + "", myMessages.size());
+		}
+		// 发送json
+		sendJson(Config.ISHAS_NEW_MYMESSAGE, json.toString(), userId);
+	}
 
 	/**
 	 * 发送我的消息
@@ -39,19 +77,34 @@ public class MyMessageHandler extends BufferHandler implements Application {
 	 *            我的消息类型(@我的,回复我的或评论我的，系统消息)
 	 * @param content
 	 *            消息内容(json格式 内容包含自定)
+	 * @throws Exception
 	 * @throws JSONException
 	 */
-	public void sendMyMessage(String userId, int type, String content)
-			throws JSONException {
+	public void sendMyMessage() throws JSONException, Exception {
+		JSONObject json = new JSONObject(getString());
+		String userId = json.getString("userId");
+		List<MyMessage> myMessages = new ArrayList<MyMessage>();
+		myMessages = myMessageDAO.findMyMessage(userId, json.getInt("type"));
+		json.put("messgae", JsonUtil.listToJson(myMessages));
+		sendJson(Config.MY_MESSAGE, json.toString(), userId);
+	}
+
+	/**
+	 * 发送我的消息
+	 * 
+	 * @param userId
+	 *            接受者
+	 * @param type
+	 *            我的消息类型(0:@我的,1:回复我的或评论我的，2:系统消息)
+	 * @param content
+	 *            消息内容(json格式 内容包含自定)
+	 * @throws Exception
+	 */
+	public void sendMyMessage(String userId, int type, String content) throws Exception {
 		SocketChannel socketChannel = map.get(userId);
 		MyMessage message = new MyMessage(userId, type, content);
-		if (socketChannel == null) {
-			// 用户不在线 存进数据库
-			myMessageDAO.save(message);
-		} else {
-			// 否则发送消息
-			sendMyMessage(message);
-		}
+		myMessageDAO.save(message);
+		isHasNewMessage(userId);
 	}
 
 	/**
@@ -87,8 +140,7 @@ public class MyMessageHandler extends BufferHandler implements Application {
 	 * @throws JSONException
 	 */
 	private void sendMyMessage(MyMessage myMessage) throws JSONException {
-		log.info("发送我的消息:userId:" + myMessage.getUserId() + "type:"
-				+ myMessage.getType());
+		log.info("发送我的消息:userId:" + myMessage.getUserId() + "type:" + myMessage.getType());
 
 		// 封装成json
 		jsonObject = new JSONObject();

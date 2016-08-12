@@ -507,8 +507,8 @@ public class MessageHandler extends BufferHandler {
 		log.info("============发送私聊离线消息=============");
 		sendPrivateOffLineMessage(userId);
 		// 发送我的消息离线消息
-		log.info("============发送私聊离线消息=============");
-		new MyMessageHandler().sendOffMyMessage(userId);
+		//log.info("============发送私聊离线消息=============");
+		//new MyMessageHandler().sendOffMyMessage(userId);
 		// 群聊离线消息
 		log.info("============发送群聊离线消息=============");
 		// sendCrowdOffLineMessage(userId);
