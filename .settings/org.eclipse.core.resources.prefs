@@ -1,4 +1,7 @@
 eclipse.preferences.version=1
 encoding//src/com/atm/action/AppealAction.java=GBK
+encoding//src/com/atm/chat/nio/server/handler/MessageHandler.java=GBK
+encoding//src/com/atm/chat/nio/server/handler/MyMessageHandler.java=GBK
 encoding//src/com/atm/springMvc/handlers=GBK
-encoding/<project>=GBK
+encoding//src/com/atm/springMvc/handlers/SchoolActivehandler.java=UTF-8
+encoding/<project>=UTF-8

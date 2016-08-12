@@ -8,3 +8,6 @@
 /applicationContext_util.xml
 /applicationContext_view.xml
 /com/
+/log4j.properties
+/struts.xml
+/struts_servicer.xml

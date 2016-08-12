@@ -1,5 +1,6 @@
 package com.atm.daoDefined;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.LockOptions;
@@ -27,8 +28,7 @@ import com.atm.model.define.MyMessage;
  */
 @Transactional
 public class MyMessageDAO {
-	private static final Logger log = LoggerFactory
-			.getLogger(MyMessageDAO.class);
+	private static final Logger log = LoggerFactory.getLogger(MyMessageDAO.class);
 	// property constants
 	public static final String USER_ID = "userId";
 	public static final String TYPE = "type";
@@ -73,8 +73,7 @@ public class MyMessageDAO {
 	public MyMessage findById(java.lang.Integer id) {
 		log.debug("getting MyMessage instance with id: " + id);
 		try {
-			MyMessage instance = (MyMessage) getCurrentSession().get(
-					"com.atm.daoDefined.MyMessage", id);
+			MyMessage instance = (MyMessage) getCurrentSession().get("com.atm.daoDefined.MyMessage", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -85,11 +84,9 @@ public class MyMessageDAO {
 	public List findByExample(MyMessage instance) {
 		log.debug("finding MyMessage instance by example");
 		try {
-			List results = getCurrentSession()
-					.createCriteria("com.atm.daoDefined.MyMessage")
+			List results = getCurrentSession().createCriteria("com.atm.daoDefined.MyMessage")
 					.add(Example.create(instance)).list();
-			log.debug("find by example successful, result size: "
-					+ results.size());
+			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
@@ -98,11 +95,9 @@ public class MyMessageDAO {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding MyMessage instance with property: " + propertyName
-				+ ", value: " + value);
+		log.debug("finding MyMessage instance with property: " + propertyName + ", value: " + value);
 		try {
-			String queryString = "from MyMessage as model where model."
-					+ propertyName + "= ?";
+			String queryString = "from MyMessage as model where model." + propertyName + "= ?";
 			Query queryObject = getCurrentSession().createQuery(queryString);
 			queryObject.setParameter(0, value);
 			return queryObject.list();
@@ -139,8 +134,7 @@ public class MyMessageDAO {
 	public MyMessage merge(MyMessage detachedInstance) {
 		log.debug("merging MyMessage instance");
 		try {
-			MyMessage result = (MyMessage) getCurrentSession().merge(
-					detachedInstance);
+			MyMessage result = (MyMessage) getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -163,8 +157,7 @@ public class MyMessageDAO {
 	public void attachClean(MyMessage instance) {
 		log.debug("attaching clean MyMessage instance");
 		try {
-			getCurrentSession().buildLockRequest(LockOptions.NONE).lock(
-					instance);
+			getCurrentSession().buildLockRequest(LockOptions.NONE).lock(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -174,5 +167,24 @@ public class MyMessageDAO {
 
 	public static MyMessageDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (MyMessageDAO) ctx.getBean("MyMessageDAO");
+	}
+
+	/**
+	 * 使用userid和type查找消息类型
+	 * 
+	 * @param userId
+	 * @param type
+	 */
+	public List<MyMessage> findMyMessage(String userId, int type) {
+		List<MyMessage> list = new ArrayList<>();
+		log.debug("finding all MyMessage by userId and type");
+		try {
+			String queryString = "select * from mymessage where userId='" + userId + "' and type=" + type;
+			list = getCurrentSession().createQuery(queryString).list();
+			return list;
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			throw re;
+		}
 	}
 }
