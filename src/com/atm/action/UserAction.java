@@ -30,7 +30,7 @@ public class UserAction extends ActionSupport implements ServletResponseAware,
 	private String json;
 
 	/**
-	 * ×¢²á·½·¨Ìø×ª
+	 * æ³¨å†Œæ–¹æ³•è·³è½¬
 	 */
 	public String register() throws IOException, JSONException {
 		log.debug("json:" + json);
@@ -41,7 +41,7 @@ public class UserAction extends ActionSupport implements ServletResponseAware,
 	}
 
 	/**
-	 * È¡Ïû×¢²á£¬É¾³ıÖ®Ç°±£´æµÄÓÃ»§ĞÅÏ¢
+	 * å–æ¶ˆæ³¨å†Œï¼Œåˆ é™¤ä¹‹å‰ä¿å­˜çš„ç”¨æˆ·ä¿¡æ¯
 	 * 
 	 * @return
 	 * @throws JSONException
@@ -56,7 +56,7 @@ public class UserAction extends ActionSupport implements ServletResponseAware,
 	}
 
 	/**
-	 * ×¢²áµÄÓÊÏäÑéÖ¤
+	 * æ³¨å†Œçš„é‚®ç®±éªŒè¯
 	 * 
 	 * @return
 	 * @throws JSONException
@@ -71,21 +71,21 @@ public class UserAction extends ActionSupport implements ServletResponseAware,
 	}
 
 	/**
-	 * µÇÂ¼
+	 * ç™»å½•
 	 * 
 	 * @return
 	 * @throws JSONException
 	 * @throws IOException
 	 */
 	public String loginConfirm() throws IOException, JSONException {
-		log.info("socketµÇÂ¼³É¹¦Ö®ºó£¬¿Í»§¶ËÔÙÒÔÇëÇóÁ´½ÓµÄ·½Ê½Íê³ÉµÇÂ¼µÄºóĞø¹¤×÷");
+		log.info("socketç™»å½•æˆåŠŸä¹‹åï¼Œå®¢æˆ·ç«¯å†ä»¥è¯·æ±‚é“¾æ¥çš„æ–¹å¼å®Œæˆç™»å½•çš„åç»­å·¥ä½œ");
 		json = userService.loginConfirm(request, response, json);
 		sendUtil.writeToClient(response, json);
 		return null;
 	}
 
 	/*
-	 * µÇÂ½·½·¨Ìø×ª(½«µÇÂ½²Ù×÷ÍêÈ«½»¸øservice)
+	 * ç™»é™†æ–¹æ³•è·³è½¬(å°†ç™»é™†æ“ä½œå®Œå…¨äº¤ç»™service)
 	 */
 	public String login() {
 		userDeal.dealLogin(request, response);
@@ -93,16 +93,16 @@ public class UserAction extends ActionSupport implements ServletResponseAware,
 	}
 
 	public String exit() {
-		String mess = "Ê§°Ü";
+		String mess = "å¤±è´¥";
 		try {
-			request.getSession().invalidate();// Ïú»Ù¸ÃÓÃ»§µÄ»á»°
-			mess = "³É¹¦";
+			request.getSession().invalidate();// é”€æ¯è¯¥ç”¨æˆ·çš„ä¼šè¯
+			mess = "æˆåŠŸ";
 			JSONObject sendJson = new JSONObject();
 			sendJson.put("tip", mess);
 			JSONArray sendArray = new JSONArray().put(sendJson);
 			sendUtil.writeToClient(response, sendArray);
 		} catch (JSONException e) {
-			log.error("×¢Ïú´íÎó", e);
+			log.error("æ³¨é”€é”™è¯¯", e);
 			sendUtil.writeToClient(response, errorArray);
 		}
 		return null;
@@ -112,15 +112,15 @@ public class UserAction extends ActionSupport implements ServletResponseAware,
 	JSONObject sendJson;
 	JSONArray resultArray;
 
-	// ³õÊ¼»¯
+	// åˆå§‹åŒ–
 	private void init() {
-		mess = "»ñÈ¡Òì³£";
+		mess = "è·å–å¼‚å¸¸";
 		sendJson = new JSONObject();
 		resultArray = new JSONArray();
 	}
 
 	/**
-	 * Ñ§ÉúµÄÑéÖ¤(½ÌÎñÏµÍ³ÕËºÅµÇÂ¼)
+	 * å­¦ç”Ÿçš„éªŒè¯(æ•™åŠ¡ç³»ç»Ÿè´¦å·ç™»å½•)
 	 * 
 	 * @return
 	 * @throws JSONException
@@ -128,7 +128,7 @@ public class UserAction extends ActionSupport implements ServletResponseAware,
 	 *             flag:2,userId:a,number:131544251,password:woaini8874535
 	 */
 	public String userConfirm() throws IOException, JSONException {
-		log.info("½ÌÎñÏµÍ³ÑéÖ¤");
+		log.info("æ•™åŠ¡ç³»ç»ŸéªŒè¯");
 		json = jsonUtil.getJSONArray(request).toString();
 		log.info("json:" + json);
 		json = userService.confirmUser(json);
@@ -137,13 +137,13 @@ public class UserAction extends ActionSupport implements ServletResponseAware,
 	}
 	
 	/**
-	 * ½øÈë¸öÈËÖĞĞÄ
+	 * è¿›å…¥ä¸ªäººä¸­å¿ƒ
 	 * @return
 	 * @throws IOException
 	 * @throws JSONException
 	 */
 	public String personalCenter() throws IOException, JSONException{
-		log.info("½øÈë¸öÈËÖĞĞÄ:");
+		log.info("è¿›å…¥ä¸ªäººä¸­å¿ƒ:");
 		json = jsonUtil.getJSONArray(request).toString();
 		log.info("json:" + json);
 		//json = userService;
@@ -151,13 +151,13 @@ public class UserAction extends ActionSupport implements ServletResponseAware,
 		return null;
 	}
 
-	// ¼ì²é½á¹û
+	// æ£€æŸ¥ç»“æœ
 	private void check() {
 		if (resultArray == null) {
-			mess = "Ã»ÓĞ½á¹û";
-			resultArray = new JSONArray();// ÖØĞÂ³õÊ¼»¯
+			mess = "æ²¡æœ‰ç»“æœ";
+			resultArray = new JSONArray();// é‡æ–°åˆå§‹åŒ–
 		} else {
-			String tip = "³É¹¦";
+			String tip = "æˆåŠŸ";
 			try {
 				tip = (String) resultArray.getJSONObject(0).get("tip");
 			} catch (JSONException e) {
@@ -167,7 +167,7 @@ public class UserAction extends ActionSupport implements ServletResponseAware,
 		}
 	}
 
-	// ·¢ËÍ£¬name:ÎªrsultArrayµÄkey
+	// å‘é€ï¼Œname:ä¸ºrsultArrayçš„key
 	public void send(String name) {
 		try {
 			sendJson.put("tip", mess);
@@ -179,14 +179,14 @@ public class UserAction extends ActionSupport implements ServletResponseAware,
 		}
 	}
 
-	// TODO¡¡»ñÈ¡ÓÃ»§¹Ø×¢µÄÓÃ»§
+	// TODOã€€è·å–ç”¨æˆ·å…³æ³¨çš„ç”¨æˆ·
 	public String attendedPeople() {
-		log.debug("»ñÈ¡¹Ø×¢ÕßÁĞ±íÇëÇó");
+		log.debug("è·å–å…³æ³¨è€…åˆ—è¡¨è¯·æ±‚");
 		init();
 		UserInfo user = (UserInfo) request.getSession(true)
 				.getAttribute("user");
 		if (user == null) {
-			mess = "Î´µÇÂ¼";
+			mess = "æœªç™»å½•";
 			send("attend");
 			return null;
 		}
@@ -194,21 +194,21 @@ public class UserAction extends ActionSupport implements ServletResponseAware,
 			resultArray = userDeal.getAttendedPeople(user.getUserId());
 			check();
 		} catch (Exception e) {
-			mess = "»ñÈ¡Ê§°Ü";
+			mess = "è·å–å¤±è´¥";
 			log.error(mess, e);
 		}
 		send("people");
 		return null;
 	}
 
-	// TODO »ñÈ¡ÓÃ»§¹Ø×¢µÄ±êÇ©
+	// TODO è·å–ç”¨æˆ·å…³æ³¨çš„æ ‡ç­¾
 	public String attendedLabel() {
-		log.debug("»ñÈ¡¹Ø×¢µÄ±êÇ©ÇëÇó");
+		log.debug("è·å–å…³æ³¨çš„æ ‡ç­¾è¯·æ±‚");
 		init();
 		UserInfo user = (UserInfo) request.getSession(true)
 				.getAttribute("user");
 		if (user == null) {
-			mess = "Î´µÇÂ¼";
+			mess = "æœªç™»å½•";
 			send("attend");
 			return null;
 		}
@@ -216,14 +216,14 @@ public class UserAction extends ActionSupport implements ServletResponseAware,
 			resultArray = userDeal.getAttendedLabel(user.getUserId());
 			check();
 		} catch (Exception e) {
-			mess = "»ñÈ¡Ê§°Ü";
+			mess = "è·å–å¤±è´¥";
 			log.error(mess, e);
 		}
 		send("label");
 		return null;
 	}
 
-	// ĞŞ¸ÄÃÜÂë
+	// ä¿®æ”¹å¯†ç 
 	public String changePassword() throws IOException, JSONException {
 		json = jsonUtil.getJSONArray(request).toString();
 		log.debug("json:" + json);
@@ -233,7 +233,7 @@ public class UserAction extends ActionSupport implements ServletResponseAware,
 	}
 
 	/**
-	 * Íü¼ÇÃÜÂë
+	 * å¿˜è®°å¯†ç 
 	 * 
 	 * @return
 	 * @throws JSONException
@@ -249,7 +249,7 @@ public class UserAction extends ActionSupport implements ServletResponseAware,
 	}
 
 	/**
-	 * ÕÒ»ØÕËºÅ
+	 * æ‰¾å›è´¦å·
 	 * 
 	 * @return
 	 * @throws JSONException
@@ -264,7 +264,7 @@ public class UserAction extends ActionSupport implements ServletResponseAware,
 	}
 
 	public String findUserBy() {
-		// »ñÈ¡userµÄÒµÎñÂß¼­Àà
+		// è·å–userçš„ä¸šåŠ¡é€»è¾‘ç±»
 		UserService userService = new UserService();
 		// userService.fi
 		return null;

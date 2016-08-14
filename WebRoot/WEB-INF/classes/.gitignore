@@ -1,12 +1,3 @@
-/applicationContext.xml
-/applicationContext_daoDefined.xml
-/applicationContext_mdelDefined.xml
-/applicationContext_my.xml
-/applicationContext_server.xml
-/applicationContext_service.xml
-/applicationContext_servicebbs.xml
-/applicationContext_util.xml
-/applicationContext_view.xml
 /com/
 /log4j.properties
 /struts.xml

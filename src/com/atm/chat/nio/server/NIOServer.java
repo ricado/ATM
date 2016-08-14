@@ -13,24 +13,24 @@ import org.slf4j.LoggerFactory;
 import com.atm.chat.nio.server.util.ScMap;
 
 /**
- * ÍøÂç¶à¿Í»§¶ËÁÄÌìÊÒ ¹¦ÄÜ1£º ¿Í»§¶ËÍ¨¹ıJava NIOÁ¬½Óµ½·şÎñ¶Ë£¬Ö§³Ö¶à¿Í»§¶ËµÄÁ¬½Ó
- * ¹¦ÄÜ2£º¿Í»§¶Ë³õ´ÎÁ¬½ÓÊ±£¬·şÎñ¶ËÌáÊ¾ÊäÈëêÇ³Æ£¬Èç¹ûêÇ³ÆÒÑ¾­ÓĞÈËÊ¹ÓÃ£¬ÌáÊ¾ÖØĞÂÊäÈë£¬Èç¹ûêÇ³ÆÎ¨Ò»£¬ÔòµÇÂ¼³É¹¦£¬Ö®ºó·¢ËÍÏûÏ¢¶¼ĞèÒª°´ÕÕ¹æ¶¨¸ñÊ½´ø×ÅêÇ³Æ·¢ËÍÏûÏ¢
- * ¹¦ÄÜ3£º¿Í»§¶ËµÇÂ¼ºó£¬·¢ËÍÒÑ¾­ÉèÖÃºÃµÄ»¶Ó­ĞÅÏ¢ºÍÔÚÏßÈËÊı¸ø¿Í»§¶Ë£¬²¢ÇÒÍ¨ÖªÆäËû¿Í»§¶Ë¸Ã¿Í»§¶ËÉÏÏß
- * ¹¦ÄÜ4£º·şÎñÆ÷ÊÕµ½ÒÑµÇÂ¼¿Í»§¶ËÊäÈëÄÚÈİ£¬×ª·¢ÖÁÆäËûµÇÂ¼¿Í»§¶Ë¡£
+ * ç½‘ç»œå¤šå®¢æˆ·ç«¯èŠå¤©å®¤ åŠŸèƒ½1ï¼š å®¢æˆ·ç«¯é€šè¿‡Java NIOè¿æ¥åˆ°æœåŠ¡ç«¯ï¼Œæ”¯æŒå¤šå®¢æˆ·ç«¯çš„è¿æ¥
+ * åŠŸèƒ½2ï¼šå®¢æˆ·ç«¯åˆæ¬¡è¿æ¥æ—¶ï¼ŒæœåŠ¡ç«¯æç¤ºè¾“å…¥æ˜µç§°ï¼Œå¦‚æœæ˜µç§°å·²ç»æœ‰äººä½¿ç”¨ï¼Œæç¤ºé‡æ–°è¾“å…¥ï¼Œå¦‚æœæ˜µç§°å”¯ä¸€ï¼Œåˆ™ç™»å½•æˆåŠŸï¼Œä¹‹åå‘é€æ¶ˆæ¯éƒ½éœ€è¦æŒ‰ç…§è§„å®šæ ¼å¼å¸¦ç€æ˜µç§°å‘é€æ¶ˆæ¯
+ * åŠŸèƒ½3ï¼šå®¢æˆ·ç«¯ç™»å½•åï¼Œå‘é€å·²ç»è®¾ç½®å¥½çš„æ¬¢è¿ä¿¡æ¯å’Œåœ¨çº¿äººæ•°ç»™å®¢æˆ·ç«¯ï¼Œå¹¶ä¸”é€šçŸ¥å…¶ä»–å®¢æˆ·ç«¯è¯¥å®¢æˆ·ç«¯ä¸Šçº¿
+ * åŠŸèƒ½4ï¼šæœåŠ¡å™¨æ”¶åˆ°å·²ç™»å½•å®¢æˆ·ç«¯è¾“å…¥å†…å®¹ï¼Œè½¬å‘è‡³å…¶ä»–ç™»å½•å®¢æˆ·ç«¯ã€‚
  */
 public class NIOServer implements ScMap {
 	private static final Logger log = LoggerFactory.getLogger(NIOServer.class);
 	private Selector selector = null;
 	static final int port = 23457;
 	public NIOServer() throws IOException{
-		log.info("---------¿ªÆôsocketServer---------");
+		log.info("---------å¼€å¯socketServer---------");
 		/*String path = ServletActionContext.getRequest().getContextPath();
 		String basicPath = ServletActionContext.getRequest().getRealPath("/");
 		log.info("path:" + path);
 		log.info("basicPath:" + path);*/
 		init();
 	}
-	// ÓÃÀ´¼ÇÂ¼ÔÚÏßÈËÊı£¬ÒÔ¼°êÇ³Æ
+	// ç”¨æ¥è®°å½•åœ¨çº¿äººæ•°ï¼Œä»¥åŠæ˜µç§°
 	/*
 	 * private static HashSet<String> users = new HashSet<String>(); private
 	 * ServerReceive receive = null;
@@ -39,9 +39,9 @@ public class NIOServer implements ScMap {
 		selector = Selector.open();
 		ServerSocketChannel server = ServerSocketChannel.open();
 		server.bind(new InetSocketAddress(port));
-		// ·Ç×èÈûµÄ·½Ê½
+		// éé˜»å¡çš„æ–¹å¼
 		server.configureBlocking(false);
-		// ×¢²áµ½Ñ¡ÔñÆ÷ÉÏ£¬ÉèÖÃÎª¼àÌı×´Ì¬
+		// æ³¨å†Œåˆ°é€‰æ‹©å™¨ä¸Šï¼Œè®¾ç½®ä¸ºç›‘å¬çŠ¶æ€
 		server.register(selector, SelectionKey.OP_ACCEPT);
 		log.info("Server is listening now...");
 		AcceptSelector acceptSelector = new AcceptSelector(selector, server);

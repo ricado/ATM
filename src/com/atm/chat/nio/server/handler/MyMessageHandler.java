@@ -57,6 +57,10 @@ public class MyMessageHandler extends BufferHandler implements Application {
 	}
 
 	public void isHasNewMessage(String userId) throws JSONException {
+
+		if (map.get(userId) == null) {
+			return;
+		}
 		JSONObject json = new JSONObject();
 		List<MyMessage> myMessages = new ArrayList<MyMessage>();
 		for (int i = 0; i < 3; i++) {
@@ -101,7 +105,7 @@ public class MyMessageHandler extends BufferHandler implements Application {
 	 * @throws Exception
 	 */
 	public void sendMyMessage(String userId, int type, String content) throws Exception {
-		SocketChannel socketChannel = map.get(userId);
+		// SocketChannel socketChannel = map.get(userId);
 		MyMessage message = new MyMessage(userId, type, content);
 		myMessageDAO.save(message);
 		isHasNewMessage(userId);

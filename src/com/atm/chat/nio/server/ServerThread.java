@@ -14,11 +14,11 @@ public class ServerThread extends Thread {
 
 	public void run() {
 		try {
-			log.info("¿ªÆôserverThread --run");
+			log.info("å¼€å¯serverThread --run");
 			server = new NIOServer();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			log.info("¿ªÆôÊ§°Ü");
+			log.info("å¼€å¯å¤±è´¥");
 			e.printStackTrace();
 		}
 	}
