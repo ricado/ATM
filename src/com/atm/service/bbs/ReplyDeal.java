@@ -31,38 +31,38 @@ import com.atm.model.user.UserInfo;
 import com.atm.util.bbs.ObjectInterface;
 
 /**
- * @TODO£º
+ * @TODOï¼š
  * @fileName : com.atm.service.ReplyDeal.java
  * date | author | version |   
- * 2015Äê8ÔÂ11ÈÕ | Jiong | 1.0 |
+ * 2015å¹´8æœˆ11æ—¥ | Jiong | 1.0 |
  */
 public class ReplyDeal   implements ObjectInterface{
 	Logger log = Logger.getLogger(getClass());
 	
 	private JSONArray sendArray;
 	
-	//³õÊ¼»¯
+	//åˆå§‹åŒ–
 	private void init(){
 		sendArray = new JSONArray();
 	}
 	
-	//TODO »ñÈ¡Â¥²ã£¬first Îª-1Ê±»ñÈ¡Ò»ÌõÈÈÃÅÆÀÂÛ£¬ÆäËûÊ±ÔòÎªÆÕÍ¨ÆğÊ¼Î»ÖÃ²éÑ¯
+	//TODO è·å–æ¥¼å±‚ï¼Œfirst ä¸º-1æ—¶è·å–ä¸€æ¡çƒ­é—¨è¯„è®ºï¼Œå…¶ä»–æ—¶åˆ™ä¸ºæ™®é€šèµ·å§‹ä½ç½®æŸ¥è¯¢
 	public JSONArray getReply(HttpServletRequest request,int essayId,int first) throws JSONException, IOException{
 		init();
 		ReplyViewDAO replyDao = context.getBean("ReplyViewDAO",ReplyViewDAO.class);
 		List list;
-		//¸ù¾İÆğÊ¼Î»ÖÃ¾ö¶¨ÔõÃ´»ñÈ¡½á¹û¼¯
+		//æ ¹æ®èµ·å§‹ä½ç½®å†³å®šæ€ä¹ˆè·å–ç»“æœé›†
 		if(first==-1){
 			list = replyDao.findHotReply(essayId);
 		}else{
 			list = replyDao.findByEssayId(essayId,first);
 		}
-		//»ñÈ¡²»µ½½á¹û£¬·µ»ØÆÀÂÛ×ÜÊı
+		//è·å–ä¸åˆ°ç»“æœï¼Œè¿”å›è¯„è®ºæ€»æ•°
 		if(list.size()==0){
 			return new JSONArray().put(new JSONObject().put("num", replyDao.getReplyNum(essayId)));
 		}
 		UserInfo user = (UserInfo) request.getSession(true).getAttribute("user");
-		//Ñ­»·ÎªÃ¿Ò»¸ö¶ÔÏóÉèÖÃ¡°ÊÇ·ñµãÔŞ¡±ÊôĞÔÖµ
+		//å¾ªç¯ä¸ºæ¯ä¸€ä¸ªå¯¹è±¡è®¾ç½®â€œæ˜¯å¦ç‚¹èµâ€å±æ€§å€¼
 		for(int i=0; i<list.size(); i++){
 			ReplyView reply = (ReplyView) list.get(i);
 			boolean isClickGood = false;
@@ -85,7 +85,7 @@ public class ReplyDeal   implements ObjectInterface{
 		return sendArray;
 	}
 	
-	//TODO »ñÈ¡Â¥ÖĞÂ¥
+	//TODO è·å–æ¥¼ä¸­æ¥¼
 	public JSONArray getInnerReply(int essayId,int floorId,int index) throws JSONException, IOException{
 		init();
 		ReplyViewDAO replyDao = context.getBean("ReplyViewDAO",ReplyViewDAO.class);
@@ -94,7 +94,7 @@ public class ReplyDeal   implements ObjectInterface{
 		return sendArray;
 	}
 	
-	//TODO µãÔŞºÍÈ¡ÏûÔŞ²Ù×÷
+	//TODO ç‚¹èµå’Œå–æ¶ˆèµæ“ä½œ
 	public String saveOrDeleteClickGood(HttpServletRequest request,int replyId,boolean isClickGood,String userId){
 		ReplyClickGoodDAO clickGoodDao = 
 				context.getBean("ReplyClickGoodDAO",ReplyClickGoodDAO.class);
@@ -103,30 +103,30 @@ public class ReplyDeal   implements ObjectInterface{
 		clickGoodId.setReplyId(replyId);
 		clickGoodId.setUserId(userId);
 		clickGood.setId(clickGoodId);
-		//ÒÑµãÔŞ£¬ÔòÖ´ĞĞÈ¡ÏûµãÔŞ²Ù×÷
+		//å·²ç‚¹èµï¼Œåˆ™æ‰§è¡Œå–æ¶ˆç‚¹èµæ“ä½œ
 		if(isClickGood){
-			log.debug("È¡ÏûµãÔŞ²Ù×÷");
+			log.debug("å–æ¶ˆç‚¹èµæ“ä½œ");
 			clickGoodDao.delete(clickGood);
 		}else{
-			log.debug("Ôö¼ÓµãÔŞ¼ÇÂ¼");
+			log.debug("å¢åŠ ç‚¹èµè®°å½•");
 			clickGoodDao.attachDirty(clickGood);
 		}
-		return "³É¹¦";
+		return "æˆåŠŸ";
 	}
-	//ÅĞ¶ÏÂ¥²ãÊÇ·ñ´æÔÚ£¬Ö±½ÓĞ´ÔÚsave·½·¨ÖĞ»á·¢Éú¸üĞÂ³ö´í
+	//åˆ¤æ–­æ¥¼å±‚æ˜¯å¦å­˜åœ¨ï¼Œç›´æ¥å†™åœ¨saveæ–¹æ³•ä¸­ä¼šå‘ç”Ÿæ›´æ–°å‡ºé”™
 	public boolean haveFloor(int floorId){
 		ReplyViewDAO viewDao = context.getBean("ReplyViewDAO",ReplyViewDAO.class);
 		return viewDao.haveFloor(floorId);
 	}
-	//TODO¡¡·¢²¼Ò»ÌõĞÂµÄÆÀÂÛ
+	//TODOã€€å‘å¸ƒä¸€æ¡æ–°çš„è¯„è®º
 	public String saveAReply(HttpServletRequest request,int essayId,UserInfo user,String repliedUserId,String repContent,int floorId,boolean boo) throws NoSuchMethodException, SecurityException, JSONException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException{
 		ReplyDAO replyDao = context.getBean("ReplyDAOImpl",ReplyDAO.class);
 		String userId = user.getUserId();
 		if(!boo){
-			return "Â¥²ã"+floorId+"²»´æÔÚ";
+			return "æ¥¼å±‚"+floorId+"ä¸å­˜åœ¨";
 		}
 		Reply reply = new Reply();
-		//±»»Ø¸´ÕßÕËºÅÎª#ºÅ¼ü,ËµÃ÷ÊÇ·¢ÌûÕß
+		//è¢«å›å¤è€…è´¦å·ä¸º#å·é”®,è¯´æ˜æ˜¯å‘å¸–è€…
 		if(repliedUserId.equals("#")){
 			EssayOuterDAO essayDao = context.getBean("EssayOuterDAO",EssayOuterDAO.class);
 			repliedUserId = essayDao.getPublisher(essayId);
@@ -136,7 +136,7 @@ public class ReplyDeal   implements ObjectInterface{
 		reply.setRepContent(repContent);
 		reply.setRepliedUserId(repliedUserId);
 		reply.setUserId(userId);
-		log.debug("±£´æÆÀÂÛ");
+		log.debug("ä¿å­˜è¯„è®º");
 		Serializable id =  replyDao.save(reply);
 		
 		EssayDAO essayDao = context.getBean("EssayDAOImpl",EssayDAO.class);
@@ -156,18 +156,18 @@ public class ReplyDeal   implements ObjectInterface{
 		return "success";
 	}
 	
-	//TODO¡¡É¾³ıÆÀÂÛ
+	//TODOã€€åˆ é™¤è¯„è®º
 	public String deleteAReply(String userId,int replyId,int position){
 		ReplyDAO replyDao = context.getBean("ReplyDAOImpl",ReplyDAO.class);
 		Reply reply = replyDao.findById(replyId);
 		if(reply==null){
-			return "¸ÃÆÀÂÛ²»´æÔÚ";
+			return "è¯¥è¯„è®ºä¸å­˜åœ¨";
 		}
 		if(!reply.getUserId().equals(userId)){
-			return "ÎŞÈ¨É¾³ı´ËÆÀÂÛ";
+			return "æ— æƒåˆ é™¤æ­¤è¯„è®º";
 		}
 		if(position==0){
-			log.debug("É¾³ıÒ»Õû¸öÂ¥²ã");
+			log.debug("åˆ é™¤ä¸€æ•´ä¸ªæ¥¼å±‚");
 			replyDao.deleteAFloor(reply.getFloorId(),reply.getEssayId());
 		}else{
 			replyDao.delete(reply);
