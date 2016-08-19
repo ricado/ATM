@@ -23,10 +23,10 @@ public class ReadThread extends Thread implements ScMap {
 	public SelectionKey selectionKey;
 	public SocketChannel socketChannel;
 	public ByteBuffer buffer = null;
-	public int number;// ±íÃ÷ÕâÊÇµÚ¼¸¸öreadSeletor
+	public int number;// è¡¨æ˜è¿™æ˜¯ç¬¬å‡ ä¸ªreadSeletor
 
 	/**
-	 * »ñÈ¡µÇÂ¼mapµÄĞÅÏ¢
+	 * è·å–ç™»å½•mapçš„ä¿¡æ¯
 	 */
 	public void getMapInfo() {
 		Set<String> keys = map.keySet();
@@ -49,21 +49,21 @@ public class ReadThread extends Thread implements ScMap {
 	 * }
 	 */
 	/**
-	 * ÓÃ»§ÏÂÏß
+	 * ç”¨æˆ·ä¸‹çº¿
 	 * 
 	 * @param sc
 	 * @throws IOException
 	 */
 	public void removeUser(SocketChannel sc) throws IOException {
-		log.info("ÓÃ»§ÏÂÏß");
+		log.info("ç”¨æˆ·ä¸‹çº¿");
 		sc.socket().close();
 		sc.close();
 		for (String userId : map.keySet()) {
 			if (map.get(userId) == sc) {
-				log.info("ÕÒµ½userId:" + userId);
+				log.info("æ‰¾åˆ°userId:" + userId);
 				UserService.exit(userId);
 				/*sc.socket().close();
-				// ¹Ø±Õ
+				// å…³é—­
 				sc.close();*/
 				map.remove(userId);
 				mapkey.remove(userId);		
@@ -76,7 +76,7 @@ public class ReadThread extends Thread implements ScMap {
 
 	public void exit(String userId) {
 		try {
-			UserService.exit(userId);// ÓÃ»§ÍË³ö£¬ĞŞ¸ÄÀëÏßÊ±¼ä
+			UserService.exit(userId);// ç”¨æˆ·é€€å‡ºï¼Œä¿®æ”¹ç¦»çº¿æ—¶é—´
 			// socketChannel.shutdownInput();
 			// socketChannel.shutdownOutput();
 			// OnlineService.deleteLogin(userId, number);
@@ -93,7 +93,7 @@ public class ReadThread extends Thread implements ScMap {
 	}
 
 	/**
-	 * ÓÃ»§ÍË³ö
+	 * ç”¨æˆ·é€€å‡º
 	 */
 	public void exit() {
 		getMapInfo();
@@ -102,14 +102,14 @@ public class ReadThread extends Thread implements ScMap {
 		exit(userId);
 		getMapInfo();
 
-		// //·µ»Ø·¢ËÍÇëÇó
+		// //è¿”å›å‘é€è¯·æ±‚
 		// buffer.clear();
 		// buffer.putInt(Config.REQUEST_EXIT);
 		// writeBuffer();
 	}
 
 	/**
-	 * ½«×Ö·û´®Ğ´Èë
+	 * å°†å­—ç¬¦ä¸²å†™å…¥
 	 * 
 	 * @param line
 	 */
@@ -143,7 +143,7 @@ public class ReadThread extends Thread implements ScMap {
 	}
 
 	/**
-	 * Ïòbuffer»ñÈ¡intÀàĞÍ
+	 * å‘bufferè·å–intç±»å‹
 	 * 
 	 * @return
 	 * @throws IOException
@@ -164,7 +164,7 @@ public class ReadThread extends Thread implements ScMap {
 	}
 
 	/**
-	 * Ïòbugger»ñÈ¡String
+	 * å‘buggerè·å–String
 	 * 
 	 * @return
 	 */
@@ -200,7 +200,7 @@ public class ReadThread extends Thread implements ScMap {
 	}
 
 	/**
-	 * ÔÚbufferÖĞ·Å×Ö·û´®µÄ×Ö½ÚÊı×é³¤¶ÈÒÔ¼°¸Ã×Ö½ÚÊı×é
+	 * åœ¨bufferä¸­æ”¾å­—ç¬¦ä¸²çš„å­—èŠ‚æ•°ç»„é•¿åº¦ä»¥åŠè¯¥å­—èŠ‚æ•°ç»„
 	 * 
 	 * @param string
 	 */
@@ -211,7 +211,7 @@ public class ReadThread extends Thread implements ScMap {
 	}
 
 	/**
-	 * ¶Ô½«bufferĞ´Èësocketchannel.
+	 * å¯¹å°†bufferå†™å…¥socketchannel.
 	 */
 	public void writeBuffer() {
 		// TODO writeBuffer
@@ -219,11 +219,11 @@ public class ReadThread extends Thread implements ScMap {
 	}
 
 	/**
-	 * ¶Ô½«bufferĞ´Èësocketchannel.
+	 * å¯¹å°†bufferå†™å…¥socketchannel.
 	 */
 	public void writeBuffer(SocketChannel channel) {
 		// TODO writeBuffer
-		buffer.flip();// ¶Ôbuffer½øĞĞ×ª»»
+		buffer.flip();// å¯¹bufferè¿›è¡Œè½¬æ¢
 		int num = 0;
 		if (channel == null) {
 			return;
@@ -232,10 +232,10 @@ public class ReadThread extends Thread implements ScMap {
 			try {
 				int y = channel.write(buffer);
 				log.info("y:" + y);
-				log.info("Ğ´Èë³É¹¦");
+				log.info("å†™å…¥æˆåŠŸ");
 			} catch (Exception e) {
 				num++;
-				log.info("Ğ´ÈëÊ§°Ü");
+				log.info("å†™å…¥å¤±è´¥");
 				if (num == 5) {
 					break;
 				}

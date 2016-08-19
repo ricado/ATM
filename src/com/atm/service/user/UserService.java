@@ -57,7 +57,7 @@ public class UserService extends AttentService implements Application {
 			.getLogger(UserService.class);
 	private String message = "";
 
-	// 2015.11.16Òş²ØÁË
+	// 2015.11.16éšè—äº†
 	// private UserInfoDAO userInfoDAO = (UserInfoDAO) context
 	// .getBean("UserInfoDAOImpl");
 
@@ -65,39 +65,39 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * ×¢²á£¬ÓÊÏäÒÑ¾­ÑéÖ¤ºÃ
+	 * æ³¨å†Œï¼Œé‚®ç®±å·²ç»éªŒè¯å¥½
 	 * 
 	 * @param request
 	 * @param response
 	 * @param json
-	 * @return json ÊÇ·ñ×¢²á³É¹¦µÄjson
+	 * @return json æ˜¯å¦æ³¨å†ŒæˆåŠŸçš„json
 	 */
 	public String register(String json) {
-		log.debug("×¢²á(ÓÊÏäÒÑ¾­ÑéÖ¤)");
-		// »ñÈ¡jsonObject
+		log.debug("æ³¨å†Œ(é‚®ç®±å·²ç»éªŒè¯)");
+		// è·å–jsonObject
 		JSONObject jsonObject = JsonUtil.getJsonObject(json);
 		String userId = jsonObject.getString("userId");
 		String mess = findById(userId);
 		if (mess.equals("")) {
-			// userIdÎ´±»Ê¹ÓÃ
-			log.info("...........userIdÎ´±»Ê¹ÓÃ");
+			// userIdæœªè¢«ä½¿ç”¨
+			log.info("...........userIdæœªè¢«ä½¿ç”¨");
 		} else {
-			// userIDÒÑ¾­±»Ê¹ÓÃ
-			log.info("...........userIdÒÑ¾­±»Ê¹ÓÃ");
+			// userIDå·²ç»è¢«ä½¿ç”¨
+			log.info("...........userIdå·²ç»è¢«ä½¿ç”¨");
 			mess = "used";
 			jsonObject.clear();
 			jsonObject.put("tip", mess);
 			json = JsonUtil.getJsonString(jsonObject);
 			return json;
 		}
-		// Ñ§Éú»¹ÊÇ½ÌÊ¦
+		// å­¦ç”Ÿè¿˜æ˜¯æ•™å¸ˆ
 		String flag = jsonObject.getString("flag");
 		if (flag.equals("0")) {
-			// ½ÌÊ¦
+			// æ•™å¸ˆ
 			mess = saveTeacher(jsonObject, userId);
 			log.info("teacher-----");
 		} else if (flag.equals("1")) {
-			// Ñ§Éú
+			// å­¦ç”Ÿ
 			log.info("student-----");
 			mess = saveStudent(jsonObject, userId);
 		}
@@ -109,14 +109,14 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * È¡Ïû×¢²á
+	 * å–æ¶ˆæ³¨å†Œ
 	 * 
 	 * @param json
 	 * @return
 	 */
 	public String exitRegister(String json) {
-		log.info("È¡Ïû×¢²á");
-		// »ñÈ¡jsonObject
+		log.info("å–æ¶ˆæ³¨å†Œ");
+		// è·å–jsonObject
 		JSONObject jsonObject = JsonUtil.getJsonObject(json);
 		String userId = jsonObject.getString("userId");
 		UserInfoDAO userInfoDAO = (UserInfoDAO) context
@@ -125,10 +125,10 @@ public class UserService extends AttentService implements Application {
 		String tip = "failed";
 		if (i == 1) {
 			tip = "success";
-			log.info("É¾³ı³É¹¦");
+			log.info("åˆ é™¤æˆåŠŸ");
 		}
 
-		// ·µ»Øjson
+		// è¿”å›json
 		jsonObject.clear();
 		jsonObject.put("tip", tip);
 		json = JsonUtil.getJsonString(jsonObject);
@@ -137,7 +137,7 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * Ñ§Éú×¢²á
+	 * å­¦ç”Ÿæ³¨å†Œ
 	 * 
 	 * @param jsonObject
 	 * @param userId
@@ -147,23 +147,23 @@ public class UserService extends AttentService implements Application {
 				.getBean("UserInfoDAOImpl");
 		UserDAO userDAO = (UserDAO) context.getBean("UserDAOImpl");
 		StudentDAO studentDAO = (StudentDAO) context.getBean("StudentDAOImpl");
-		// ÃÜÂë
+		// å¯†ç 
 		String userPwd = jsonObject.getString("userPwd");
-		// »ñÈ¡Ñ§Ğ££¬Ïµ±ğ£¬×¨Òµ
+		// è·å–å­¦æ ¡ï¼Œç³»åˆ«ï¼Œä¸“ä¸š
 		String sName = jsonObject.getString("userSchool");
 		String dName = jsonObject.getString("userDept");
 		String mName = jsonObject.getString("userMajor");
-		// ÓÊÏä
+		// é‚®ç®±
 		String email = jsonObject.getString("userEmail");
-		// ÈëÑ§Äê·İ
+		// å…¥å­¦å¹´ä»½
 		String enterSchoolTime = jsonObject.getString("enterSchoolTime");
-		// ÏÔÊ¾
+		// æ˜¾ç¤º
 		log.info("userId:" + userId + ",userPwd:" + userPwd + ",sName:" + sName
 				+ ",dName:" + dName + ",mName:" + mName + ",email:" + email
 				+ ",enterSchoolTime:" + enterSchoolTime);
 		User user = new User(userId, userPwd);
 		UserInfo userInfo = new UserInfo(userId);
-		// »ñÈ¡Ñ§Ğ££¬Ïµ±ğ£¬×¨ÒµµÄ±àÂë
+		// è·å–å­¦æ ¡ï¼Œç³»åˆ«ï¼Œä¸“ä¸šçš„ç¼–ç 
 		List list = userInfoDAO.getSdmNO(sName, dName, mName);
 		Object[] numbers = (Object[]) list.get(0);
 		log.info("sno:" + numbers[0] + ",dNo:" + numbers[1] + ",mno:"
@@ -173,13 +173,13 @@ public class UserService extends AttentService implements Application {
 		userInfo.setMajor(new Major(numbers[2] + ""));
 		userInfo.setFlag(1);
 		Student student = new Student(userId, "", enterSchoolTime, email, null);
-		// ±£´æ
+		// ä¿å­˜
 		try {
 			log.info("---------");
 			userInfoDAO.save(userInfo);
 			userDAO.save(user);
 			studentDAO.save(student);
-			log.info("±£´æ³É¹¦");
+			log.info("ä¿å­˜æˆåŠŸ");
 			return "success";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -188,7 +188,7 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * ÀÏÊ¦×¢²á
+	 * è€å¸ˆæ³¨å†Œ
 	 * 
 	 * @param jsonObject
 	 * @param userId
@@ -199,34 +199,34 @@ public class UserService extends AttentService implements Application {
 				.getBean("UserInfoDAOImpl");
 		UserDAO userDAO = (UserDAO) context.getBean("UserDAOImpl");
 		TeacherDAO teacherDAO = (TeacherDAO) context.getBean("TeacherDAOImpl");
-		// ÃÜÂë
+		// å¯†ç 
 		String userPwd = jsonObject.getString("userPwd");
-		// »ñÈ¡Ñ§Ğ££¬Ïµ±ğ£¬×¨Òµ
+		// è·å–å­¦æ ¡ï¼Œç³»åˆ«ï¼Œä¸“ä¸š
 		String sName = jsonObject.getString("userSchool");
 		String dName = jsonObject.getString("userDept");
-		// ÀÏÊ¦Ã»ÓĞ²»ÓÃ×¨Òµ
+		// è€å¸ˆæ²¡æœ‰ä¸ç”¨ä¸“ä¸š
 		// String mName = jsonObject.getString("userMajor");
-		// ÓÊÏä
+		// é‚®ç®±
 		String email = jsonObject.getString("userEmail");
-		// ÈëÑ§Äê·İ
+		// å…¥å­¦å¹´ä»½
 		String enterSchoolTime = jsonObject.getString("enterSchoolTime");
-		// ÏÔÊ¾
+		// æ˜¾ç¤º
 		log.info("userId:" + userId + ",userPwd:" + userPwd + ",sName:" + sName
 				+ ",dName:" + dName + ",email:" + email + ",enterSchoolTime:"
 				+ enterSchoolTime);
 		User user = new User(userId, userPwd);
 		UserInfo userInfo = new UserInfo(userId);
-		// »ñÈ¡Ñ§Ğ££¬Ïµ±ğ£¬×¨ÒµµÄ±àÂë
+		// è·å–å­¦æ ¡ï¼Œç³»åˆ«ï¼Œä¸“ä¸šçš„ç¼–ç 
 		List list = userInfoDAO.getSdmNO(sName, dName, "");
 		Object[] numbers = (Object[]) list.get(0);
 		log.info("sno:" + numbers[0] + ",dNo:" + numbers[1]);
-		// ÉèÖÃuserInfo
+		// è®¾ç½®userInfo
 		userInfo.setScNo(numbers[0] + "");
 		userInfo.setDno(numbers[1] + "");
 		userInfo.setMajor(null);
 		userInfo.setFlag(1);
 		Teacher teacher = new Teacher(userId, "", email, null);
-		// ±£´æ
+		// ä¿å­˜
 		try {
 			userInfoDAO.save(userInfo);
 			userDAO.save(user);
@@ -238,55 +238,55 @@ public class UserService extends AttentService implements Application {
 		}
 	}
 
-	// '¹ã¶«½ğÈÚÑ§Ôº','»¥ÁªÍø½ğÈÚÓëĞÅÏ¢¹¤³ÌÏµ','µç×ÓÉÌÎñ'
+	// 'å¹¿ä¸œé‡‘èå­¦é™¢','äº’è”ç½‘é‡‘èä¸ä¿¡æ¯å·¥ç¨‹ç³»','ç”µå­å•†åŠ¡'
 	public String confirmUserId(HttpServletRequest request,
 			HttpServletResponse response, String json) {
-		log.debug("ÑéÖ¤ÓÃ»§Ê¹ÓÃµÄuserIdÊÇ·ñÒÑ¾­´æÔÚ");
-		// »ñÈ¡½ÓËÍjsonObject
+		log.debug("éªŒè¯ç”¨æˆ·ä½¿ç”¨çš„userIdæ˜¯å¦å·²ç»å­˜åœ¨");
+		// è·å–æ¥é€jsonObject
 		JSONObject jsonObject = JsonUtil.getJsonObject(json);
 		JSONArray jsonArray = new JSONArray();
-		// »ñÈ¡ÓÃ»§userId
+		// è·å–ç”¨æˆ·userId
 		String userId = jsonObject.getString("userId");
-		log.debug("×¢²á--ÑéÖ¤userid--userId:" + userId);
+		log.debug("æ³¨å†Œ--éªŒè¯userid--userId:" + userId);
 		String mess = findById(userId);
 		if (mess.equals("")) {
-			// userIdÎ´±»Ê¹ÓÃ
+			// userIdæœªè¢«ä½¿ç”¨
 			mess = "success";
 		} else {
 			mess = "fail";
 		}
-		// ·µ»Øjson
+		// è¿”å›json
 		jsonObject = new JSONObject();
 		jsonObject.put("tip", mess);
 		jsonArray.add(jsonObject);
 		json = jsonArray.toString();
-		log.debug("×¢²á--ÑéÖ¤userId--json:" + json);
+		log.debug("æ³¨å†Œ--éªŒè¯userId--json:" + json);
 		return json;
 	}
 
 	/**
-	 * ×¢²áÓÊÏäµÄÑéÖ¤
+	 * æ³¨å†Œé‚®ç®±çš„éªŒè¯
 	 * 
 	 * @author ye 2015.9.9
 	 * @param request
 	 * @param response
 	 * @param json
-	 * @return ·µ»ØµÄjson
+	 * @return è¿”å›çš„json
 	 */
 	public String confirmRegisterEmail(String json) {
-		// ¼ì²éÓÊÏäÊÇ·ñÒÑ¾­±»ÓÃ»§Ê¹ÓÃ¹ı
+		// æ£€æŸ¥é‚®ç®±æ˜¯å¦å·²ç»è¢«ç”¨æˆ·ä½¿ç”¨è¿‡
 		JSONObject jsonObject = JsonUtil.getJsonObject(json);
-		// ÓÊÏäÑéÖ¤Âë
+		// é‚®ç®±éªŒè¯ç 
 		String captchas = "";
-		// ±êÖ¾
+		// æ ‡å¿—
 		String tip = "";
-		// ËÑË÷³öÓÊÏä
+		// æœç´¢å‡ºé‚®ç®±
 		String email = jsonObject.getString("userEmail");
-		log.info("ÇëÇóµÄÓÊÏäÊÇ:" + email);
+		log.info("è¯·æ±‚çš„é‚®ç®±æ˜¯:" + email);
 		String mess = findByEmail(email);
-		log.info("ÇëÇó³É¹¦=============mess:" + mess);
+		log.info("è¯·æ±‚æˆåŠŸ=============mess:" + mess);
 		if (mess.equals("")) {
-			// messÎª""£¬±íÊ¾ÓÊÏäÃ»ÓĞÈËÊ¹ÓÃ£¬¿ÉÒÔÑéÖ¤
+			// messä¸º""ï¼Œè¡¨ç¤ºé‚®ç®±æ²¡æœ‰äººä½¿ç”¨ï¼Œå¯ä»¥éªŒè¯
 			SendDemo sendDemo = new SendDemo();
 			captchas = sendDemo.sendRegisterEmail(email);
 			log.info("captchas:" + captchas);
@@ -299,7 +299,7 @@ public class UserService extends AttentService implements Application {
 			tip = "used";
 		}
 		log.info("captchas>>>>" + captchas);
-		// ½«½á¹û·â×°³ÉJSONArray
+		// å°†ç»“æœå°è£…æˆJSONArray
 		jsonObject = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		jsonObject.put("tip", tip);
@@ -310,10 +310,10 @@ public class UserService extends AttentService implements Application {
 		return json;
 	}
 
-	// ÓÃ»§µÇÂ¼
+	// ç”¨æˆ·ç™»å½•
 	public boolean login(HttpServletRequest request,
 			HttpServletResponse response, String json) {
-		log.info("µÇÂ¼");
+		log.info("ç™»å½•");
 		UserDAO dao = UserDAOImpl.getFromApplicationContext();
 
 		User user = (User) request.getAttribute("user");
@@ -327,7 +327,7 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * socketµÇÂ¼ºóµÄºóĞø
+	 * socketç™»å½•åçš„åç»­
 	 * 
 	 * @param request
 	 * @param response
@@ -345,16 +345,16 @@ public class UserService extends AttentService implements Application {
 
 		json = new com.atm.util.bbs.JsonUtil().getJSONArray(request).toString();
 		JSONObject jsonObject = JsonUtil.getJsonObject(json);
-		// »ñÈ¡userId
+		// è·å–userId
 		String userId = jsonObject.getString("userId");
 		log.info("userId:" + userId);
-		// »ñÈ¡ÓÃ»§ĞÅÏ¢
+		// è·å–ç”¨æˆ·ä¿¡æ¯
 		UserInfo userInfo = userInfoDAO.findById(userId);
 		if (userInfo != null) {
 			tip = "success";
 		}
 		request.getSession().setAttribute("user", userInfo);
-		// ·µ»ØµÄjson
+		// è¿”å›çš„json
 		jsonObject.clear();
 		jsonObject.put("tip", tip);
 		JSONArray jsonArray = new JSONArray();
@@ -365,19 +365,19 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * ½øÈë¸öÈËÖĞĞÄÊ×Ò³
+	 * è¿›å…¥ä¸ªäººä¸­å¿ƒé¦–é¡µ
 	 * 
 	 * @param json
 	 * @return
 	 */
 	public String personalCenter(String json) {
-		log.info("½øÈëuserServiceµÄpersonnalCenter");
+		log.info("è¿›å…¥userServiceçš„personnalCenter");
 
 		return json;
 	}
 
 	/**
-	 * ÓÃ»§ÈÏÖ¤
+	 * ç”¨æˆ·è®¤è¯
 	 */
 	public String confirmUser(String json) {
 		JSONObject jsonObject = JsonUtil.getJsonObject(json);
@@ -386,10 +386,10 @@ public class UserService extends AttentService implements Application {
 		int i = 0;
 		String mess = "failed";
 		if (flag.equals("3")) {
-			log.info("ÊÇ±ÏÒµÉú,×¼±¸½øÈëÑéÖ¤Ğ£ÓÑÖ®´°");
+			log.info("æ˜¯æ¯•ä¸šç”Ÿ,å‡†å¤‡è¿›å…¥éªŒè¯æ ¡å‹ä¹‹çª—");
 			i = confirmGraduate(jsonObject);
 		} else {
-			log.info("ÊÇÔÚĞ£Éú»òÕßÊÇÀÏÊ¦£¬×¼±¸½øÈëÑéÖ¤½ÌÎñÏµÍ³");
+			log.info("æ˜¯åœ¨æ ¡ç”Ÿæˆ–è€…æ˜¯è€å¸ˆï¼Œå‡†å¤‡è¿›å…¥éªŒè¯æ•™åŠ¡ç³»ç»Ÿ");
 			i = confirmTeach(jsonObject);
 		}
 
@@ -410,28 +410,28 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * ÑéÖ¤±ÏÒµÉúµÄÕæÊµÉí·İ
+	 * éªŒè¯æ¯•ä¸šç”Ÿçš„çœŸå®èº«ä»½
 	 * 
 	 * @param jsonObject
 	 * @return
 	 */
 	public int confirmGraduate(JSONObject jsonObject) {
-		log.info("½øÈëÑéÖ¤Ğ£ÓÑÖ®´°");
+		log.info("è¿›å…¥éªŒè¯æ ¡å‹ä¹‹çª—");
 		String number = jsonObject.getString("Num");
 		String userId = jsonObject.getString("userId");
 		String username = jsonObject.getString("userName");
 		String year = jsonObject.getString("enterSchoolTime");
-		// Ğ£ÓÑÖ®´°ÑéÖ¤
+		// æ ¡å‹ä¹‹çª—éªŒè¯
 		boolean tip = graduateConfirm(number, username, year);
 		if (tip) {
-			// ÑéÖ¤³É¹¦£¬ÓÃ»§µÄÕæÊµĞÕÃûºÍÑ§ºÅ´æ½øÊı¾İ¿â
+			// éªŒè¯æˆåŠŸï¼Œç”¨æˆ·çš„çœŸå®å§“åå’Œå­¦å·å­˜è¿›æ•°æ®åº“
 			return getUserInfoDAO().saveNumAndName(userId, number, username);
 		}
 		return 0;
 	}
 
 	/**
-	 * ÑéÖ¤ÔÚĞ£ÉúÓëÀÏÊ¦µÄÕæÊµÉí·İ
+	 * éªŒè¯åœ¨æ ¡ç”Ÿä¸è€å¸ˆçš„çœŸå®èº«ä»½
 	 * 
 	 * @param jsonObject
 	 * @return
@@ -443,30 +443,30 @@ public class UserService extends AttentService implements Application {
 		String password = jsonObject.getString("Pwd");
 		log.info("flag:" + flag + ",userId:" + userId + ",number:" + number
 				+ ",password:" + password);
-		// TODO ÑéÖ¤½ÌÎñÏµÍ³µÄ·½·¨
-		// ÑéÖ¤³É¹¦
+		// TODO éªŒè¯æ•™åŠ¡ç³»ç»Ÿçš„æ–¹æ³•
+		// éªŒè¯æˆåŠŸ
 		String name = "";
 		if (flag.equals("0")) {
-			log.info("½øÈëÑéÖ¤½ÌÊ¦");
-			// ÅĞ¶Ï½ÌÖ°¹¤ºÅÊÇ·ñÒÑ¾­±»Ê¹ÓÃ
+			log.info("è¿›å…¥éªŒè¯æ•™å¸ˆ");
+			// åˆ¤æ–­æ•™èŒå·¥å·æ˜¯å¦å·²ç»è¢«ä½¿ç”¨
 			if (findTeacherNumber(number)) {
 				return 2;
 			}
 
-			name = userConfirm(number, password, "½ÌÊ¦");
+			name = userConfirm(number, password, "æ•™å¸ˆ");
 		} else if (flag.equals("2")) {
-			log.info("½øÈëÑéÖ¤ÔÚĞ£Ñ§Éú");
-			// ÅĞ¶ÏÑ§ºÅÊÇ·ñÒÑ¾­±»Ê¹ÓÃ
+			log.info("è¿›å…¥éªŒè¯åœ¨æ ¡å­¦ç”Ÿ");
+			// åˆ¤æ–­å­¦å·æ˜¯å¦å·²ç»è¢«ä½¿ç”¨
 			if (findStudentNumber(number)) {
 				return 2;// ""
 			}
 
-			name = userConfirm(number, password, "Ñ§Éú");
+			name = userConfirm(number, password, "å­¦ç”Ÿ");
 		} else {
 			return 0;
 		}
 
-		if (name.equals("")) {// ºÅÂë»òÃÜÂë´íÎó
+		if (name.equals("")) {// å·ç æˆ–å¯†ç é”™è¯¯
 			return 0;
 		} else {
 			return getUserInfoDAO().saveNumAndName(userId, number, name);
@@ -474,7 +474,7 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * ²éÕÒ¸ÃÑ§ºÅÊÇ·ñÒÑ¾­´æÔÚ
+	 * æŸ¥æ‰¾è¯¥å­¦å·æ˜¯å¦å·²ç»å­˜åœ¨
 	 * 
 	 * @param number
 	 * @return
@@ -483,7 +483,7 @@ public class UserService extends AttentService implements Application {
 		StudentDAO dao = (StudentDAO) context.getBean("StudentDAOImpl");
 		List list = dao.findByProperty("sno", number);
 		if (list.size() > 0) {
-			log.info("Ñ§ºÅ´æÔÚ");
+			log.info("å­¦å·å­˜åœ¨");
 			return true;
 		} else {
 			return false;
@@ -491,7 +491,7 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * ÑéÖ¤¸Ã½Ì¹¤ºÅÊÇ·ñÒÑ¾­´æÔÚ
+	 * éªŒè¯è¯¥æ•™å·¥å·æ˜¯å¦å·²ç»å­˜åœ¨
 	 * 
 	 * @param number
 	 * @return
@@ -507,7 +507,7 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * ÅĞ¶ÏÓÃ»§ÊÇ·ñ´æÔÚ¡£
+	 * åˆ¤æ–­ç”¨æˆ·æ˜¯å¦å­˜åœ¨ã€‚
 	 * 
 	 * @param user
 	 * @return true or flase
@@ -531,21 +531,21 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * ÕÒ»ØÕËºÅ
+	 * æ‰¾å›è´¦å·
 	 */
-	// TODO ÕÒ»ØÕËºÅ
+	// TODO æ‰¾å›è´¦å·
 	public String findUserId(String json) {
 		JSONObject jsonObject = JsonUtil.getJsonObject(json);
 		String email = jsonObject.getString("email");
 		System.out.println(email + "=======================");
 		String userId = findByEmail(email);
 		log.info("userId:" + userId);
-		// ÅĞ¶ÏÓÊÏäÊÇ·ñ´æÔÚÔÚÊı¾İ¿âÖĞ
+		// åˆ¤æ–­é‚®ç®±æ˜¯å¦å­˜åœ¨åœ¨æ•°æ®åº“ä¸­
 		if (!userId.equals("")) {
 			SendDemo demo = new SendDemo();
 			log.info("send................:" + demo.toString()
 					+ demo.getEmail());
-			// ·¢ËÍ²¢ÅĞ¶ÏÊÇ·ñ·¢ËÍ³É¹¦
+			// å‘é€å¹¶åˆ¤æ–­æ˜¯å¦å‘é€æˆåŠŸ
 			String tip = demo.sendFindUserIdEmail(email, userId);
 			log.info("tip:" + tip);
 			if (tip.equals("success")) {
@@ -559,12 +559,12 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * µ±ÓÃ»§Íü¼ÇÃÜÂëÊ±ÊäÈëÕËºÅ»òÕßÓÊÏäÊ±£¬ÑéÖ¤ÊäÈëµÄÊÇÕËºÅ»¹ÊÇÓÊÏä¡£²¢ÑéÖ¤ÊÇ·ñ´æÔÚ
+	 * å½“ç”¨æˆ·å¿˜è®°å¯†ç æ—¶è¾“å…¥è´¦å·æˆ–è€…é‚®ç®±æ—¶ï¼ŒéªŒè¯è¾“å…¥çš„æ˜¯è´¦å·è¿˜æ˜¯é‚®ç®±ã€‚å¹¶éªŒè¯æ˜¯å¦å­˜åœ¨
 	 * 
 	 * @author ye
 	 */
 	public String forgetPasswod(String json) {
-		// »ñÈ¡ÊäÈëµÄÕËºÅ»òÕßÓÊÏä×Ö·û´®
+		// è·å–è¾“å…¥çš„è´¦å·æˆ–è€…é‚®ç®±å­—ç¬¦ä¸²
 		// String idOrEmail = (String)request.getAttribute("idOrEmail");
 		// id or email isExits?
 		JSONObject jsonObject = JsonUtil.getJsonObject(json);
@@ -575,7 +575,7 @@ public class UserService extends AttentService implements Application {
 		String userId = "";
 		System.out.println(idOrEmail + "===========");
 		if (idOrEmail.split("@").length >= 2) {
-			// ÑéÖ¤ÓÊÏäÊÇ·ñ´æÔÚ£¬´æÔÚÔòflagÎªÓÊÏä£¬·ñ²àÎª¿Õ
+			// éªŒè¯é‚®ç®±æ˜¯å¦å­˜åœ¨ï¼Œå­˜åœ¨åˆ™flagä¸ºé‚®ç®±ï¼Œå¦ä¾§ä¸ºç©º
 			userId = findByEmail(idOrEmail);
 			if (!userId.equals("")) {
 				flag = idOrEmail;
@@ -587,12 +587,12 @@ public class UserService extends AttentService implements Application {
 			userId = idOrEmail;
 		}
 		if (!flag.equals("")) {
-			// ÓÊÏä»òÕßÕËºÅÕıÈ·£¬·¢ËÍÓÊÏä
-			// ÉèÖÃÓÊÏä
+			// é‚®ç®±æˆ–è€…è´¦å·æ­£ç¡®ï¼Œå‘é€é‚®ç®±
+			// è®¾ç½®é‚®ç®±
 			String captchas = demo.sendChangePasswordEmail(flag);
-			// ·¢ËÍÓÊÏä²¢ÑéÖ¤ÊÇ·ñ³É¹¦
+			// å‘é€é‚®ç®±å¹¶éªŒè¯æ˜¯å¦æˆåŠŸ
 			if (demo.send().equals("success")) {
-				// ³É¹¦ÉèÖÃ³É¹¦µÄjson
+				// æˆåŠŸè®¾ç½®æˆåŠŸçš„json
 				map.put("tip", "success");
 				map.put("captchas", captchas);
 				map.put("userId", userId);
@@ -607,7 +607,7 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * ÑéÖ¤ÕËºÅÊÇ·ñÔÚÊı¾İ¿âÖĞ
+	 * éªŒè¯è´¦å·æ˜¯å¦åœ¨æ•°æ®åº“ä¸­
 	 * 
 	 * @param userId
 	 * @return true or false
@@ -621,7 +621,7 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * ¸Ä±äÃÜÂë
+	 * æ”¹å˜å¯†ç 
 	 * 
 	 * @param json
 	 * @return
@@ -644,7 +644,7 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * µ±ÓÃ»§Íü¼ÇÃÜÂëÊ±ÊäÈëµÄÊÇÓÊÏäÊ±£¬ÑéÖ¤ÓÊÏäÊÇ·ñÔÚÊı¾İ¿âÖĞ
+	 * å½“ç”¨æˆ·å¿˜è®°å¯†ç æ—¶è¾“å…¥çš„æ˜¯é‚®ç®±æ—¶ï¼ŒéªŒè¯é‚®ç®±æ˜¯å¦åœ¨æ•°æ®åº“ä¸­
 	 * 
 	 * @param email
 	 * @return true or false
@@ -658,7 +658,7 @@ public class UserService extends AttentService implements Application {
 		try {
 			list = dao.findByEmail(email);
 		} catch (Exception e) {
-			log.info("findByEmail : Ñ§ÉúÖĞÃ»ÓĞ¸ÃÓÊÏä");
+			log.info("findByEmail : å­¦ç”Ÿä¸­æ²¡æœ‰è¯¥é‚®ç®±");
 		}
 		String userId = null;
 		if (list.size() > 0) {
@@ -673,7 +673,7 @@ public class UserService extends AttentService implements Application {
 			try {
 				list = teacherDao.findByEmail(email);
 			} catch (Exception e) {
-				log.info("findByEmail : ÀÏÊ¦ÖĞÃ»ÓĞ¸ÃÓÊÏä");
+				log.info("findByEmail : è€å¸ˆä¸­æ²¡æœ‰è¯¥é‚®ç®±");
 				return "";
 			}
 			if (list.size() > 0) {
@@ -684,19 +684,19 @@ public class UserService extends AttentService implements Application {
 				return userId;
 			}
 		}
-		log.info("ÓÊÏä²»¿ÉÓÃ----------------------");
+		log.info("é‚®ç®±ä¸å¯ç”¨----------------------");
 		return "";
 	}
 
 	/**
-	 * Í¨¹ıUserId²éÕÒ³öÓÃ»§µÄEmail
+	 * é€šè¿‡UserIdæŸ¥æ‰¾å‡ºç”¨æˆ·çš„Email
 	 * 
 	 * @param userId
 	 * @return
 	 */
-	// TODO Í¨¹ıUserId²éÕÒ³öÓÃ»§µÄEmail
+	// TODO é€šè¿‡UserIdæŸ¥æ‰¾å‡ºç”¨æˆ·çš„Email
 	public String findEmailById(String userId) {
-		// µÃµ½UserInfoDAOÍ¨¹ıUserId²éÕÒ³ö¸ÃÓÃ»§µÄÉí·İ
+		// å¾—åˆ°UserInfoDAOé€šè¿‡UserIdæŸ¥æ‰¾å‡ºè¯¥ç”¨æˆ·çš„èº«ä»½
 		/*
 		 * UserInfoDAO userInfoDAO=
 		 * (UserInfoDAO)context.getBean("UserInfoDAOImpl");
@@ -720,18 +720,18 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * Í¨¹ı´Ê»ãÆ¥Åä£¬²éÕÒ³ö·ûºÏÌõ¼şµÄÓÃ»§£¬·µ»ØÁĞ±íµÄjson
+	 * é€šè¿‡è¯æ±‡åŒ¹é…ï¼ŒæŸ¥æ‰¾å‡ºç¬¦åˆæ¡ä»¶çš„ç”¨æˆ·ï¼Œè¿”å›åˆ—è¡¨çš„json
 	 * 
 	 * @param string
-	 *            ÒªÆ¥ÅäµÄ´Ê»ã
+	 *            è¦åŒ¹é…çš„è¯æ±‡
 	 * @return
 	 */
 	public List<UserList> findUser(String string, int first, int max) {
 		UserInfoDAO userInfoDAO = (UserInfoDAO) context
 				.getBean("UserInfoDAOImpl");
-		log.info("²éÕÒÏà¹ØµÄÓÃ»§");
+		log.info("æŸ¥æ‰¾ç›¸å…³çš„ç”¨æˆ·");
 		List<UserList> userLists = userInfoDAO.findUser(string, first, max);
-		log.info("==========" + string + "Ïà¹ØÓÃ»§===========");
+		log.info("==========" + string + "ç›¸å…³ç”¨æˆ·===========");
 		showUserList(userLists);
 		return userLists;
 	}
@@ -739,16 +739,16 @@ public class UserService extends AttentService implements Application {
 	public List<UserList> findInterestingUser(String userId, int first, int max) {
 		UserInfoDAO userInfoDAO = (UserInfoDAO) context
 				.getBean("UserInfoDAOImpl");
-		log.info("²éÕÒÏà¹ØµÄÓÃ»§");
+		log.info("æŸ¥æ‰¾ç›¸å…³çš„ç”¨æˆ·");
 		List<UserList> userLists = userInfoDAO.findinterestingUser(userId,
 				first, max);
-		log.info("==========" + userId + "Ïà¹ØµÄÓÃ»§===========");
+		log.info("==========" + userId + "ç›¸å…³çš„ç”¨æˆ·===========");
 		showUserList(userLists);
 		return userLists;
 	}
 
 	/**
-	 * ÓÃ»§ÍË³ö ¸ü¸ÄÏÂÏßÊ±¼ä
+	 * ç”¨æˆ·é€€å‡º æ›´æ”¹ä¸‹çº¿æ—¶é—´
 	 * 
 	 * @param userId
 	 */
@@ -760,7 +760,7 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * »ñÈ¡ÓÃ»§»ù±¾µÄĞÅÏ¢
+	 * è·å–ç”¨æˆ·åŸºæœ¬çš„ä¿¡æ¯
 	 * 
 	 * @return
 	 */
@@ -774,30 +774,30 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * ÏÔÊ¾ÓÃ»§»ù±¾ĞÅÏ¢
+	 * æ˜¾ç¤ºç”¨æˆ·åŸºæœ¬ä¿¡æ¯
 	 */
 	public static void showUserBasicInfo(UserBasicInfo userBasicInfo) {
 		log.info("===========" + userBasicInfo.getUserId() + "==============");
-		log.info("êÇ³Æ:" + userBasicInfo.getNickname());
+		log.info("æ˜µç§°:" + userBasicInfo.getNickname());
 		log.info("image:" + userBasicInfo.getHeadImagePath());
-		log.info("Ç©Ãû:" + userBasicInfo.getSign());
-		log.info("Ñ§Ğ£:" + userBasicInfo.getScName());
-		log.info("Ïµ±ğ:" + userBasicInfo.getDname());
-		log.info("·ÛË¿ÊıÁ¿:" + userBasicInfo.getFansNum());
-		log.info("¹Ø×¢:" + userBasicInfo.getFocusNum());
-		log.info("ĞÔ±ğ:" + userBasicInfo.getSex());
+		log.info("ç­¾å:" + userBasicInfo.getSign());
+		log.info("å­¦æ ¡:" + userBasicInfo.getScName());
+		log.info("ç³»åˆ«:" + userBasicInfo.getDname());
+		log.info("ç²‰ä¸æ•°é‡:" + userBasicInfo.getFansNum());
+		log.info("å…³æ³¨:" + userBasicInfo.getFocusNum());
+		log.info("æ€§åˆ«:" + userBasicInfo.getSex());
 		log.info("=======================================");
 	}
 
 	/**
-	 * »ñÈ¡ËõÂÔÍ¼µÄ×Ö½ÚÊı×é
+	 * è·å–ç¼©ç•¥å›¾çš„å­—èŠ‚æ•°ç»„
 	 * 
 	 * @param userId
 	 * @return
 	 * @throws IOException
 	 */
 	public byte[] getUserSmallHeadByte(String userId) throws IOException {
-		// »ñÈ¡ËõÂÔÍ¼Â·¾¶
+		// è·å–ç¼©ç•¥å›¾è·¯å¾„
 		String path = getUserInfoDAO().getUserHeadPath(userId);
 		path = this.getClass().getResource("/").getPath().substring(1)
 				.replaceFirst("WEB-INF/classes/", "")
@@ -817,7 +817,7 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * ÑéÖ¤±ÏÒµÉúµÄĞ£ÓÑÖ®´°
+	 * éªŒè¯æ¯•ä¸šç”Ÿçš„æ ¡å‹ä¹‹çª—
 	 * 
 	 * @param number
 	 * @param keyword
@@ -825,7 +825,7 @@ public class UserService extends AttentService implements Application {
 	 * @return
 	 */
 	public boolean graduateConfirm(String number, String keyword, String year) {
-		log.info("ÕıÔÚÑéÖ¤Ğ£ÓÑÖ®´°");
+		log.info("æ­£åœ¨éªŒè¯æ ¡å‹ä¹‹çª—");
 		Response res = null;
 		// Map<String, String> data = new HashMap<String, String>();
 		// data.put("", "");
@@ -839,13 +839,13 @@ public class UserService extends AttentService implements Application {
 		// data.put("Connection", "keep-alive");
 		// data.put("Content-Type", "application/x-www-form-urlencoded");
 		try {
-			log.info("Á¬½ÓĞ£ÓÑÖ®´°" + "ÉèÖÃ²ÎÊı");
+			log.info("è¿æ¥æ ¡å‹ä¹‹çª—" + "è®¾ç½®å‚æ•°");
 			res = Jsoup
 					.connect(
 							"http://jzzg.gduf.edu.cn/xyml_1.asp?"
 									+ "select1=1&imageField.x=27&imageField.y=19&years=+"
 									+ year + "&keyword=" + keyword)
-					// 2015.11.16Ôö¼ÓÁ¬½ÓµÄÒ»ÏÂ²ÎÊı
+					// 2015.11.16å¢åŠ è¿æ¥çš„ä¸€ä¸‹å‚æ•°
 					// .header("Host", "jzzg.gduf.edu.cn")
 					// .header("User-Agent",
 					// "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:42.0) Gecko/20100101 Firefox/42.0")
@@ -861,33 +861,33 @@ public class UserService extends AttentService implements Application {
 					// .header("", "")
 					.method(Method.POST).execute();
 		} catch (IOException e) {
-			log.info("Á¬½ÓĞ£ÓÑÖ®´°" + "ÉèÖÃ²ÎÊıÊ§°Ü");
+			log.info("è¿æ¥æ ¡å‹ä¹‹çª—" + "è®¾ç½®å‚æ•°å¤±è´¥");
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
-			log.info("½øĞĞ document µÄ·ÖÎö");
+			log.info("è¿›è¡Œ document çš„åˆ†æ");
 			Document doc = res.parse();
 			if (doc != null) {
-				log.info("¿ªÊ¼------------------------");
-				// »ñÈ¡a±êÇ©
+				log.info("å¼€å§‹------------------------");
+				// è·å–aæ ‡ç­¾
 				Elements elements = doc.getElementsByTag("a");
 				log.info("a:" + elements.size());
-				log.info("½øÈëÅĞ¶Ï¡£¡£¡£¡£¡£");
+				log.info("è¿›å…¥åˆ¤æ–­ã€‚ã€‚ã€‚ã€‚ã€‚");
 				for (int i = 0; i < elements.size(); i++) {
-					log.info("½øÈëde xunhuanÅĞ¶Ï");
+					log.info("è¿›å…¥de xunhuanåˆ¤æ–­");
 				}
 
-				// ¸ÄÎªÓÃµü´úÆ÷
+				// æ”¹ä¸ºç”¨è¿­ä»£å™¨
 				for (int i = 0; i < elements.size(); i++) {
 
-					log.info("½øÈëÅĞ¶Ï");
+					log.info("è¿›å…¥åˆ¤æ–­");
 
 					Element a = elements.get(i);
 					log.info("get info");
 					// }
 					// for (Element a : elements) {log
-					// aµÄtextÎªkeyword¡£Ôò½øÈëÏêÏ¸Ò³Ãæ
+					// açš„textä¸ºkeywordã€‚åˆ™è¿›å…¥è¯¦ç»†é¡µé¢
 					String aText = a.text();
 					aText = aText.replaceAll(" ", "");
 					System.out.println("aText:" + aText.trim() + ",length:"
@@ -898,18 +898,18 @@ public class UserService extends AttentService implements Application {
 						log.info("text:" + text);
 						String[] strs = text.split("'");
 						log.info(strs[1]);
-						// Á¬½Óµ½ÏêÏ¸Ò³Ãæ
+						// è¿æ¥åˆ°è¯¦ç»†é¡µé¢
 						res = getConnection(
 								"http://jzzg.gduf.edu.cn/" + strs[1]).execute();
 						doc = res.parse();
 						Elements tds = doc.getElementsByTag("td");
 						for (Element td : tds) {
 							// System.out.println("tds:" + td.text());
-							if (td.text().equals("ĞÕÃû£º")) {
+							if (td.text().equals("å§“åï¼š")) {
 								log.info("----------");
 								Element element = td.nextElementSibling();
-								log.info("ĞÕÃû:" + element.text());
-								String[] t = element.text().split("£º");
+								log.info("å§“å:" + element.text());
+								String[] t = element.text().split("ï¼š");
 								if (t[1].equals(number + ")")) {
 									log.info("true");
 									return true;
@@ -920,9 +920,9 @@ public class UserService extends AttentService implements Application {
 				}
 				// http://jzzg.gduf.edu.cn/news_manage/xiaoyou
 				// /student_show.asp?studentid=205809
-				log.info("½áÊø------------------------");
+				log.info("ç»“æŸ------------------------");
 			} else {
-				log.info("»ñÈ¡Ê§°Ü");
+				log.info("è·å–å¤±è´¥");
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -933,7 +933,7 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * ½ÌÎñÏµÍ³ÑéÖ¤
+	 * æ•™åŠ¡ç³»ç»ŸéªŒè¯
 	 * 
 	 * @param number
 	 * @param password
@@ -955,17 +955,17 @@ public class UserService extends AttentService implements Application {
 				.method(Method.GET);
 		Response response = null;
 		try {
-			log.info("Á¬½Ó½ÌÎñÏµÍ³Ê×Ò³");
-			response = connection.execute();// »ñÈ¡ÏìÓ¦
-			log.info("»ñÈ¡document");
-			Document document = Jsoup.parse(response.body());// ×ª»»ÎªDomÊ÷
+			log.info("è¿æ¥æ•™åŠ¡ç³»ç»Ÿé¦–é¡µ");
+			response = connection.execute();// è·å–å“åº”
+			log.info("è·å–document");
+			Document document = Jsoup.parse(response.body());// è½¬æ¢ä¸ºDomæ ‘
 			log.info("title:" + document.title() + ",body:" + document.data());
 			log.info("body:" + document.body());
 			Map<String, String> map = response.cookies();
 			for (String s : map.keySet()) {
 				System.out.println(s + "      " + map.get(s));
 			}
-			// ²ÎÊı
+			// å‚æ•°
 			Map<String, String> params = new HashMap<String, String>();
 			// String __VIEWSTATE = "";
 			/*
@@ -980,18 +980,18 @@ public class UserService extends AttentService implements Application {
 			params.put("__VIEWSTATE", __VIEWSTATE);
 			params.put("txtSecretCode", "");
 			params.put("RadioButtonList1", flag);
-			params.put("Button1", "µÇÂ¼");
-			log.info("ÉèÖÃ²ÎÊıÍê±Ï");
+			params.put("Button1", "ç™»å½•");
+			log.info("è®¾ç½®å‚æ•°å®Œæ¯•");
 			// header
 			String referer = "http://jwc.gduf.edu.cn/xs_main.aspx?xh=" + number;
-			log.info("×¼±¸ÔÙ´ÎÁ¬½Ó");
+			log.info("å‡†å¤‡å†æ¬¡è¿æ¥");
 			Connection connection2 = getConnection("http://jwc.gduf.edu.cn/");
-			// ÉèÖÃcookieºÍpostÉÏÃæµÄmapÊı¾İ
+			// è®¾ç½®cookieå’Œpostä¸Šé¢çš„mapæ•°æ®
 			log.info("response");
 			Response login = null;
 			log.info("---");
 			try {
-				log.info("½øÈëÁ¬½ÓµÇÂ¼½ÌÎñÏµÍ³");
+				log.info("è¿›å…¥è¿æ¥ç™»å½•æ•™åŠ¡ç³»ç»Ÿ");
 				connection2 = connection2
 						.ignoreContentType(true)
 						.data(params)
@@ -1012,17 +1012,17 @@ public class UserService extends AttentService implements Application {
 						.timeout(3000).method(Method.POST);
 				log.info("connect-------");
 				login = connection2.execute();
-				log.info("Á¬½Ó³É¹¦");
+				log.info("è¿æ¥æˆåŠŸ");
 			} catch (Exception e1) {
-				log.info("Á¬½ÓÊ§°Ü");
+				log.info("è¿æ¥å¤±è´¥");
 				e1.printStackTrace();
 				throw e1;
 			}
-			log.info("»ñÈ¡³É¹¦");
-			// ´òÓ¡£¬µÇÂ½³É¹¦ºóµÄĞÅÏ¢
+			log.info("è·å–æˆåŠŸ");
+			// æ‰“å°ï¼Œç™»é™†æˆåŠŸåçš„ä¿¡æ¯
 			// System.out.println(login.body());
 			System.out.println("-----------------------------");
-			// µÇÂ½³É¹¦ºóµÄcookieĞÅÏ¢£¬¿ÉÒÔ±£´æµ½±¾µØ£¬ÒÔºóµÇÂ½Ê±£¬Ö»ĞèÒ»´ÎµÇÂ½¼´¿É
+			// ç™»é™†æˆåŠŸåçš„cookieä¿¡æ¯ï¼Œå¯ä»¥ä¿å­˜åˆ°æœ¬åœ°ï¼Œä»¥åç™»é™†æ—¶ï¼Œåªéœ€ä¸€æ¬¡ç™»é™†å³å¯
 			map = login.cookies();
 			for (String s : map.keySet()) {
 				System.out.println(s + "      " + map.get(s));
@@ -1031,7 +1031,7 @@ public class UserService extends AttentService implements Application {
 			log.info("title:" + document.title());
 			Element element = document2.getElementById("xhxm");
 			if (element != null && element.tagName().equals("span")) {
-				// ÊÇ·ñÓĞÕâ¸öÔªËØ
+				// æ˜¯å¦æœ‰è¿™ä¸ªå…ƒç´ 
 				System.out.println("success-tag:" + element.tagName());
 				String name = element.text();
 				name = name.substring(0, name.length() - 2);
@@ -1049,15 +1049,15 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * »ñÈ¡Á¬½Ó
+	 * è·å–è¿æ¥
 	 * 
 	 * @param url
 	 * @return
 	 */
 	public Connection getConnection(String url) {
-		// »ñÈ¡Á¬½Ó
+		// è·å–è¿æ¥
 		Connection connection = Jsoup.connect(url);
-		// ÅäÖÃÄ£Äâä¯ÀÀÆ÷
+		// é…ç½®æ¨¡æ‹Ÿæµè§ˆå™¨
 		connection
 				.header("User-Agent",
 						"Mozilla/5.0 (Windows NT 6.2; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0");
@@ -1077,17 +1077,17 @@ public class UserService extends AttentService implements Application {
 
 	/**
 	 * 
-	 * *********************************************************** ²éÑ¯ÓÃ»§µÄÓÅ»¯´úÂë
+	 * *********************************************************** æŸ¥è¯¢ç”¨æˆ·çš„ä¼˜åŒ–ä»£ç 
 	 */
 
 	public void findUserB(String keyword) {
-		// »ñÈ¡µ½ËùÓĞµÄÓÃ»§±êÇ©Çé¿ö
+		// è·å–åˆ°æ‰€æœ‰çš„ç”¨æˆ·æ ‡ç­¾æƒ…å†µ
 		LabelAttentionAssociationDAO labelaDAO = (LabelAttentionAssociationDAO) context
 				.getBean("LabelAttentionAssociationDAOImpl");
 		LabelDAO labelDAO = (LabelDAO) context.getBean("LabelDAOImpl");
 		UserInfoDAO userInfoDAO = (UserInfoDAO) context
 				.getBean("UserInfoDAOImpl");
-		// ½«Label±íÓ³Éä³Émap
+		// å°†Labelè¡¨æ˜ å°„æˆmap
 		List<Label> labels = labelDAO.findAll();
 		List<LabelAttentionAssociation> userLabels = labelaDAO.findAll();
 		List<UserInfo> userInfos = userInfoDAO.findAll();
@@ -1107,12 +1107,12 @@ public class UserService extends AttentService implements Application {
 		if (keyword == null && keyword.equals(" ")) {
 			return;
 		}
-		log.info("---------keywordsµÄ·Ö´Ê------------");
-		log.info("Ô­×Ö·û´®:" + keyword);
+		log.info("---------keywordsçš„åˆ†è¯------------");
+		log.info("åŸå­—ç¬¦ä¸²:" + keyword);
 		//keyword = keyword.replaceAll(" ", "");
-		// ½øĞĞ¶ÔkeywordµÄ·Ö´Ê´¦Àí
+		// è¿›è¡Œå¯¹keywordçš„åˆ†è¯å¤„ç†
 		/*
-		 * ¶ÔÓÚÓ¢ÎÄºÍÊı×ÖÀ´Ëµ,Ó¦¸ÃºÏ²¢´¦ÀíÈç word64findÓ¦²ğ·ÖÎª word,64,find. word find my64 -->
+		 * å¯¹äºè‹±æ–‡å’Œæ•°å­—æ¥è¯´,åº”è¯¥åˆå¹¶å¤„ç†å¦‚ word64findåº”æ‹†åˆ†ä¸º word,64,find. word find my64 -->
 		 * word,find,my,64
 		 */
 
@@ -1122,10 +1122,10 @@ public class UserService extends AttentService implements Application {
 		// log.info(i + " : " + keys[i]);
 		// }
 
-		// aÀàÆ¥ÅäÊ×ÏÈ,È»ºó²ÅÊÇbÀàÆ¥Åä,bÀàÆ¥ÅäÊÇ¸½¼Ó·Ö
-		// Ê×ÏÈ¶ÔÓÃ»§ÕËºÅ£¬nicknameµÄ·Ö´ÊÆ¥Åä
+		// aç±»åŒ¹é…é¦–å…ˆ,ç„¶åæ‰æ˜¯bç±»åŒ¹é…,bç±»åŒ¹é…æ˜¯é™„åŠ åˆ†
+		// é¦–å…ˆå¯¹ç”¨æˆ·è´¦å·ï¼Œnicknameçš„åˆ†è¯åŒ¹é…
 
-		// ¿´keywordÄÜ·ñ×ª»¯³ÉÊı×Ö£¬ÈôÄÜ,ÓëÕËºÅ½øĞĞÆ¥Åä
+		// çœ‹keywordèƒ½å¦è½¬åŒ–æˆæ•°å­—ï¼Œè‹¥èƒ½,ä¸è´¦å·è¿›è¡ŒåŒ¹é…
 		String[] keys;
 		try {
 			int keywordInt = Integer.parseInt(keyword);
@@ -1134,19 +1134,19 @@ public class UserService extends AttentService implements Application {
 		} catch (Exception e) {
 			keys = ParticipleUtil.participleString(keyword);
 		}
-		// ·Ö´ÊÍê³É,¿ªÊ¼½øĞĞÆ¥Åä
+		// åˆ†è¯å®Œæˆ,å¼€å§‹è¿›è¡ŒåŒ¹é…
 		String infoString = "";
 		FindUser findUser = null;
-		// Æ¥ÅäÊı
+		// åŒ¹é…æ•°
 		int matchCount = 0;
-		// Æ¥Åä³É¹¦µÄÓÃ»§
+		// åŒ¹é…æˆåŠŸçš„ç”¨æˆ·
 		List<UserInfo> matchUsers = new ArrayList<UserInfo>();
 		Map<String, Integer> matchCounts = new HashMap<String, Integer>();
-		log.info("-------------Æ¥ÅäÇé¿ö:");
+		log.info("-------------åŒ¹é…æƒ…å†µ:");
 		for (String userId : userLabelMap.keySet()) {
-			// 1.½«ĞÅÏ¢ÕûºÏ³ÉÒ»´®×Ö·û´®
+			// 1.å°†ä¿¡æ¯æ•´åˆæˆä¸€ä¸²å­—ç¬¦ä¸²
 			infoString = userLabelMap.get(userId).toInfoString();
-			// Æ¥Åä´Ê
+			// åŒ¹é…è¯
 
 			for (int i = 0; i < keys.length; i++) {
 				String[] matches = infoString.split(keys[i]);
@@ -1163,7 +1163,7 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * ½«label±ä³ÉmapÓ³Éä½á¹¹
+	 * å°†labelå˜æˆmapæ˜ å°„ç»“æ„
 	 * 
 	 * @param labels
 	 * @return
@@ -1177,7 +1177,7 @@ public class UserService extends AttentService implements Application {
 	}
 
 	/**
-	 * ¸ù¾İlabelÓ³ÉäÒÔ¼°userLabel±íµÄ¹ØÏµ,ÖÆ×÷³öÒ»¸ömap,keyÎªuserID,valueÎªÓÃ»§¿É±»ËÑË÷µÄÊôĞÔÁ¬½ÓÆğÀ´µÄ×Ö·û´®¡£
+	 * æ ¹æ®labelæ˜ å°„ä»¥åŠuserLabelè¡¨çš„å…³ç³»,åˆ¶ä½œå‡ºä¸€ä¸ªmap,keyä¸ºuserID,valueä¸ºç”¨æˆ·å¯è¢«æœç´¢çš„å±æ€§è¿æ¥èµ·æ¥çš„å­—ç¬¦ä¸²ã€‚
 	 * 
 	 * @param userInfos
 	 * @param userLabels
@@ -1188,14 +1188,14 @@ public class UserService extends AttentService implements Application {
 			List<LabelAttentionAssociation> userLabels,
 			Map<Integer, String> labelMap) {
 		Map<String, FindUser> userLabelMap = new HashMap<String, FindUser>();
-		// ÊµÀı»¯Ò»¸öFindUser¶ÔÏó
+		// å®ä¾‹åŒ–ä¸€ä¸ªFindUserå¯¹è±¡
 		FindUser findUser = new FindUser();
 		for (UserInfo userInfo : userInfos) {
 			userLabelMap.put(userInfo.getUserId(),
 					new FindUser(userInfo.getUserId(), userInfo.getNickname()));
 		}
 		/**
-		 * ½«±êÇ©ÖğÒ»¼ÓÔØ½øÈ¥
+		 * å°†æ ‡ç­¾é€ä¸€åŠ è½½è¿›å»
 		 */
 		for (LabelAttentionAssociation userLabel : userLabels) {
 			findUser = userLabelMap.get(userLabel.getUserId());

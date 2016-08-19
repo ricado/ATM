@@ -11,11 +11,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.struts2.components.Else;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atm.chat.nio.server.handler.CrowdHandler;
 import com.atm.chat.nio.server.handler.MessageHandler;
+import com.atm.chat.nio.server.handler.MyMessageHandler;
 import com.atm.chat.nio.server.handler.UserHandler;
 import com.atm.chat.nio.server.util.Config;
 import com.atm.model.user.User;
@@ -30,33 +32,34 @@ public class ReadSelector extends ReadThread {
 	private MessageHandler messageHandler = new MessageHandler();
 	private CrowdHandler crowdHandler = new CrowdHandler();
 	private UserHandler userHandler = new UserHandler();
+	private MyMessageHandler myMessageHandler = new MyMessageHandler();
 
-	// ¹¹Ôìº¯Êı ¿ªÆôselector
+	// æ„é€ å‡½æ•° å¼€å¯selector
 	public ReadSelector(ServerSocketChannel server, SocketChannel sc) {
 		log.info("readSelector");
 		try {
-			log.info("¹¹Ôìº¯Êı readselector");
+			log.info("æ„é€ å‡½æ•° readselector");
 			selector = Selector.open();
-			log.info("×¢²á¡£¡£¡£·şÎñÆ÷");
+			log.info("æ³¨å†Œã€‚ã€‚ã€‚æœåŠ¡å™¨");
 			selector.wakeup();
 			server.register(selector, SelectionKey.OP_ACCEPT);
-			log.info("×¢²á³É¹¦");
+			log.info("æ³¨å†ŒæˆåŠŸ");
 		} catch (IOException e) {
-			log.info("Ê§°Ü¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£");
+			log.info("å¤±è´¥ã€‚ã€‚ã€‚ã€‚ã€‚ã€‚ã€‚ã€‚ã€‚ã€‚ã€‚ã€‚ã€‚ã€‚ã€‚ã€‚");
 			e.printStackTrace();
 		}
 		if (selector == null) {
 			log.info("selector is null");
 		}
-		register(sc);// ×¢²á
+		register(sc);// æ³¨å†Œ
 	}
 
 	/**
-	 * run·½·¨
+	 * runæ–¹æ³•
 	 */
 	public void run() {
 		try {
-			log.info("readSelector ¿ªÆô run()");
+			log.info("readSelector å¼€å¯ run()");
 			receive();
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
@@ -64,28 +67,27 @@ public class ReadSelector extends ReadThread {
 	}
 
 	/**
-	 * ×¢²á
+	 * æ³¨å†Œ
 	 * 
 	 * @param sc
 	 */
 	public void register(SocketChannel sc) {
 		try {
 			synchronized (gate) {
-				log.info("½øÈë×¢²áÒ»¸ösocketChannel");
+				log.info("è¿›å…¥æ³¨å†Œä¸€ä¸ªsocketChannel");
 				sc.configureBlocking(false);
-				log.info("×¢²ásocketchannel--»½ĞÑselector");
+				log.info("æ³¨å†Œsocketchannel--å”¤é†’selector");
 				selector.wakeup();
-				log.info("»½ĞÑÍê±Ï");
-				// ×¢²áÑ¡ÔñÆ÷£¬²¢ÉèÖÃÎª¶ÁÈ¡Ä£Ê½£¬ÊÕµ½Ò»¸öÁ¬½ÓÇëÇó£¬È»ºóÆğÒ»¸öSocketChannel£¬²¢×¢²áµ½selectorÉÏ£¬Ö®ºóÕâ¸öÁ¬½ÓµÄÊı¾İ£¬¾ÍÓÉÕâ¸öSocketChannel´¦Àí
+				log.info("å”¤é†’å®Œæ¯•");
+				// æ³¨å†Œé€‰æ‹©å™¨ï¼Œå¹¶è®¾ç½®ä¸ºè¯»å–æ¨¡å¼ï¼Œæ”¶åˆ°ä¸€ä¸ªè¿æ¥è¯·æ±‚ï¼Œç„¶åèµ·ä¸€ä¸ªSocketChannelï¼Œå¹¶æ³¨å†Œåˆ°selectorä¸Šï¼Œä¹‹åè¿™ä¸ªè¿æ¥çš„æ•°æ®ï¼Œå°±ç”±è¿™ä¸ªSocketChannelå¤„ç†
 				sc.register(selector, SelectionKey.OP_READ);
 			}
-			log.info("Server is listening from client :"
-					+ sc.getRemoteAddress());
-			log.info("×¢²áÑ¡ÔñÆ÷³Â¹¦");
+			log.info("Server is listening from client :" + sc.getRemoteAddress());
+			log.info("æ³¨å†Œé€‰æ‹©å™¨é™ˆåŠŸ");
 		} catch (IOException e) {
 			log.info(e.getMessage());
 			e.printStackTrace();
-			log.info("×¢²áÊ§°Ü");
+			log.info("æ³¨å†Œå¤±è´¥");
 		}
 	}
 
@@ -93,13 +95,13 @@ public class ReadSelector extends ReadThread {
 	private Object gate = new Object();
 
 	/**
-	 * ½ÓÊÕÏûÏ¢
+	 * æ¥æ”¶æ¶ˆæ¯
 	 * 
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
 	public void receive() throws IOException, InterruptedException {
-		log.info("readSelector ¿ªÆô receive()");
+		log.info("readSelector å¼€å¯ receive()");
 		while (true) {
 			// try{
 			// System.out.println("write....");
@@ -110,7 +112,7 @@ public class ReadSelector extends ReadThread {
 			// log.info(selector.toString());
 			if (readyChannels == 0)
 				continue;
-			Set<SelectionKey> selectedKeys = selector.selectedKeys(); // ¿ÉÒÔÍ¨¹ıÕâ¸ö·½·¨£¬ÖªµÀ¿ÉÓÃÍ¨µÀµÄ¼¯ºÏ
+			Set<SelectionKey> selectedKeys = selector.selectedKeys(); // å¯ä»¥é€šè¿‡è¿™ä¸ªæ–¹æ³•ï¼ŒçŸ¥é“å¯ç”¨é€šé“çš„é›†åˆ
 			Iterator<SelectionKey> keyIterator = selectedKeys.iterator();
 			// System.out.println(selectedKeys.size());
 			while (keyIterator.hasNext()) {
@@ -121,22 +123,21 @@ public class ReadSelector extends ReadThread {
 		}
 	}
 
-	public void dealWithSelectionKey(SelectionKey selectionKey)
-			throws IOException {
+	public void dealWithSelectionKey(SelectionKey selectionKey) throws IOException {
 
-		// ´¦ÀíÀ´×Ô¿Í»§¶ËµÄÊı¾İ¶ÁÈ¡ÇëÇó
+		// å¤„ç†æ¥è‡ªå®¢æˆ·ç«¯çš„æ•°æ®è¯»å–è¯·æ±‚
 		if (selectionKey.isReadable()) {
-			log.info("=-----selectionkey¿É¶Á");
-			// ·µ»Ø¸ÃSelectionKey¶ÔÓ¦µÄ Channel£¬ÆäÖĞÓĞÊı¾İĞèÒª¶ÁÈ¡
+			log.info("=-----selectionkeyå¯è¯»");
+			// è¿”å›è¯¥SelectionKeyå¯¹åº”çš„ Channelï¼Œå…¶ä¸­æœ‰æ•°æ®éœ€è¦è¯»å–
 			socketChannel = (SocketChannel) selectionKey.channel();
 			log.info("remoteAddress:" + socketChannel.getRemoteAddress());
 
 			/**
-			 * »ñÈ¡ÏûÏ¢ÀàĞÍ
+			 * è·å–æ¶ˆæ¯ç±»å‹
 			 */
 			int type = -100;
 			try {
-				log.info("type------µ÷ÓÃgetInt()");
+				log.info("type------è°ƒç”¨getInt()");
 				type = getInt();
 				log.info("type:" + type);
 			} catch (Exception e) {
@@ -145,25 +146,29 @@ public class ReadSelector extends ReadThread {
 				return;
 			}
 			try {
-				// TODO ÖĞ×ªÕ¾
+				// TODO ä¸­è½¬ç«™
 				if (type >= 1400) {
-					// ÎªÓÃ»§µÄ¹ÜÀíÀàĞÍ
-					log.info("------------------×ªÈëuserhandler");
+					// ä¸ºç”¨æˆ·çš„ç®¡ç†ç±»å‹
+					log.info("------------------è½¬å…¥userhandler");
 					userHandler.setSocketChannel(socketChannel);
 					userHandler.operate(type);
 				} else if (type >= 1200) {
-					// ÎªÈºÁÄµÄ¹ÜÀíÀàĞÍ
-					log.info("------------------×ªÈëcrowdhandler");
+					// ä¸ºç¾¤èŠçš„ç®¡ç†ç±»å‹
+					log.info("------------------è½¬å…¥crowdhandler");
 					crowdHandler.setSocketChannel(socketChannel);
 					crowdHandler.operate(type);
+				} else if (type > 1150) {
+					log.info("------------------è½¬å…¥mymessageHnadler");
+					myMessageHandler.setSocketChannel(socketChannel);
+					myMessageHandler.operate(type);
 				} else if (type >= 1000) {
-					// ÎªÏûÏ¢ÀàĞÍ,ÓÉÏûÏ¢ÀàĞÍ´¦Àí
-					log.info("------------------×ªÈëmessagehandler");
+					// ä¸ºæ¶ˆæ¯ç±»å‹,ç”±æ¶ˆæ¯ç±»å‹å¤„ç†
+					log.info("------------------è½¬å…¥messagehandler");
 					messageHandler.setSocketChannel(socketChannel);
 					messageHandler.operate(type);
 				} else {
-					// »ù±¾²Ù×÷ÀàĞÍ
-					log.info("------------------×ªÈëbasiOoperate");
+					// åŸºæœ¬æ“ä½œç±»å‹
+					log.info("------------------è½¬å…¥basiOoperate");
 					basicOperate(type);
 				}
 			} catch (Exception e) {
@@ -187,27 +192,27 @@ public class ReadSelector extends ReadThread {
 			break;
 		}
 	}
-	
+
 	/**
-	 * µÇÂ¼
+	 * ç™»å½•
 	 * 
 	 * @param content
 	 * @param sk
 	 * @throws IOException
 	 */
 	public void login() throws IOException {
-		// TODO µÇÂ¼
+		// TODO ç™»å½•
 		getMapInfo();
 		String userId = getString();
 		String userPwd = getString();
-		log.info("===========µÇÂ¼=============");
+		log.info("===========ç™»å½•=============");
 		log.info("userId:" + userId);
 		log.info("userPwd:" + userPwd);
 		User user = new User(userId, userPwd);
-		// ÑéÖ¤ÕËºÅÃÜÂëÊÇ·ñÕıÈ·
+		// éªŒè¯è´¦å·å¯†ç æ˜¯å¦æ­£ç¡®
 		if (UserService.login(user)) {
 			if (isLogin(userId)) {
-				log.info("ÓĞÈËµÇÂ¼ÁË,±ÆËûÏÂÏß");
+				log.info("æœ‰äººç™»å½•äº†,é€¼ä»–ä¸‹çº¿");
 				buffer.clear();
 				buffer = ByteBuffer.allocateDirect(4);
 				buffer.putInt(Config.REQUEST_BE_OFF);
@@ -217,7 +222,7 @@ public class ReadSelector extends ReadThread {
 				exit(userId);
 				// buffer.putInt(Config.USER_LOGIN_ALREADY);
 			}
-			log.info("=============µÇÂ¼³É¹¦=============");
+			log.info("=============ç™»å½•æˆåŠŸ=============");
 			map.put(user.getUserId(), socketChannel);
 			mapkey.put(userId, selectionKey);
 			buffer.clear();
@@ -225,10 +230,10 @@ public class ReadSelector extends ReadThread {
 			buffer.putInt(Config.RESULT_LOGIN);
 			buffer.putInt(Config.SUCCESS);
 			// OnlineService.saveLogin(userId, number);
-			log.info("±£´æ³É¹¦");
+			log.info("ä¿å­˜æˆåŠŸ");
 			// sendOffLineMessage(userId);
 		} else {
-			log.info("µÇÂ¼Ê§°Ü");
+			log.info("ç™»å½•å¤±è´¥");
 			buffer.clear();
 			buffer = ByteBuffer.allocateDirect(8);
 			buffer.putInt(Config.RESULT_LOGIN);
@@ -240,7 +245,7 @@ public class ReadSelector extends ReadThread {
 	}
 
 	/**
-	 * ÅĞ¶ÏÓÃ»§ÊÇ·ñÒÑ¾­µÇÂ¼
+	 * åˆ¤æ–­ç”¨æˆ·æ˜¯å¦å·²ç»ç™»å½•
 	 * 
 	 * @param userId
 	 * @return true or false
@@ -250,7 +255,7 @@ public class ReadSelector extends ReadThread {
 
 		for (String id : map.keySet()) {
 			if (id.equals(userId)) {
-				log.info("ÓÃ»§ÒÑ¾­µÇÂ¼ÁË");
+				log.info("ç”¨æˆ·å·²ç»ç™»å½•äº†");
 				return true;
 			}
 		}
@@ -258,7 +263,7 @@ public class ReadSelector extends ReadThread {
 
 		/*
 		 * SocketChannel sc = map.get(userId); if (sc == null) { return false; }
-		 * else{ log.info("ÓÃ»§ÒÑ¾­µÇÂ¼"); // log.info("socket:" +
+		 * else{ log.info("ç”¨æˆ·å·²ç»ç™»å½•"); // log.info("socket:" +
 		 * sc.getLocalAddress().toString()); return true; }
 		 */
 	}
@@ -270,8 +275,9 @@ public class ReadSelector extends ReadThread {
 	public void setSelectionKeyls(List<SelectionKey> keys) {
 		this.selectionKeys = keys;
 	}
+
 	/**
-	 * »ñÈ¡µ±Ç°Á¬½ÓµÄsocketchannelµÄÊıÁ¿
+	 * è·å–å½“å‰è¿æ¥çš„socketchannelçš„æ•°é‡
 	 * 
 	 * @return
 	 * @throws IOException

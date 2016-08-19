@@ -31,22 +31,22 @@ public class AcceptSelector implements ScMap {
 	}
 
 	public void receive() throws IOException {
-		log.info("acceptselector ¿ªÆô receive");
+		log.info("acceptselector å¼€å¯ receive");
 		while (true) {
 			int readyChannels = selector.select(20);
 			if (readyChannels == 0)
 				continue;
-			Set<SelectionKey> selectedKeys = selector.selectedKeys(); // ¿ÉÒÔÍ¨¹ıÕâ¸ö·½·¨£¬ÖªµÀ¿ÉÓÃÍ¨µÀµÄ¼¯ºÏ
+			Set<SelectionKey> selectedKeys = selector.selectedKeys(); // å¯ä»¥é€šè¿‡è¿™ä¸ªæ–¹æ³•ï¼ŒçŸ¥é“å¯ç”¨é€šé“çš„é›†åˆ
 			Iterator<SelectionKey> keyIterator = selectedKeys.iterator();
 			while (keyIterator.hasNext()) {
 				selectionKey = (SelectionKey) keyIterator.next();
 				keyIterator.remove();
-				// ÅĞ¶ÏÊÇ·ñ½ÓÊÕ
+				// åˆ¤æ–­æ˜¯å¦æ¥æ”¶
 				if (selectionKey.isAcceptable()) {
 					socketChannel = server.accept();
 					managerSelector();
-					// ½«´Ë¶ÔÓ¦µÄchannelÉèÖÃÎª×¼±¸½ÓÊÜÆäËû¿Í»§¶ËÇëÇó
-					log.info("½«´Ë¶ÔÓ¦µÄchannelÉèÖÃÎª×¼±¸½ÓÊÜÆäËû¿Í»§¶ËÇëÇó");
+					// å°†æ­¤å¯¹åº”çš„channelè®¾ç½®ä¸ºå‡†å¤‡æ¥å—å…¶ä»–å®¢æˆ·ç«¯è¯·æ±‚
+					log.info("å°†æ­¤å¯¹åº”çš„channelè®¾ç½®ä¸ºå‡†å¤‡æ¥å—å…¶ä»–å®¢æˆ·ç«¯è¯·æ±‚");
 					selectionKey.interestOps(SelectionKey.OP_ACCEPT);
 					log.info("----------ok--------");
 				}
@@ -55,7 +55,7 @@ public class AcceptSelector implements ScMap {
 	}
 
 	/**
-	 * ¹ÜÀíreadSelector
+	 * ç®¡ç†readSelector
 	 * 
 	 * @throws IOException
 	 */
@@ -65,19 +65,19 @@ public class AcceptSelector implements ScMap {
 		for (Iterator<ReadSelector> readSelectors = selectors.iterator(); readSelectors
 				.hasNext();) {
 			ReadSelector readSelector = (ReadSelector) readSelectors.next();
-			System.out.println("µ±Ç°readSocketorµÄÊıÁ¿:" + readSelector.getSize());
-			// readSelectorµÄsocketChannelµÄÊıÁ¿Ğ¡ÓÚ40
+			System.out.println("å½“å‰readSocketorçš„æ•°é‡:" + readSelector.getSize());
+			// readSelectorçš„socketChannelçš„æ•°é‡å°äº40
 			if (readSelector.getSize() <= 1) {
 				readSelectors.remove();
-				System.out.println("ÒÆ³ıÁËÒ»¸öselector");
+				System.out.println("ç§»é™¤äº†ä¸€ä¸ªselector");
 			} else if (readSelector.getSize() < 30) {
 				readSelector.register(socketChannel);
 				flag = false;
 			}
 		}
 		if (flag) {
-			System.out.println("¿ªÆôĞÂµÄreadSelector....");
-			// ËùÓĞselectorµÄsocketChannelµÄÊıÁ¿¶¼³¬¹ı
+			System.out.println("å¼€å¯æ–°çš„readSelector....");
+			// æ‰€æœ‰selectorçš„socketChannelçš„æ•°é‡éƒ½è¶…è¿‡
 			ReadSelector readSelector = new ReadSelector(server, socketChannel);
 			// add readSelector to selectors
 			selectors.add(readSelector);
