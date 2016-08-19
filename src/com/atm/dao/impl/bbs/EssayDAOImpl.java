@@ -1,5 +1,6 @@
 package com.atm.dao.impl.bbs;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.LockOptions;
@@ -52,11 +53,12 @@ public class EssayDAOImpl implements EssayDAO {
 	 * @see com.atm.dao.impl.EssayDAO#save(com.atm.model.Essay)
 	 */
 	@Override
-	public void save(Essay transientInstance) {
+	public Serializable save(Essay transientInstance) {
 		log.debug("saving Essay instance");
 		try {
-			getCurrentSession().save(transientInstance);
+			Serializable id = getCurrentSession().save(transientInstance);
 			log.debug("save successful");
+			return id;
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
 			throw re;
@@ -256,7 +258,7 @@ public class EssayDAOImpl implements EssayDAO {
 		return (EssayDAO) ctx.getBean("EssayDAOImpl");
 	}
 	
-	//TODO *********************自定义方法********************************
+	//TODO *********************锟皆讹拷锟藉方锟斤拷********************************
 	public List g(String propertyName, Object value) {
 		log.debug("finding Essay instance with property: " + propertyName
 				+ ", value: " + value);

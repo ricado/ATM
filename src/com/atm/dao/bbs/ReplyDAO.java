@@ -1,5 +1,6 @@
 package com.atm.dao.bbs;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
@@ -17,7 +18,7 @@ public interface ReplyDAO {
 
 	public abstract void setSessionFactory(SessionFactory sessionFactory);
 	public abstract void deleteAFloor(int floorId,int essayId);
-	public abstract void save(Reply transientInstance);
+	public abstract Serializable save(Reply transientInstance);
 
 	public abstract void delete(Reply persistentInstance);
 

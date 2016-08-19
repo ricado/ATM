@@ -11,18 +11,16 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import com.atm.model.define.bbs.EssayDetailView;
 import com.atm.model.user.UserInfo;
 
 /**
- * @TODO£º
+ * @TODOï¼š
  * @fileName : com.atm.util.essayFilter.java
  * date | author | version |   
- * 2015Äê8ÔÂ4ÈÕ | Jiong | 1.0 |
+ * 2015å¹´8æœˆ4æ—¥ | Jiong | 1.0 |
  */
 
 	public class essayFilter implements Filter {
@@ -46,25 +44,25 @@ import com.atm.model.user.UserInfo;
 	       String url = request.getServletPath();
 	       if (url == null)
 	           url = "";
-	       log.error("Á¬½Ó£º"+url);
+	       log.error("è¿žæŽ¥ï¼š"+url);
 	       Cookie[] cookies = request.getCookies();
 	       if(cookies!=null)
 			for(int i=0;i<cookies.length;i++){
 				log.error("cookis:"+cookies[i].getName());
 				UserInfo user = (UserInfo) request.getSession().getAttribute("user");
 				if(user!=null)
-				log.error("ÓÃ»§£º"+user.getUserId());
+				log.error("ç”¨æˆ·ï¼š"+user.getUserId());
 				else{
-					log.error("ÓÐcookieµ«Î´µÇÂ½");
+					log.error("æœ‰cookieä½†æœªç™»é™†");
 				}
 			}else{
-	    	   log.error("Ã»ÓÐCookie");
+	    	   log.error("æ²¡æœ‰Cookie");
 	       }
 	       if(url.equals("/essay.jsp")&&request.getAttribute("essayBean")==null){
-	    	   log.debug("¹ýÂËÆ÷Ìø×ªµ½action");
+	    	   log.debug("è¿‡æ»¤å™¨è·³è½¬åˆ°action");
 	    	   request.getRequestDispatcher("/essay_detail.action").forward(request, response); 
 	       }else if(url.equals("/recuit.jsp")&&request.getAttribute("recuitBean")==null){
-	    	   log.debug("ÓÃ»§Ö±½Ó·ÃÎÊjspÎÄ¼þ£¬¹ýÂËÆ÷Ìø×ªµ½action");
+	    	   log.debug("ç”¨æˆ·ç›´æŽ¥è®¿é—®jspæ–‡ä»¶ï¼Œè¿‡æ»¤å™¨è·³è½¬åˆ°action");
 	    	   request.getRequestDispatcher("/recuit_detail.action").forward(request, response); 
 	       }else{
 	    	   chain.doFilter(request, response);

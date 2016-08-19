@@ -27,7 +27,7 @@ public class UserDeal implements ObjectInterface{
 	
 	private Logger log = Logger.getLogger(UserDeal.class);
 	/**
-	 * @ÓÃ»§×¢²á´¦Àí ¸ºÔğÊı¾İ³Ö¾Ã»¯£¬·µ»Ø·´À¡ĞÅÏ¢
+	 * @ç”¨æˆ·æ³¨å†Œå¤„ç† è´Ÿè´£æ•°æ®æŒä¹…åŒ–ï¼Œè¿”å›åé¦ˆä¿¡æ¯
 	 * @date 2015/7/26
 	 * @author Jiong
 	 * @param request
@@ -38,88 +38,88 @@ public class UserDeal implements ObjectInterface{
 	 * @throws Exception 
 	 */
 	public String saveRegister(HttpServletRequest request) throws IOException, JSONException{
-		String mess = "×¢²áÊ§°Ü";
-		//TODO ****************Êı¾İ²Ù×÷¶ÔÏó*************************
-		//ÓÃ»§ĞÅÏ¢±í
+		String mess = "æ³¨å†Œå¤±è´¥";
+		//TODO ****************æ•°æ®æ“ä½œå¯¹è±¡*************************
+		//ç”¨æˆ·ä¿¡æ¯è¡¨
 		UserInfoDAO userInfoDao = (UserInfoDAO)context.getBean("UserInfoDAOImpl");
-		//ÓÃ»§µÇÂ½±í
+		//ç”¨æˆ·ç™»é™†è¡¨
 		UserDAO userDao = (UserDAO) context.getBean("UserDAOImpl");
-		//ÓÃ»§½ÇÉ«±í
+		//ç”¨æˆ·è§’è‰²è¡¨
 		TeacherDAO teacherDao;
 		StudentDAO studentDao;
 		
-		//TODO ********½«ÓÃ»§ÇëÇóÒÔjsonArray¸ñÊ½È¡³ö
+		//TODO ********å°†ç”¨æˆ·è¯·æ±‚ä»¥jsonArrayæ ¼å¼å–å‡º
 		JSONArray jsonArray = jsonUtil.getJSONArray(request);
 		
 		if(jsonArray.length()!=0){
 			JSONObject jsonObject = jsonArray.getJSONObject(0);
-			//TODO ***********½«JSONObject¶ÔÏó×ª»»ÎªÊµÌå¶ÔÏó(¿ÉÄÜÅ×³öÁ½ÖÖ´íÎó)***************
-			//ÓÃ»§ĞÅÏ¢¶ÔÏó
+			//TODO ***********å°†JSONObjectå¯¹è±¡è½¬æ¢ä¸ºå®ä½“å¯¹è±¡(å¯èƒ½æŠ›å‡ºä¸¤ç§é”™è¯¯)***************
+			//ç”¨æˆ·ä¿¡æ¯å¯¹è±¡
 			UserInfo userInfo = 
 					(UserInfo) jsonUtil.JSONToObj(jsonObject.toString(), UserInfo.class);
-			//ÓÃ»§µÇÂ½¶ÔÏó
+			//ç”¨æˆ·ç™»é™†å¯¹è±¡
 			User user = 
 					(User) jsonUtil.JSONToObj(jsonObject.toString(), User.class);
-			//ÓÃ»§½ÇÉ«¶ÔÏó£¨¶şÑ¡Ò»£©
+			//ç”¨æˆ·è§’è‰²å¯¹è±¡ï¼ˆäºŒé€‰ä¸€ï¼‰
 			Teacher teacher = null;
 			Student student = null;
 			
-			//´Ë´¦ÎªÓÃ»§×¢²áĞÅÏ¢¸ñÊ½ÑéÖ¤£¬Î´ÍêÉÆ£¬¿ÉÌ×ÓÃ¿Í»§¶ËµÄÄ£°æ
+			//æ­¤å¤„ä¸ºç”¨æˆ·æ³¨å†Œä¿¡æ¯æ ¼å¼éªŒè¯ï¼Œæœªå®Œå–„ï¼Œå¯å¥—ç”¨å®¢æˆ·ç«¯çš„æ¨¡ç‰ˆ
 			if(!jsonUtil.registerCheck(jsonObject)){
-				mess = "ÓÃ»§ĞÅÏ¢²»¹æ·¶";
+				mess = "ç”¨æˆ·ä¿¡æ¯ä¸è§„èŒƒ";
 			}else if(userInfoDao.findById(userInfo.getUserId())!=null){
-				mess = "ÓÃ»§ÒÑ±»×¢²á";
+				mess = "ç”¨æˆ·å·²è¢«æ³¨å†Œ";
 			}else{
-				//TODO ×¢²áÓÃ»§Êı¾İ³Ö¾Ã»¯
+				//TODO æ³¨å†Œç”¨æˆ·æ•°æ®æŒä¹…åŒ–
 				userInfoDao.save(userInfo);
-				log.debug(">>>>>>±£´æuserInfo");
+				log.debug(">>>>>>ä¿å­˜userInfo");
 					
 				userDao.save(user);
-				log.debug(">>>>>>>>>±£´æuser");
+				log.debug(">>>>>>>>>ä¿å­˜user");
 				
 				if(userInfo.getFlag()==null){
-					log.error(userInfo.getUserId()+":Éí·İĞÅÏ¢»ñÈ¡Ê§°Ü");
-					return "Î´»ñÈ¡µ½Éí·İĞÅÏ¢";
+					log.error(userInfo.getUserId()+":èº«ä»½ä¿¡æ¯è·å–å¤±è´¥");
+					return "æœªè·å–åˆ°èº«ä»½ä¿¡æ¯";
 				}else if(userInfo.getFlag()==0){
 					teacher = (Teacher) jsonUtil.JSONToObj(jsonObject.toString(), Teacher.class);
 					teacherDao = (TeacherDAO) context.getBean("TeacherDAO");
 					teacherDao.save(teacher);
-					log.debug(">>>>>>>±£´æteacher");
+					log.debug(">>>>>>>ä¿å­˜teacher");
 				}else if(userInfo.getFlag()==1){
 					student = (Student) jsonUtil.JSONToObj(jsonObject.toString(), Student.class);
 					studentDao = (StudentDAO) context.getBean("StudentDAO");
 					studentDao.save(student);
-					log.debug(">>>>>>>±£´æstudent");
+					log.debug(">>>>>>>ä¿å­˜student");
 				}else{
-					log.error(userInfo.getUserId()+":Éí·İĞÅÏ¢»ñÈ¡´íÎó");
-					return "Éí·İĞÅÏ¢´íÎó";
+					log.error(userInfo.getUserId()+":èº«ä»½ä¿¡æ¯è·å–é”™è¯¯");
+					return "èº«ä»½ä¿¡æ¯é”™è¯¯";
 				}
-				mess = "×¢²á³É¹¦";
-				log.info("ÓÃ»§£º"+user.getUserId()+"Ö´ĞĞÁË×¢²á²Ù×÷");
+				mess = "æ³¨å†ŒæˆåŠŸ";
+				log.info("ç”¨æˆ·ï¼š"+user.getUserId()+"æ‰§è¡Œäº†æ³¨å†Œæ“ä½œ");
 			}
 		}else{
-			mess = "Î´ÌîĞ´ĞÅÏ¢";
+			mess = "æœªå¡«å†™ä¿¡æ¯";
 		}
-		log.debug(">>>>>>>>´¦Àíºó£º"+mess);
-		log.debug("¡·¡·¡·¡·¡·×¢²á·½·¨½áÊø");
+		log.debug(">>>>>>>>å¤„ç†åï¼š"+mess);
+		log.debug("ã€‹ã€‹ã€‹ã€‹ã€‹æ³¨å†Œæ–¹æ³•ç»“æŸ");
 		return mess;	
 	}
 	
 	
 	/**
-	 * @µÇÂ½·½·¨ ²éÑ¯user±í£¬³É¹¦Ôò·µ»Ø·´À¡¼°ÓÃ»§ĞÅÏ¢£¬±£´æµ½»á»°£¬Ê§°ÜÔò·µ»ØÊ§°ÜÒòËØ
+	 * @ç™»é™†æ–¹æ³• æŸ¥è¯¢userè¡¨ï¼ŒæˆåŠŸåˆ™è¿”å›åé¦ˆåŠç”¨æˆ·ä¿¡æ¯ï¼Œä¿å­˜åˆ°ä¼šè¯ï¼Œå¤±è´¥åˆ™è¿”å›å¤±è´¥å› ç´ 
 	 * @author Jiong
 	 * @param request
 	 * @param response
-	 * @´´½¨Ê±¼ä 2015¡¢7¡¢28
+	 * @åˆ›å»ºæ—¶é—´ 2015ã€7ã€28
 	 */
 	public void dealLogin(HttpServletRequest request,HttpServletResponse response){
-		String mess = "µÇÂ¼Ê§°Ü";
-		log.debug(">>>>>>>>>>>>>½øÈëµÇÂ½");
-		//TODO ****************×¢ÈëÊı¾İ²Ù×÷¶ÔÏó*************************
-		//ÓÃ»§µÇÂ½±í
+		String mess = "ç™»å½•å¤±è´¥";
+		log.debug(">>>>>>>>>>>>>è¿›å…¥ç™»é™†");
+		//TODO ****************æ³¨å…¥æ•°æ®æ“ä½œå¯¹è±¡*************************
+		//ç”¨æˆ·ç™»é™†è¡¨
 		UserDAO userDao = (UserDAO) context.getBean("UserDAOImpl");
-		//TODO ***************µÇÂ½³É¹¦ºóÓÃµ½µÄÊµÌåºÍdao*****************
+		//TODO ***************ç™»é™†æˆåŠŸåç”¨åˆ°çš„å®ä½“å’Œdao*****************
 		UserInfo userInfo;
 		Teacher teacher;
 		Student student;
@@ -127,7 +127,7 @@ public class UserDeal implements ObjectInterface{
 		TeacherDAO teacherDao;
 		StudentDAO studentDao;
 		
-		//TODO ***************·´À¡ĞÅÏ¢ÓÃµÄJSON**********************
+		//TODO ***************åé¦ˆä¿¡æ¯ç”¨çš„JSON**********************
 		JSONObject sendJson = new JSONObject();
 		JSONArray sendArray = new JSONArray();
 		
@@ -136,11 +136,11 @@ public class UserDeal implements ObjectInterface{
 			jsonArray = jsonUtil.getJSONArray(request);
 			if(true){//jsonArray.length()!=0){
 				//JSONObject jsonObject = jsonArray.getJSONObject(0);
-				//TODO ***********½«JSONObject¶ÔÏó×ª»»ÎªÊµÌå¶ÔÏó***************
-				//ÓÃ»§µÇÂ½¶ÔÏó
+				//TODO ***********å°†JSONObjectå¯¹è±¡è½¬æ¢ä¸ºå®ä½“å¯¹è±¡***************
+				//ç”¨æˆ·ç™»é™†å¯¹è±¡
 				User user = new User();
 						//(User) jsonUtil.JSONToObj(jsonObject.toString(), User.class);
-				//²âÊÔ
+				//æµ‹è¯•
 				if(jsonArray.length()!=0){
 					JSONObject jsonObject = jsonArray.getJSONObject(0);
 				 user = 
@@ -152,24 +152,24 @@ public class UserDeal implements ObjectInterface{
 					user.setUserId(userId);
 					user.setUserPwd(password);
 				}
-				//²âÊÔ½áÊø
+				//æµ‹è¯•ç»“æŸ
 				
 				if(userDao.findById(user.getUserId())==null){
-					mess = "ÓÃ»§²»´æÔÚ";
+					mess = "ç”¨æˆ·ä¸å­˜åœ¨";
 				}else if(!userDao.login(user)){
-					mess = "ÃÜÂë´íÎó";
+					mess = "å¯†ç é”™è¯¯";
 				}else{
 					log.debug(jsonUtil.objectToArray(userDao.findByExample(user)));
-					mess = "µÇÂ¼³É¹¦";
-					int i = 0; //ÑéÖ¤²½Öè´ÎÊı
+					mess = "ç™»å½•æˆåŠŸ";
+					int i = 0; //éªŒè¯æ­¥éª¤æ¬¡æ•°
 					
-					//TODO *********µÇÂ¼ÑéÖ¤³É¹¦£¬»ñÈ¡ÓÃ»§ĞÅÏ¢***********
+					//TODO *********ç™»å½•éªŒè¯æˆåŠŸï¼Œè·å–ç”¨æˆ·ä¿¡æ¯***********
 					userInfoDao = (UserInfoDAO) context.getBean("UserInfoDAOImpl");
 					userInfo = userInfoDao.findById(user.getUserId());
 					sendJson = jsonUtil.objectToJson(userInfo);
 					sendArray.put(1, sendJson);
 					if(userInfo.getFlag()==null){
-						mess = "ÑéÖ¤Í¨¹ı£¬µ«ÓÃ»§Éí·İ»ñÈ¡Ê§°Ü";
+						mess = "éªŒè¯é€šè¿‡ï¼Œä½†ç”¨æˆ·èº«ä»½è·å–å¤±è´¥";
 						sendArray.remove(1);
 						i++;
 					}else if(userInfo.getFlag()==0){
@@ -181,28 +181,28 @@ public class UserDeal implements ObjectInterface{
 						studentDao = (StudentDAO) context.getBean("StudentDAOImpl");
 						student = studentDao.findById(user.getUserId());
 						if(student==null){
-							mess = "Ã»ÓĞ´ËÑ§Éú";
+							mess = "æ²¡æœ‰æ­¤å­¦ç”Ÿ";
 							i++;
 						}else{
 							sendJson = jsonUtil.objectToJson(student);
 							sendArray.put(2,sendJson);
 						}
 					}else{
-						mess = "ÑéÖ¤Í¨¹ı£¬µ«ÓÃ»§Éí·İ»ñÈ¡Ê§°Ü";
+						mess = "éªŒè¯é€šè¿‡ï¼Œä½†ç”¨æˆ·èº«ä»½è·å–å¤±è´¥";
 						sendArray.remove(1);
 						i++;
 					}
-					//½«µÇÂ½×´Ì¬±£´æµ½»á»°ÖĞ
+					//å°†ç™»é™†çŠ¶æ€ä¿å­˜åˆ°ä¼šè¯ä¸­
 					if(i==0){
 						request.getSession().setAttribute("user",userInfo);
 					}
 				}
-				log.info(user.getUserId()+" ---Ö´ĞĞµÇÂ½²Ù×÷£º"+mess);
+				log.info(user.getUserId()+" ---æ‰§è¡Œç™»é™†æ“ä½œï¼š"+mess);
 			}else{
-				mess = "Î´ÌîĞ´ĞÅÏ¢";
+				mess = "æœªå¡«å†™ä¿¡æ¯";
 			}
 		} catch(Exception e){
-			mess = "´íÎó:"+e.getMessage();
+			mess = "é”™è¯¯:"+e.getMessage();
 		}
 		try {
 			sendJson = new JSONObject();
@@ -213,13 +213,13 @@ public class UserDeal implements ObjectInterface{
 			e.printStackTrace();
 		}
 		sendUtil.writeToClient(response, sendArray);
-		log.debug("¡·¡·¡·¡·¡·µÇÂ½·½·¨½áÊø");				
+		log.debug("ã€‹ã€‹ã€‹ã€‹ã€‹ç™»é™†æ–¹æ³•ç»“æŸ");				
 	}
-	//TODO »ñÈ¡¹Ø×¢ÈË¼¯ºÏ
+	//TODO è·å–å…³æ³¨äººé›†åˆ
 	public JSONArray getAttendedPeople(String userId) throws JSONException, IOException{
 		PeopleRelationViewDAO relationDao = 
 				context.getBean("PeopleRelationViewDAO",PeopleRelationViewDAO.class);
-		log.debug("»ñÈ¡¹Ø×¢ÕßÕËºÅ¼¯ºÏ"+userId);
+		log.debug("è·å–å…³æ³¨è€…è´¦å·é›†åˆ"+userId);
 		List userList = relationDao.findAttendedPeople(userId);
 		if(userList.size()==0){
 			return null;
@@ -227,11 +227,11 @@ public class UserDeal implements ObjectInterface{
 		return jsonUtil.objectToArray(userList,false);
 	}
 	
-	//TODO »ñÈ¡¹Ø×¢µÄ±êÇ©¼¯ºÏ
+	//TODO è·å–å…³æ³¨çš„æ ‡ç­¾é›†åˆ
 		public JSONArray getAttendedLabel(String userId) throws JSONException, IOException{
 			LabelRelationViewDAO labelDao = 
 					context.getBean("LabelRelationViewDAO",LabelRelationViewDAO.class);
-			log.debug("»ñÈ¡¹Ø×¢ÕßÕËºÅ¼¯ºÏ"+userId);
+			log.debug("è·å–å…³æ³¨è€…è´¦å·é›†åˆ"+userId);
 			List userList = labelDao.findAttendedLabel(userId);
 			if(userList.size()==0){
 				return null;

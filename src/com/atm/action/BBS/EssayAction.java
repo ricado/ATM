@@ -465,6 +465,7 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 	//TODO***********************修改相关的操作
 	
 	//发布帖子
+	//放弃不用
 	public String publishEssay(){
 		log.debug("获取发布帖子请求");
 		init();
@@ -475,7 +476,7 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 			return null;
 		}
 		try{
-			mess = changeDeal.saveAEssay(user, type, label, title, department, content,new ArrayList());
+			mess = changeDeal.saveAEssay(user, type, label, title, department, content,new ArrayList(),"");
 		}catch(Exception e){
 			mess = "未知错误,发布失败";
 			log.error(mess, e);

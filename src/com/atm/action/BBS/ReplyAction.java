@@ -135,7 +135,7 @@ Logger log = Logger.getLogger(getClass());
 			if(floorId!=0){//楼层为不为0说明回复的是楼中楼，需判断回复的楼层是否存在
 			  boo = deal.haveFloor(floorId);
 			}
-			mess = deal.saveAReply(request, essayId, userId, repliedUserId, repContent, floorId,boo);
+			mess = deal.saveAReply(request, essayId, user, repliedUserId, repContent, floorId,boo);
 			sendTip(false);
 		} catch (Exception e) {
 			mess = "获取错误";

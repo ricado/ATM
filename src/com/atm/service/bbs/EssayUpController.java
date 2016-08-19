@@ -96,7 +96,7 @@ public class EssayUpController implements ObjectInterface{
 		if(size==savePath.size()){
 			try{
 				//调用发布帖子方法
-				mess = changeDeal.saveAEssay(user, type, label, title, department, content,savePath);
+				mess = changeDeal.saveAEssay(user, type, label, title, department, content,savePath,aiteID);
 			}catch(Exception e){
 				mess = "未知错误,发布失败";
 				log.error(mess, e);

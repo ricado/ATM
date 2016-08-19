@@ -205,6 +205,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	  系别：<input type="text" name="department" id="department"/>
  	    内容：<input type="text" name="content" id="content"/>
  	 文件：<input type="file" name="files"/>
+ 	  艾特的人，多个以*#分隔：<input type="text" name="aiteID"/>
  	<input type="file" name="files"/>
  	<input type="submit" value="发布帖子测试"/>
  </form>

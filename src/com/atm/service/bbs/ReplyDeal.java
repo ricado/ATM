@@ -1,6 +1,11 @@
 package com.atm.service.bbs;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +15,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.atm.chat.nio.server.handler.MyMessageHandler;
+import com.atm.dao.bbs.EssayDAO;
 import com.atm.dao.bbs.ReplyDAO;
 import com.atm.daoDefined.bbs.EssayOuterDAO;
 import com.atm.daoDefined.bbs.IsReplyClickGoodViewDAO;
@@ -112,8 +119,9 @@ public class ReplyDeal   implements ObjectInterface{
 		return viewDao.haveFloor(floorId);
 	}
 	//TODO　发布一条新的评论
-	public String saveAReply(HttpServletRequest request,int essayId,String userId,String repliedUserId,String repContent,int floorId,boolean boo){
+	public String saveAReply(HttpServletRequest request,int essayId,UserInfo user,String repliedUserId,String repContent,int floorId,boolean boo) throws NoSuchMethodException, SecurityException, JSONException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException{
 		ReplyDAO replyDao = context.getBean("ReplyDAOImpl",ReplyDAO.class);
+		String userId = user.getUserId();
 		if(!boo){
 			return "楼层"+floorId+"不存在";
 		}
@@ -129,7 +137,22 @@ public class ReplyDeal   implements ObjectInterface{
 		reply.setRepliedUserId(repliedUserId);
 		reply.setUserId(userId);
 		log.debug("保存评论");
-		replyDao.save(reply);
+		Serializable id =  replyDao.save(reply);
+		
+		EssayDAO essayDao = context.getBean("EssayDAOImpl",EssayDAO.class);
+		JSONObject msgJsonStr = new JSONObject();
+		msgJsonStr.put("replyId",id);
+		msgJsonStr.put("nickname", user.getNickname());
+		msgJsonStr.put("floorId", floorId);
+		msgJsonStr.put("essayId", essayId);
+		msgJsonStr.put("essayTitle", essayDao.findById(essayId).getTitle());
+		msgJsonStr.put("userId",userId);
+		msgJsonStr.put("avatar",user.getHeadImagePath());
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		msgJsonStr.put("replyTime",df.format(new Date()));
+		Method m = MyMessageHandler.class.getMethod("sendMyMessage", String.class, int.class,String.class);
+		m.invoke(MyMessageHandler.class.newInstance(),repliedUserId,1,msgJsonStr.toString());
+		
 		return "success";
 	}
 	
