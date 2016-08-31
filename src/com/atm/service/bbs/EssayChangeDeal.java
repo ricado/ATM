@@ -162,7 +162,7 @@ public class EssayChangeDeal implements ObjectInterface{
 		
 		//到“我的消息”
 		if(aiteID!=null){
-			String[] ids = aiteID.split("//*#");
+			String[] ids = aiteID.split("\\*#");
 			Method m = MyMessageHandler.class.getMethod("sendMyMessage", String.class, int.class,String.class);
 			for(String oneId:ids){
 				JSONObject msgJsonStr = new JSONObject();

@@ -102,7 +102,7 @@ public class AtmDeal implements ObjectInterface{
 	//增加举报记录
 	public String saveReport(String userId,int aim,int aimId,String reason){
 		String mess = "未知错误，举报失败";
-		if(reason.length()<=0){
+		if(reason==null||reason.length()<=0){
 			return "未填写举报原因";
 		}
 		if(aim==-1){
@@ -144,7 +144,7 @@ public class AtmDeal implements ObjectInterface{
 			reDao.save(report);
 		}
 	
-		return "成功";
+		return "success";
 	}
 	
 	//用户关注标签

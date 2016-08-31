@@ -24,10 +24,10 @@ import com.atm.util.bbs.ObjectInterface;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
- * @TODO£º
+ * @TODOï¼š
  * @fileName : com.atm.action.AtmAction.java
  * date | author | version |   
- * 2015Äê8ÔÂ14ÈÕ | Jiong | 1.0 |
+ * 2015å¹´8æœˆ14æ—¥ | Jiong | 1.0 |
  */
 public class AtmAction extends ActionSupport implements ServletResponseAware,ServletRequestAware,ObjectInterface {
 	Logger log = Logger.getLogger(getClass()); 
@@ -36,41 +36,41 @@ public class AtmAction extends ActionSupport implements ServletResponseAware,Ser
 	AtmDeal deal = context.getBean("AtmDeal",AtmDeal.class);
 	UserDeal userDeal;
 	
-	 private String id;//ËÑË÷¹Ø¼ü×Ö,»òÓÃ»§ÕËºÅ
+	 private String id;//æœç´¢å…³é”®å­—,æˆ–ç”¨æˆ·è´¦å·
 	 private int page;
 	 
-	 //¾Ù±¨
-	 private String reportReason; //¾Ù±¨Ô­Òò	
-	 private int aim = -1; //¾Ù±¨Ä¿±ê£¨0ÎªÂÛÌ³Ìù£¬1ÎªÕĞÆ¸Ìù£©
-	 private int aimId = -1; //£¨Ìû×ÓId)
+	 //ä¸¾æŠ¥
+	 private String reportReason; //ä¸¾æŠ¥åŸå› 	
+	 private int aim = -1; //ä¸¾æŠ¥ç›®æ ‡ï¼ˆ0ä¸ºè®ºå›è´´ï¼Œ1ä¸ºæ‹›è˜è´´ï¼‰
+	 private int aimId = -1; //ï¼ˆå¸–å­Id)
 	 
-	 //ÓÃ»§±êÇ©
+	 //ç”¨æˆ·æ ‡ç­¾
 	 private String tag;
 	
-	 //Ïµ±ğÈÈÃÅ±êÇ©
+	 //ç³»åˆ«çƒ­é—¨æ ‡ç­¾
 	 private String dno;
 	 private int rows = 9;
 	 
-	//mess:¸øÓÃ»§µÄÌáÊ¾ĞÅÏ¢-----sendJson:×°ÔØmess------resultArray:×°ÔØsendJson¼°Ìû×Ó
+	//mess:ç»™ç”¨æˆ·çš„æç¤ºä¿¡æ¯-----sendJson:è£…è½½mess------resultArray:è£…è½½sendJsonåŠå¸–å­
 		String mess;
 		JSONObject sendJson;
 		JSONArray resultArray;
 		
-		//¶à¸öJSONArrayÊ±ÓÃlist
+		//å¤šä¸ªJSONArrayæ—¶ç”¨list
 /*		List<String> nameList;
 		List<JSONArray> resultList;*/
 		
-		//³õÊ¼»¯
+		//åˆå§‹åŒ–
 		private void init(){
-			mess = "»ñÈ¡Ê§°Ü";
+			mess = "è·å–å¤±è´¥";
 			sendJson  = new JSONObject();
 			resultArray = new JSONArray();
 		}
-		//¼ì²éÓĞÃ»ÓĞ»ñÈ¡µ½Ìû×Ó
+		//æ£€æŸ¥æœ‰æ²¡æœ‰è·å–åˆ°å¸–å­
 		private void check(){
 			if(resultArray == null){
-				mess = "Ã»ÓĞ½á¹û";
-				resultArray = new JSONArray();//ÖØĞÂ³õÊ¼»¯
+				mess = "æ²¡æœ‰ç»“æœ";
+				resultArray = new JSONArray();//é‡æ–°åˆå§‹åŒ–
 			}else{
 				String tip="success";
 				try{
@@ -81,7 +81,7 @@ public class AtmAction extends ActionSupport implements ServletResponseAware,Ser
 				mess = tip;
 			}
 		}
-		//·¢ËÍ½á¹û
+		//å‘é€ç»“æœ
 		private void send(String name){
 			send(name,true);
 		}
@@ -91,7 +91,7 @@ public class AtmAction extends ActionSupport implements ServletResponseAware,Ser
 				if(haveArray){
 					sendJson.put(name,resultArray);
 				}
-				//´ËÊ±ÓĞ¶à¸öJSONarray·Å½øsendJson
+				//æ­¤æ—¶æœ‰å¤šä¸ªJSONarrayæ”¾è¿›sendJson
 				/*if(resultList!=null&&nameList!=null){
 					for(int i=0;i<resultList.size()&&i<nameList.size();i++){
 						sendJson.put(nameList.get(i), resultList.get(i));
@@ -104,23 +104,23 @@ public class AtmAction extends ActionSupport implements ServletResponseAware,Ser
 			sendUtil.writeToClient(response,sendJson);
 		}
 	
-		//TODO »ñÈ¡Ïµ²¿ÁĞ±í
+		//TODO è·å–ç³»éƒ¨åˆ—è¡¨
 	public String deptList(){
-		log.debug("»ñÈ¡Ïµ²¿ÁĞ±íÇëÇó");
+		log.debug("è·å–ç³»éƒ¨åˆ—è¡¨è¯·æ±‚");
 		init();
 		UserInfo user = (UserInfo) request.getSession().getAttribute("user");
 		try {
 			if(user==null){
-				mess="Î´µÇÂ¼";
+				mess="æœªç™»å½•";
 				send("department");
 				return null;
 			}
 			String scNo = user.getScNo();
-			log.debug("»ñÈ¡Ïµ²¿ÁĞ±í");
+			log.debug("è·å–ç³»éƒ¨åˆ—è¡¨");
 			resultArray = deal.getDeptList(scNo);
 			check();	
 		} catch (Exception e) {
-			mess="»ñÈ¡Ìû×Ó·¢Éú´íÎó";
+			mess="è·å–å¸–å­å‘ç”Ÿé”™è¯¯";
 			log.error(mess, e);
 		} 
 		send("department");
@@ -130,35 +130,35 @@ public class AtmAction extends ActionSupport implements ServletResponseAware,Ser
 	
 	
 	
-	//TODO ËÑË÷ÓÃ»§
+	//TODO æœç´¢ç”¨æˆ·
 	public String searchPeople(){
-		log.debug("ËÑË÷ÓÃ»§ÇëÇó");
+		log.debug("æœç´¢ç”¨æˆ·è¯·æ±‚");
 		init();
 		UserService userService = new UserService();
 		try{
-			log.debug("ËÑË÷¹Ø¼ü´Ê£º"+id);
+			log.debug("æœç´¢å…³é”®è¯ï¼š"+id);
 			List<UserList> userLists = userService.findUser(id, page, 20);
 			resultArray = jsonUtil.objectToArray(userLists);
 			sendJson.put("user", resultArray);
 			sendUtil.writeToClient(response, sendJson);
 		}catch(Exception e){
-			mess = "»ñÈ¡Ê§°Ü";
+			mess = "è·å–å¤±è´¥";
 			log.error(mess,e);
 			sendUtil.writeToClient(response, errorJson);
 		}
-	/*	if(mess.equals("³É¹¦"))
-			mess = "³É¹¦_"+resultArray.length();*/
+	/*	if(mess.equals("æˆåŠŸ"))
+			mess = "æˆåŠŸ_"+resultArray.length();*/
 		//send("user");
 		return null;
 	}
 	
-	//TODO ½øÈëÏêÇé
+	//TODO è¿›å…¥è¯¦æƒ…
 	public String personDetail(){
-		log.debug("½øÈëÓÃ»§ÏêÇé");
+		log.debug("è¿›å…¥ç”¨æˆ·è¯¦æƒ…");
 		init();
 		UserService userService = new UserService();
 		try{
-			log.debug("½øÈëÓÃ»§£º"+id);
+			log.debug("è¿›å…¥ç”¨æˆ·ï¼š"+id);
 			if(id!=null&&id.length()!=0){
 				UserBasicInfo basicInfo = userService.getUserBasicInfo(id);
 				sendJson.put("data", jsonUtil.objectToJson(basicInfo));
@@ -167,79 +167,79 @@ public class AtmAction extends ActionSupport implements ServletResponseAware,Ser
 				mess = "id incorrect";
 			}
 		}catch(Exception e){
-			mess = "»ñÈ¡Ê§°Ü";
+			mess = "è·å–å¤±è´¥";
 			log.error(mess,e);
 		}
-		/*if(mess.equals("³É¹¦"))
-			mess = "³É¹¦_"+resultArray.length();*/
+		/*if(mess.equals("æˆåŠŸ"))
+			mess = "æˆåŠŸ_"+resultArray.length();*/
 		send("person",false);
 		return null;
 	}
 	
-	//TODO ËÑË÷Ìû×Ó
+	//TODO æœç´¢å¸–å­
 	public String searchEssay(){
-		log.debug("ËÑË÷Ìû×ÓÇëÇó");
+		log.debug("æœç´¢å¸–å­è¯·æ±‚");
 		init();
 
 		String id = getId();
 		try{
-			log.debug("ËÑË÷¹Ø¼ü´Ê£º"+id);
+			log.debug("æœç´¢å…³é”®è¯ï¼š"+id);
 			resultArray = deal.searchEssayByKey(id,getPage());
 			check();
-			/*if(mess.equals("³É¹¦"))
-				mess = "³É¹¦_"+resultArray.length();*/
+			/*if(mess.equals("æˆåŠŸ"))
+				mess = "æˆåŠŸ_"+resultArray.length();*/
 		}catch(Exception e){
-			mess = "»ñÈ¡Ê§°Ü";
+			mess = "è·å–å¤±è´¥";
 			log.error(mess,e);
 		}
 		send("bbs");
 		return null;
 	}
 	
-	//TODO ¾Ù±¨
+	//TODO ä¸¾æŠ¥
 	public void report(){
 		init();
 		
 		UserInfo user = (UserInfo) request.getSession().getAttribute("user");
 		try {
 			if(user==null){
-				mess="Î´µÇÂ¼";
+				mess="æœªç™»å½•";
 				send("report",false);
 				return;
 			}
 			mess = deal.saveReport(user.getUserId(), aim, aimId, reportReason);
 		} catch (Exception e) {
-			mess="¾Ù±¨·¢Éú´íÎó";
+			mess="ä¸¾æŠ¥å‘ç”Ÿé”™è¯¯";
 			log.error(mess, e);
 		} 
 		send("report",false);	
 	}
 	
 	
-	//TODO »ñÈ¡ÈÈÃÅ±êÇ©
+	//TODO è·å–çƒ­é—¨æ ‡ç­¾
 	public void hotLabel(){
 		String name="tag";
 		init();
-		log.debug("»ñÈ¡ÈÈÃÅ±êÇ©ÇëÇó");
+		log.debug("è·å–çƒ­é—¨æ ‡ç­¾è¯·æ±‚");
 		try {
 			UserInfo user = (UserInfo) request.getSession().getAttribute("user");
 			if(user==null){
-				mess="Î´µÇÂ¼";
+				mess="æœªç™»å½•";
 				send("tag",false);
 				return;
 			}
 			 resultArray = deal.getAttendedLabelName(user.getUserId());
 			 check();
 			 name = "userTag";
-			 //µ±ÓÃ»§Ã»ÓĞ¹Ø×¢±êÇ©Ê±²Å·µ»ØÈÈÃÅ±êÇ©
-			 if(mess.equals("Ã»ÓĞ½á¹û")){
-				log.debug("»ñÈ¡ÈÈÃÅ±êÇ©");
+			 //å½“ç”¨æˆ·æ²¡æœ‰å…³æ³¨æ ‡ç­¾æ—¶æ‰è¿”å›çƒ­é—¨æ ‡ç­¾
+			 if(mess.equals("æ²¡æœ‰ç»“æœ")){
+				log.debug("è·å–çƒ­é—¨æ ‡ç­¾");
 				resultArray =  deal.getHotLabel();
 				mess = "success";
 				name = "hotTag";
 			 }	
 		} catch (Exception e) {
-			mess="»ñÈ¡±êÇ©·¢Éú´íÎó";
+			mess="è·å–æ ‡ç­¾å‘ç”Ÿé”™è¯¯";
 			log.error(mess, e);
 		}
 		send(name);
@@ -248,72 +248,72 @@ public class AtmAction extends ActionSupport implements ServletResponseAware,Ser
 	public void hotDeptLabel(){
 		String name = "hotTag";
 		init();
-		log.debug("»ñÈ¡Ïµ±ğÈÈÃÅ±êÇ©ÇëÇó:id:"+id);
+		log.debug("è·å–ç³»åˆ«çƒ­é—¨æ ‡ç­¾è¯·æ±‚:id:"+id);
 		try {
 				resultArray =  deal.getHotLabelByDno(id, rows);
 				mess = "success";
 		} catch (Exception e) {
-			mess="»ñÈ¡±êÇ©·¢Éú´íÎó";
+			mess="è·å–æ ‡ç­¾å‘ç”Ÿé”™è¯¯";
 			log.error(mess, e);
 		}
 		send(name);
 	}
 	
-	//ÓÃ»§Ìí¼Ó×Ô¼ºµÄ±êÇ©
+	//ç”¨æˆ·æ·»åŠ è‡ªå·±çš„æ ‡ç­¾
 	public void attTag(){
 		init();
 		UserInfo user = (UserInfo) request.getSession().getAttribute("user");
 		try {
 			if(user==null){
-				mess="Î´µÇÂ¼";
+				mess="æœªç™»å½•";
 				send("tag",false);
 				return;
 			}
 			mess = deal.saveAttTag(user.getUserId(), tag);
 		} catch (Exception e) {
-			mess="·¢Éú´íÎó";
+			mess="å‘ç”Ÿé”™è¯¯";
 			log.error(mess, e);
 		} 
 		send("tag",false);	
 		
 	}
-	//ÓÃ»§É¾³ı×Ô¼ºµÄ±êÇ©
+	//ç”¨æˆ·åˆ é™¤è‡ªå·±çš„æ ‡ç­¾
 	public void cancelTag(){
 		init();
 		UserInfo user = (UserInfo) request.getSession().getAttribute("user");
 		try {
 			if(user==null){
-				mess="Î´µÇÂ¼";
+				mess="æœªç™»å½•";
 				send("tag",false);
 				return;
 			}
 			mess = deal.deleteAttTag(user.getUserId(), tag);
 		} catch (Exception e) {
-			mess="·¢Éú´íÎó";
+			mess="å‘ç”Ÿé”™è¯¯";
 			log.error(mess, e);
 		} 
 		send("tag",false);	
 	}
-	//»ñÈ¡ÓÃ»§Í·ÏñÂ·¾¶
+	//è·å–ç”¨æˆ·å¤´åƒè·¯å¾„
 	public void getUserHead(){
 		init();
 		UserInfo user = (UserInfo) request.getSession().getAttribute("user");
 		try {
 			if(user==null){
-				mess="Î´µÇÂ¼";
+				mess="æœªç™»å½•";
 				send("",false);
 				return;
 			}
 			String userHead = deal.getUserHead(user.getUserId());
 			if(userHead==null){
-				mess = "ÓÃ»§²»´æÔÚ";
+				mess = "ç”¨æˆ·ä¸å­˜åœ¨";
 				send("",false);
 			}else{
 				sendJson.put("userHead",userHead);
 				sendUtil.writeToClient(response,sendJson);
 			}
 		} catch (Exception e) {
-			mess="·¢Éú´íÎó";
+			mess="å‘ç”Ÿé”™è¯¯";
 			log.error(mess, e);
 		} 
 	}

@@ -41,16 +41,16 @@ import com.atm.model.define.bbs.LabelView;
 import com.atm.util.bbs.ObjectInterface;
 
 /**
- * @TODO£ºÌû×ÓÂß¼­ÒµÎñ´¦Àí
+ * @TODOï¼šå¸–å­é€»è¾‘ä¸šåŠ¡å¤„ç†
  * @fileName : com.atm.service.EssayDeal.java
  * date | author | version |   
- * 2015Äê7ÔÂ30ÈÕ | Jiong | 1.0 |
+ * 2015å¹´7æœˆ30æ—¥ | Jiong | 1.0 |
  */
 public class EssayDeal implements ObjectInterface{
 	Logger log = Logger.getLogger(getClass());
 	private JSONArray sendArray;
 	
-	//³õÊ¼»¯
+	//åˆå§‹åŒ–
 	private void init(){
 		sendArray = new JSONArray();
 	}
@@ -58,15 +58,15 @@ public class EssayDeal implements ObjectInterface{
 	
 	//TODO***********************
 	/*
-	 * »ñÈ¡Ö÷Ò³ÃæÏÔÊ¾µÄÌû×Ó(ÈÈÃÅ£¬×îĞÂ)
+	 * è·å–ä¸»é¡µé¢æ˜¾ç¤ºçš„å¸–å­(çƒ­é—¨ï¼Œæœ€æ–°)
 	 */
 	public JSONArray getMainEssay() throws JSONException, IOException{
 		EssayOuterDAO essayOuterDao = 
 				context.getBean("EssayOuterDAO",EssayOuterDAO.class);
 		
-		//»ñÈ¡ÈÈÃÅÌù
+		//è·å–çƒ­é—¨è´´
 		List<EssayOuter> list = essayOuterDao.getSomeEssay(0,5,"replyNum");
-		if(list.size()==0){//È¡²»µ½Öµ
+		if(list.size()==0){//å–ä¸åˆ°å€¼
 			return null;
 		}
 		list.get(0).setFlag("hot");
@@ -74,33 +74,33 @@ public class EssayDeal implements ObjectInterface{
 		
 		String hotEssay = jsonUtil.objectToArray(list,false).toString();
 		
-		//»ñÈ¡×îĞÂÌù
+		//è·å–æœ€æ–°è´´
 		list = essayOuterDao.getSomeEssay(0,10,"publishTime");;
 		list.get(0).setFlag("new");
 		String currentEssay = jsonUtil.objectToArray(list,false).toString();
-		//ºÏ²¢Á½¸öarray
+		//åˆå¹¶ä¸¤ä¸ªarray
 		String essay = hotEssay+currentEssay;
 		essay = essay.replace("][", ",");
 		return new JSONArray(essay);
 	}
 	
 	
-	//TODO »ñÈ¡Ê®Ìõ´ÓÓÃ»§Ë¢ĞÂ´¦(index)ËãÆğµÄ×îĞÂÌù
+	//TODO è·å–åæ¡ä»ç”¨æˆ·åˆ·æ–°å¤„(index)ç®—èµ·çš„æœ€æ–°è´´
 	public JSONArray getTenEssay(HttpServletRequest request,int index) throws IOException, JSONException{
 		EssayOuterDAO essayOuterDao = 
 				context.getBean("EssayOuterDAO",EssayOuterDAO.class);
 		if(index<0){
 			index = 0;
 		}
-		List list = essayOuterDao.getCurrentEssay(index);//´ÓµÚindex´¦È¡Ê®Ìõ×îĞÂÌû×Ó
-		if(list.size()==0){ //»ñÈ¡²»µ½Ìû×ÓÁË£¬·µ»Ønull
+		List list = essayOuterDao.getCurrentEssay(index);//ä»ç¬¬indexå¤„å–åæ¡æœ€æ–°å¸–å­
+		if(list.size()==0){ //è·å–ä¸åˆ°å¸–å­äº†ï¼Œè¿”å›null
 			return null;
 		}
 		return jsonUtil.objectToArray(list);
 	}
 	
 	
-	//TODO »ñÈ¡Ïµ±ğÌù
+	//TODO è·å–ç³»åˆ«è´´
 	public JSONArray getDeptEssay(HttpServletRequest request,String dNo,int index) throws JSONException, IOException{
 		EssayOuterDAO essayOuterDao = 
 				context.getBean("EssayOuterDAO",EssayOuterDAO.class);
@@ -109,7 +109,7 @@ public class EssayDeal implements ObjectInterface{
 		
 		/*List deptList = (List) deptDao.findById(dNo);
 		if(deptList.size()==0){
-			return new JSONArray("[{'tip':'ÕÒ²»µ½¸ÃÏµ±ğ'}]");
+			return new JSONArray("[{'tip':'æ‰¾ä¸åˆ°è¯¥ç³»åˆ«'}]");
 		}
 		*/
 		//String dNo = ((Department) deptList.get(0)).getDno();
@@ -117,12 +117,12 @@ public class EssayDeal implements ObjectInterface{
 			index = 0;
 		}
 		
-		List list = essayOuterDao.getDeptEssay(index,dNo);//´ÓµÚfirst´¦È¡Ê®Ìõ×îĞÂÌû×Ó
+		List list = essayOuterDao.getDeptEssay(index,dNo);//ä»ç¬¬firstå¤„å–åæ¡æœ€æ–°å¸–å­
 		return jsonUtil.objectToArray(list,false);
 	}
 	
 	
-	//TODO »ñÈ¡¹Ø×¢ÈËºÍ±êÇ©µÄÌù
+	//TODO è·å–å…³æ³¨äººå’Œæ ‡ç­¾çš„è´´
 	public JSONArray getAttendEssay(HttpServletRequest request,String userId,int index) throws JSONException, IOException{
 		PeopleAttentionAssociationDAO attendDao = 
 				context.getBean("PeopleAttentionAssociationDAOImpl",PeopleAttentionAssociationDAO.class);
@@ -132,28 +132,28 @@ public class EssayDeal implements ObjectInterface{
 				context.getBean("LabelAttentionAssociationDAOImpl",LabelAttentionAssociationDAO.class);
 		boolean haveSomething = false;
 		
-		log.debug("»ñÈ¡¹Ø×¢ÕßÕËºÅ¼¯ºÏ"+userId);
+		log.debug("è·å–å…³æ³¨è€…è´¦å·é›†åˆ"+userId);
 		List userList = attendDao.findByAttendUserId(userId);
 		List<String> ids = new ArrayList<String>();
 		if(userList.size()>0){
 			haveSomething = true;	
 		}
-		//È¡³ö¹Ø×¢¹ØÏµÖĞµÄ±»¹Ø×¢Õß
+		//å–å‡ºå…³æ³¨å…³ç³»ä¸­çš„è¢«å…³æ³¨è€…
 		for(int i=0;i<userList.size();i++){
 			String aId = ((PeopleAttentionAssociation)userList.get(i)).getUserAttendedId();
 			ids.add(aId);
 		}
-		log.debug("±»¹Ø×¢Õß²éÑ¯Ìõ¼ş"+ids.toString());
+		log.debug("è¢«å…³æ³¨è€…æŸ¥è¯¢æ¡ä»¶"+ids.toString());
 		
-		log.debug("»ñÈ¡¹Ø×¢µÄ±êÇ©±àºÅ¼¯ºÏ");
+		log.debug("è·å–å…³æ³¨çš„æ ‡ç­¾ç¼–å·é›†åˆ");
 		List labelList = labelAttDao.findByUserId(userId);
 		if(labelList.size()>0){
 			haveSomething = true;
 		}
 		if(!haveSomething){
-			return new JSONArray("[{'tip':'Î´¹Ø×¢ËûÈË»ò±êÇ©'}]");
+			return new JSONArray("[{'tip':'æœªå…³æ³¨ä»–äººæˆ–æ ‡ç­¾'}]");
 		}
-		//½«»ñÈ¡µÄ±êÇ©¹ØÏµÈ¡³ö±êÇ©IDÀ´´Õ³Ésql²éÑ¯µÄÌõ¼ş
+		//å°†è·å–çš„æ ‡ç­¾å…³ç³»å–å‡ºæ ‡ç­¾IDæ¥å‡‘æˆsqlæŸ¥è¯¢çš„æ¡ä»¶
 		String labelCondition = "";
 		for(int i=0;i<labelList.size();i++){
 			labelCondition += "FIND_IN_SET('"+((LabelAttentionAssociation)labelList.get(i)).getLabId()+"',labId)";
@@ -161,17 +161,17 @@ public class EssayDeal implements ObjectInterface{
 				labelCondition += " or ";
 			}
 		}
-		log.debug("±êÇ©²éÑ¯Ìõ¼ş£º"+labelCondition);
+		log.debug("æ ‡ç­¾æŸ¥è¯¢æ¡ä»¶ï¼š"+labelCondition);
 		
 		if(index<0){
 			index = 0;
 		}
-		log.debug("»ñÈ¡¹Ø×¢ÈËºÍ±êÇ©µÄÌû×Ó");
+		log.debug("è·å–å…³æ³¨äººå’Œæ ‡ç­¾çš„å¸–å­");
 		List list = essayDao.getAttendEssay(index, ids,labelCondition);
 		if(list.size()==0){
 			return null;
 		}
-		//É¾³ı²»ĞèÒª·¢¸ø¿Í»§¶ËµÄÊôĞÔ
+		//åˆ é™¤ä¸éœ€è¦å‘ç»™å®¢æˆ·ç«¯çš„å±æ€§
 		for(int i=0;i<list.size();i++){
 			((EssayOuter) list.get(i)).setFullContent(null);
 			((EssayOuter) list.get(i)).setDepartment(null);
@@ -181,7 +181,7 @@ public class EssayDeal implements ObjectInterface{
 		return jsonUtil.objectToArray(list,false);
 	}
 	
-	//TODO »ñÈ¡±êÇ©Ìû×Ó
+	//TODO è·å–æ ‡ç­¾å¸–å­
 	public JSONArray tagEssay(String tagName,int index) throws JSONException, IOException{
 		EssayOuterDAO essayDao = 
 				context.getBean("EssayOuterDAO",EssayOuterDAO.class);
@@ -195,7 +195,7 @@ public class EssayDeal implements ObjectInterface{
 		String labelCondition = 
 				"FIND_IN_SET('"+label.getLabId()+"',labId)";
 		List list = essayDao.getAttendEssay(index, null,labelCondition);
-		//É¾³ı²»ĞèÒª·¢¸ø¿Í»§¶ËµÄÊôĞÔ
+		//åˆ é™¤ä¸éœ€è¦å‘ç»™å®¢æˆ·ç«¯çš„å±æ€§
 		for(int i=0;i<list.size();i++){
 			((EssayOuter) list.get(i)).setFullContent(null);
 			((EssayOuter) list.get(i)).setDepartment(null);
@@ -206,7 +206,7 @@ public class EssayDeal implements ObjectInterface{
 		
 	}
 	
-	//TODO »ñÈ¡ÓÃ»§·¢²¼µÄºÍÊÕ²ØµÄÒ»ÌõÌû×Ó
+	//TODO è·å–ç”¨æˆ·å‘å¸ƒçš„å’Œæ”¶è—çš„ä¸€æ¡å¸–å­
 	public JSONArray getUserEssay(String userId) throws JSONException, IOException{
 		init();
 		CollectEssayViewDAO collectEssayDao =
@@ -219,10 +219,10 @@ public class EssayDeal implements ObjectInterface{
 		List list2 = essayOuterDao.getPublishedEssay(userId,0,1);
 		int publishNum = essayOuterDao.getPublishedEssayNum(userId);
 		
-		if(list1.size()!=0){//0´¦´æ·ÅÊÕ²ØÌù
+		if(list1.size()!=0){//0å¤„å­˜æ”¾æ”¶è—è´´
 			sendArray.put(0,jsonUtil.objectToJson(list1.get(0),false).put("num",collectNum));
 		}
-		if(list2.size()!=0){//1´¦´æ·Å·¢²¼Ìù
+		if(list2.size()!=0){//1å¤„å­˜æ”¾å‘å¸ƒè´´
 			sendArray.put(1,jsonUtil.objectToJson(list2.get(0),false).put("num", publishNum));
 		}
 		
@@ -230,14 +230,14 @@ public class EssayDeal implements ObjectInterface{
 		
 	}
 	
-	//TODO  »ñÈ¡ÓÃ»§£¨userId)ÊÕ²ØµÄÌû×Ó
+	//TODO  è·å–ç”¨æˆ·ï¼ˆuserId)æ”¶è—çš„å¸–å­
 	public JSONArray getCollectedEssay(HttpServletRequest request,String userId,int index) throws IOException, JSONException {
 		init();
 		CollectEssayViewDAO collectEssayDao =
 				context.getBean("CollectEssayViewDAO",CollectEssayViewDAO.class);
 		List list = collectEssayDao.findByUserId(userId,index);
 		
-		if(list.size()==0){ //»ñÈ¡²»µ½Ìû×ÓÁË£¬·µ»Ønull
+		if(list.size()==0){ //è·å–ä¸åˆ°å¸–å­äº†ï¼Œè¿”å›null
 			return null;
 		}
 		
@@ -246,8 +246,8 @@ public class EssayDeal implements ObjectInterface{
 	}
 	
 	/*
-	 //TODO  »ñÈ¡ÓÃ»§·¢²¼µÄÌû×Ó
-	 * ´«Èë²ÎÊı£ºessayId£ºÌû×Ó±àºÅ--------userId:ÓÃ»§ÕËºÅ
+	 //TODO  è·å–ç”¨æˆ·å‘å¸ƒçš„å¸–å­
+	 * ä¼ å…¥å‚æ•°ï¼šessayIdï¼šå¸–å­ç¼–å·--------userId:ç”¨æˆ·è´¦å·
 	 */
 	public JSONArray getPublishedEssay(HttpServletRequest request,String userId,int index) throws IOException, JSONException{
 		init();
@@ -255,25 +255,25 @@ public class EssayDeal implements ObjectInterface{
 				context.getBean("EssayOuterDAO",EssayOuterDAO.class);
 		List list = essayOuterDao.getPublishedEssay(userId, index,10);
 		
-		if(list.size()==0){ //»ñÈ¡²»µ½Ìû×ÓÁË£¬·µ»Ønull
+		if(list.size()==0){ //è·å–ä¸åˆ°å¸–å­äº†ï¼Œè¿”å›null
 			return null;
 		}
 		return jsonUtil.objectToArray(list,false);
 	}
 	
-	//TODO ÓÃ»§ÆÀÂÛ¹ıµÄÌû×Ó
+	//TODO ç”¨æˆ·è¯„è®ºè¿‡çš„å¸–å­
 	public JSONArray getRepliedEssay(String userId,int page,int rows) throws JSONException, IOException{
 		init();
 		EssayOuterDAO essayOuterDao = 
 				context.getBean("EssayOuterDAO",EssayOuterDAO.class);
 		List<String> list = essayOuterDao.getRepliedEssay(userId, rows, page);
-		if(list.size()==0){ //»ñÈ¡²»µ½Ìû×ÓÁË£¬·µ»Ønull
+		if(list.size()==0){ //è·å–ä¸åˆ°å¸–å­äº†ï¼Œè¿”å›null
 			return null;
 		}
 		return jsonUtil.objectToArray(list,false);
 	}
 	
-	//TODO¡¡¿Í»§¶Ë½øÈëÌû×ÓÏêÇéºóĞèÒª²ÎÊı
+	//TODOã€€å®¢æˆ·ç«¯è¿›å…¥å¸–å­è¯¦æƒ…åéœ€è¦å‚æ•°
 	public JSONObject getContent(HttpServletRequest request,int essayId,String userId) throws JSONException, IOException{
 		EssayDetailViewDAO essayDetailDao =
 				context.getBean("EssayDetailViewDAO",EssayDetailViewDAO.class);
@@ -281,18 +281,18 @@ public class EssayDeal implements ObjectInterface{
 				context.getBean("ClickGoodViewDAO",ClickGoodViewDAO.class);
 		CollectEssayViewDAO collectEssayDao = 
 				context.getBean("CollectEssayViewDAO",CollectEssayViewDAO.class);
-		log.debug("»ñÈ¡Ìû×Ó£º"+essayId);
+		log.debug("è·å–å¸–å­ï¼š"+essayId);
 		EssayDetailView essayDetail = essayDetailDao.findSomeValue(essayId);
-		if(essayDetail==null){//»ñÈ¡²»µ½Ìû×Ó
+		if(essayDetail==null){//è·å–ä¸åˆ°å¸–å­
 			return null;
 		}
 		log.debug(">>>"+jsonUtil.objectToJson(essayDetail));
-		//²éÑ¯ÊÇ·ñÒÑµãÔŞ
+		//æŸ¥è¯¢æ˜¯å¦å·²ç‚¹èµ
 		boolean isClickGood = false;
-		//²éÑ¯ÊÇ·ñÒÑÊÕ²Ø
+		//æŸ¥è¯¢æ˜¯å¦å·²æ”¶è—
 		boolean isCollect = false;
 		if(userId!=null){
-			log.debug("ÑéÖ¤ÓÃ»§Óë±¾Ìû¹ØÏµ");
+			log.debug("éªŒè¯ç”¨æˆ·ä¸æœ¬å¸–å…³ç³»");
 			ClickGoodView clickGood = clickGoodDao.findById(userId+"_"+essayId);
 			if(clickGood!=null){
 				isClickGood = true;
@@ -308,17 +308,17 @@ public class EssayDeal implements ObjectInterface{
 		return jsonUtil.objectToJson(essayDetail, false);
 	}
 	/*
-	 //TODO ½øÈëÌû×ÓÏêÇé
-	 * ´«Èë²ÎÊı£ºessayId£ºÌû×Ó±àºÅ
+	 //TODO è¿›å…¥å¸–å­è¯¦æƒ…
+	 * ä¼ å…¥å‚æ•°ï¼šessayIdï¼šå¸–å­ç¼–å·
 	 * read-only = false;
 	 */
 	public String essayDetail(HttpServletRequest request,int essayId) throws IOException, JSONException{
 
 		EssayDetailViewDAO essayDetailDao =
 				context.getBean("EssayDetailViewDAO",EssayDetailViewDAO.class);	
-		//»ñÈ¡Ìû×ÓÏêÏ¸ÄÚÈİ
+		//è·å–å¸–å­è¯¦ç»†å†…å®¹
 		EssayDetailView essayDetail = essayDetailDao.findById(essayId);
-		if(essayDetail==null){//»ñÈ¡²»µ½Ìû×Ó
+		if(essayDetail==null){//è·å–ä¸åˆ°å¸–å­
 			return null;
 		}
 		
@@ -327,11 +327,11 @@ public class EssayDeal implements ObjectInterface{
 		
 	
 		List pathList  = dao.findByProperty("essayId", essayId);
-		log.debug("ÎÄ¼şÂ·¾¶ÊıÁ¿:"+pathList.size());
+		log.debug("æ–‡ä»¶è·¯å¾„æ•°é‡:"+pathList.size());
 		//List temp = new ArrayList();
 		String photoPath = "";
 		if(pathList.size()>0){
-			//½«ÊµÌåÖĞµÄÂ·¾¶ÊôĞÔÈ¡³ö£¬È¡´úÊµÌå
+			//å°†å®ä½“ä¸­çš„è·¯å¾„å±æ€§å–å‡ºï¼Œå–ä»£å®ä½“
 			for(int i=0;i<pathList.size();i++){
 				EssayPhoto p = (EssayPhoto) pathList.get(i);
 				if(i==0){
@@ -342,20 +342,20 @@ public class EssayDeal implements ObjectInterface{
 				//pathList.remove(i);
 				//pathList.add(i,p.getPhotoPath());
 			}
-			log.debug("±£´æÍ¼Æ¬Â·¾¶µ½request");
+			log.debug("ä¿å­˜å›¾ç‰‡è·¯å¾„åˆ°request");
 			request.setAttribute("photoPath", photoPath.replaceAll("\\\\", "/"));
 		}
 		
-		log.debug("±£´æÌû×ÓĞÅÏ¢µ½request");
+		log.debug("ä¿å­˜å¸–å­ä¿¡æ¯åˆ°request");
 		request.setAttribute("essayBean", essayDetail);
 		
-		log.debug("EssayDeal·½·¨½áÊø");
+		log.debug("EssayDealæ–¹æ³•ç»“æŸ");
 		
 		return "success";
 	}
  
 	/*
-	 * »ñÈ¡Ìû×ÓµãÔŞÕß
+	 * è·å–å¸–å­ç‚¹èµè€…
 	 */
 	public String getClickGoodPeople(HttpServletRequest request,int essayId,int first){
 		ClickGoodViewDAO clickGoodDao = 
@@ -365,7 +365,7 @@ public class EssayDeal implements ObjectInterface{
 		return "success";
 	}
 	/*
-	 * ¸ü¶àµãÔŞÕß
+	 * æ›´å¤šç‚¹èµè€…
 	 */
 	public JSONArray getMorePeople(int essayId,int first) throws JSONException, IOException{
 		ClickGoodViewDAO clickGoodDao = 
@@ -373,7 +373,7 @@ public class EssayDeal implements ObjectInterface{
 		List list = clickGoodDao.findByEssayId(essayId,first);
 		return jsonUtil.objectToArray(list);
 	}
-	//TODO µãÔŞºÍÈ¡ÏûÔŞ²Ù×÷
+	//TODO ç‚¹èµå’Œå–æ¶ˆèµæ“ä½œ
 	public String saveOrDeleteClickGood(HttpServletRequest request,int essayId,boolean isClickGood,String userId){
 		ClickGoodDAO clickGoodDao = 
 				context.getBean("ClickGoodDAOImpl",ClickGoodDAO.class);
@@ -382,17 +382,17 @@ public class EssayDeal implements ObjectInterface{
 		clickGoodId.setEssayId(essayId);
 		clickGoodId.setUserId(userId);
 		clickGood.setId(clickGoodId);
-		//ÒÑµãÔŞ£¬ÔòÖ´ĞĞÈ¡ÏûµãÔŞ²Ù×÷
+		//å·²ç‚¹èµï¼Œåˆ™æ‰§è¡Œå–æ¶ˆç‚¹èµæ“ä½œ
 		if(isClickGood){
-			log.debug("È¡ÏûµãÔŞ²Ù×÷");
+			log.debug("å–æ¶ˆç‚¹èµæ“ä½œ");
 			clickGoodDao.delete(clickGood);
 		}else{
-			log.debug("Ôö¼ÓµãÔŞ¼ÇÂ¼");
+			log.debug("å¢åŠ ç‚¹èµè®°å½•");
 			clickGoodDao.attachDirty(clickGood);
 		}
 		return "success";
 	}
-	//TODO ÊÕ²ØºÍÈ¡ÏûÊÕ²Ø²Ù×÷
+	//TODO æ”¶è—å’Œå–æ¶ˆæ”¶è—æ“ä½œ
 		public String saveOrDeleteCollect(HttpServletRequest request,int essayId,boolean isCollect,String userId){
 			CollectEssayDAO collectDao = 
 					context.getBean("CollectEssayDAOImpl",CollectEssayDAO.class);
@@ -401,12 +401,12 @@ public class EssayDeal implements ObjectInterface{
 			collectEssayId.setEssayId(essayId);
 			collectEssayId.setUserId(userId);
 			collectEssay.setId(collectEssayId);
-			//ÒÑÊÕ²Ø£¬ÔòÖ´ĞĞÈ¡ÏûÊÕ²Ø²Ù×÷
+			//å·²æ”¶è—ï¼Œåˆ™æ‰§è¡Œå–æ¶ˆæ”¶è—æ“ä½œ
 			if(isCollect){
-				log.debug("È¡ÏûÊÕ²Ø²Ù×÷");
+				log.debug("å–æ¶ˆæ”¶è—æ“ä½œ");
 				collectDao.delete(collectEssay);
 			}else{
-				log.debug("Ôö¼ÓÊÕ²Ø¼ÇÂ¼");
+				log.debug("å¢åŠ æ”¶è—è®°å½•");
 				collectDao.attachDirty(collectEssay);
 			}
 			return "success";
