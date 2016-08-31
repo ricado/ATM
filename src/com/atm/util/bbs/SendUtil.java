@@ -11,7 +11,7 @@ import org.json.JSONObject;
 public class SendUtil {
 	Logger log = Logger.getLogger(getClass());
 	/**
-	 * @·½·¨ °Ñresult·¢ËÍ¸ø¿Í»§¶Ë
+	 * @æ–¹æ³• æŠŠresultå‘é€ç»™å®¢æˆ·ç«¯
 	 * @author Jiong
 	 * @param response
 	 * @param result
@@ -20,7 +20,7 @@ public class SendUtil {
 	public boolean writeToClient(HttpServletResponse response,String sendString){
 		boolean ok = false;
 		response.setContentType("text/json; charset=utf-8");
-		//response.setHeader("Cache-Control", "no-cache"); //È¡Ïûä¯ÀÀÆ÷»º´æ
+		//response.setHeader("Cache-Control", "no-cache"); //å–æ¶ˆæµè§ˆå™¨ç¼“å­˜
 		PrintWriter out;
 		try {
 			out = response.getWriter();
@@ -31,8 +31,8 @@ public class SendUtil {
 			if(strNum>100){
 				sendString = sendString.substring(0, 40)+"..."+sendString.substring(strNum-40, strNum);
 			}
-			log.debug("·¢ËÍing£º"+strNum+":"+sendString);
-			//log.debug("·¢ËÍ£º"+sendString.length()+"¸ö×Ö·û");
+			log.debug("å‘é€ingï¼š"+strNum+":"+sendString);
+			//log.debug("å‘é€ï¼š"+sendString.length()+"ä¸ªå­—ç¬¦");
 			ok = true;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

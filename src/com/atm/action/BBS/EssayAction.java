@@ -21,21 +21,21 @@ import com.opensymphony.xwork2.ActionSupport;
 public class EssayAction extends ActionSupport implements ServletResponseAware,ServletRequestAware,ObjectInterface {
 	Logger log = Logger.getLogger(getClass());
 	
-	private String ids; //ÅúÁ¿id
+	private String ids; //æ‰¹é‡id
 	private int essayId;
-	private int first = 0;//ÆğÊ¼Î»ÖÃ
-	private int page = 0;//Ìû×ÓÁĞ±íÒÑÏÔÊ¾Ìû×ÓÊı
+	private int first = 0;//èµ·å§‹ä½ç½®
+	private int page = 0;//å¸–å­åˆ—è¡¨å·²æ˜¾ç¤ºå¸–å­æ•°
 	private String id;
 	private int rows = 0;
 	
-	private boolean clickGood;//ÊÇ·ñµãÔŞ
-	private boolean collect;//ÊÇ·ñÊÕ²Ø
+	private boolean clickGood;//æ˜¯å¦ç‚¹èµ
+	private boolean collect;//æ˜¯å¦æ”¶è—
 	
-	private String deptName;//²éÕÒÏµ±ğÌû×Ó
+	private String deptName;//æŸ¥æ‰¾ç³»åˆ«å¸–å­
 	
-	private String tag; //±êÇ©Ìû×Ó
+	private String tag; //æ ‡ç­¾å¸–å­
 	
-	//·¢Ìû²ÎÊı
+	//å‘å¸–å‚æ•°
 	private String type;
 	private String title;
 	private String content;
@@ -44,27 +44,27 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 	
 	private HttpServletRequest request;
 	private HttpServletResponse response;
-	EssayDeal deal = //Ö»¶ÁÏà¹Ø²Ù×÷
+	EssayDeal deal = //åªè¯»ç›¸å…³æ“ä½œ
 			(EssayDeal) context.getBean("EssayDeal");
-	EssayChangeDeal changeDeal = //¸üĞÂ±£´æÏà¹Ø²Ù×÷
+	EssayChangeDeal changeDeal = //æ›´æ–°ä¿å­˜ç›¸å…³æ“ä½œ
 			context.getBean("EssayChangeDeal",EssayChangeDeal.class);
 	
-	//mess:¸øÓÃ»§µÄÌáÊ¾ĞÅÏ¢-----sendJson:×°ÔØmess------resultArray:×°ÔØÌû×Ó
+	//mess:ç»™ç”¨æˆ·çš„æç¤ºä¿¡æ¯-----sendJson:è£…è½½mess------resultArray:è£…è½½å¸–å­
 	String mess;
 	JSONObject sendJson;
 	JSONArray resultArray;
 	
-	//³õÊ¼»¯
+	//åˆå§‹åŒ–
 	private void init(){
-		mess = "»ñÈ¡Ê§°Ü";
+		mess = "è·å–å¤±è´¥";
 		sendJson  = new JSONObject();
 		resultArray = new JSONArray();
 	}
-	//¼ì²éÓĞÃ»ÓĞ»ñÈ¡µ½Ìû×Ó
+	//æ£€æŸ¥æœ‰æ²¡æœ‰è·å–åˆ°å¸–å­
 	private void check(){
 		if(resultArray == null){
-			mess = "Ã»ÓĞÌû×Ó";
-			resultArray = new JSONArray();//ÖØĞÂ³õÊ¼»¯
+			mess = "æ²¡æœ‰å¸–å­";
+			resultArray = new JSONArray();//é‡æ–°åˆå§‹åŒ–
 		}else{
 			String tip="success";
 			try{
@@ -76,7 +76,7 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 			mess = tip;
 		}
 	}
-	//·¢ËÍ½á¹û
+	//å‘é€ç»“æœ
 	private void send(){
 		send("bbs");
 	}
@@ -91,12 +91,12 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 		sendUtil.writeToClient(response,sendJson);
 	}
 	
-	//TODO*****************Ìø×ª****************************
+	//TODO*****************è·³è½¬****************************
 	
 	int hotNum = 5;
-	//Ìø×ª»ñÈ¡Ö÷½çÃæÌû×Ó,¼°ÉÏÀ­Ë¢ĞÂ
+	//è·³è½¬è·å–ä¸»ç•Œé¢å¸–å­,åŠä¸Šæ‹‰åˆ·æ–°
 	public String mainEssay(){
-		log.debug("»ñÈ¡Ö÷½çÃæÌû×ÓÇëÇó");
+		log.debug("è·å–ä¸»ç•Œé¢å¸–å­è¯·æ±‚");
 		/*try{
 			Cookie[] cookies = request.getCookies();
 			for(int i=0;i<cookies.length;i++){
@@ -109,8 +109,8 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 		init();
 		try {
 			
-			int index = getPage();//È¡³ö¿Í»§¶Ë´«¹ıÀ´µÄÌû×ÓÎ»ÖÃ
-			log.debug(">>>>>>>>>>>>>µÚ"+index+"Ìõ");
+			int index = getPage();//å–å‡ºå®¢æˆ·ç«¯ä¼ è¿‡æ¥çš„å¸–å­ä½ç½®
+			log.debug(">>>>>>>>>>>>>ç¬¬"+index+"æ¡");
 			if(index==0){
 				resultArray = deal.getMainEssay();
 				int length = resultArray.length();
@@ -120,7 +120,7 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 					hotNum = length/2;
 				}
 			}else{
-				index = index - hotNum;//Ë÷Òı¼õÈ¥3£¬ÒòÎª»ñÈ¡ÁË3ÌõÈÈÃÅÌû
+				index = index - hotNum;//ç´¢å¼•å‡å»3ï¼Œå› ä¸ºè·å–äº†3æ¡çƒ­é—¨å¸–
 				if(index<0){
 					index = 0;
 				}
@@ -128,7 +128,7 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 			}
 			check();
 		} catch(Exception e){
-			mess = "»ñÈ¡Ìû×Ó·¢Éú´íÎó";
+			mess = "è·å–å¸–å­å‘ç”Ÿé”™è¯¯";
 			log.error(mess, e);
 		}
 		send();
@@ -136,74 +136,74 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 	}
 	
 	public String deptEssay(){
-		log.debug("»ñÈ¡ÔºÏµÌû×ÓÇëÇó");
+		log.debug("è·å–é™¢ç³»å¸–å­è¯·æ±‚");
 		init();
-		//»ñÈ¡ÓÃ»§µÇÂ½ĞÅÏ¢
+		//è·å–ç”¨æˆ·ç™»é™†ä¿¡æ¯
 		/*UserInfo user = (UserInfo) request.getSession().getAttribute("user");
 		if(user==null){
-			mess = "ÓÃ»§Î´µÇÂ½";
+			mess = "ç”¨æˆ·æœªç™»é™†";
 			send();
 			return null;
 		}*/
-		int index = getPage();//È¡³ö¿Í»§¶Ë´«¹ıÀ´µÄÌû×ÓÎ»ÖÃ
+		int index = getPage();//å–å‡ºå®¢æˆ·ç«¯ä¼ è¿‡æ¥çš„å¸–å­ä½ç½®
 		try {
-			log.debug(">>>>>>>>>>>>>>>>>>>>»ñÈ¡Ïµ±ğÌû×Ó"+getId());
+			log.debug(">>>>>>>>>>>>>>>>>>>>è·å–ç³»åˆ«å¸–å­"+getId());
 			resultArray = deal.getDeptEssay(request, getId(), index);
 			check();
 		} catch(Exception e){
-			mess = "»ñÈ¡Ìû×Ó·¢Éú´íÎó";
+			mess = "è·å–å¸–å­å‘ç”Ÿé”™è¯¯";
 			log.error(mess, e);
 		}
 		send();
 		return null;
 	}
 	
-	//»ñÈ¡¹Ø×¢Ìù£¨±êÇ©£¬ÈË£©
+	//è·å–å…³æ³¨è´´ï¼ˆæ ‡ç­¾ï¼Œäººï¼‰
 	public String attendEssay(){
-		log.debug("»ñÈ¡¹Ø×¢Ïà¹ØµÄÌû×ÓÇëÇó");
+		log.debug("è·å–å…³æ³¨ç›¸å…³çš„å¸–å­è¯·æ±‚");
 		init();
-		//»ñÈ¡ÓÃ»§µÇÂ½ĞÅÏ¢
+		//è·å–ç”¨æˆ·ç™»é™†ä¿¡æ¯
 		UserInfo user = (UserInfo) request.getSession().getAttribute("user");
 		if(user==null){
-			mess = "Î´µÇÂ¼";
+			mess = "æœªç™»å½•";
 			send();
 			return null;
 		}
 		String userId = user.getUserId();
 		try {
-			int index = getPage();//È¡³ö¿Í»§¶Ë´«¹ıÀ´µÄÌû×ÓÎ»ÖÃ
-			log.debug(">>>>>>>>>>>>>>>>>>>>»ñÈ¡¹Ø×¢Ìû×Ó"+userId);
+			int index = getPage();//å–å‡ºå®¢æˆ·ç«¯ä¼ è¿‡æ¥çš„å¸–å­ä½ç½®
+			log.debug(">>>>>>>>>>>>>>>>>>>>è·å–å…³æ³¨å¸–å­"+userId);
 			resultArray = deal.getAttendEssay(request, userId, index);
 			check();
 		} catch(Exception e){
-			mess = "»ñÈ¡Ìû×Ó·¢Éú´íÎó";
+			mess = "è·å–å¸–å­å‘ç”Ÿé”™è¯¯";
 			log.error(mess, e);
 		}
 		send();
 		return null;
 	}
 	
-	//TODO »ñÈ¡Ä³Ò»±êÇ©µÄÌû×Ó
+	//TODO è·å–æŸä¸€æ ‡ç­¾çš„å¸–å­
 	public void tagEssay(){
 		init();
 		try {
 			log.debug(tag+":"+page);
 			resultArray = deal.tagEssay(tag, page);
 			if(resultArray==null){
-				mess = "±êÇ©:"+tag+" ²»´æÔÚ";
+				mess = "æ ‡ç­¾:"+tag+" ä¸å­˜åœ¨";
 			}else{
 				mess = "success";
 			}
 		} catch(Exception e){
-			mess = "»ñÈ¡Ìû×Ó·¢Éú´íÎó";
+			mess = "è·å–å¸–å­å‘ç”Ÿé”™è¯¯";
 			log.error(mess, e);
 		}
 		send();
 	}
 	
-	//Ìø×ª»ñÈ¡Ê®Ìõ×îĞÂÌù
+	//è·³è½¬è·å–åæ¡æœ€æ–°è´´
 	/*
-	 * ĞèÒª¿Í»§¶Ë´«Êä²ÎÊı£ºindex:ÓÃ»§Ë¢ĞÂ´¦Î»ÖÃ
+	 * éœ€è¦å®¢æˆ·ç«¯ä¼ è¾“å‚æ•°ï¼šindex:ç”¨æˆ·åˆ·æ–°å¤„ä½ç½®
 	 */
 	/*public String tenEssay(){
 		init();
@@ -211,7 +211,7 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 			resultArray = deal.getTenEssay(request);
 			check();
 		} catch (Exception e) {
-			mess = "»ñÈ¡·¢Éú´íÎó";
+			mess = "è·å–å‘ç”Ÿé”™è¯¯";
 			log.error(e);
 		} 
 		send();
@@ -220,12 +220,12 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 	
 	
 	public void userEssay(){
-		log.debug("»ñÈ¡ÓÃ»§µÄÒ»Ìõ·¢¹ı¼°ÊÕ²ØµÄÌû×Ó");
+		log.debug("è·å–ç”¨æˆ·çš„ä¸€æ¡å‘è¿‡åŠæ”¶è—çš„å¸–å­");
 		init();
-		//»ñÈ¡ÓÃ»§µÇÂ½ĞÅÏ¢
+		//è·å–ç”¨æˆ·ç™»é™†ä¿¡æ¯
 		UserInfo user = (UserInfo) request.getSession().getAttribute("user");
 		if(user==null){
-			mess = "Î´µÇÂ¼";
+			mess = "æœªç™»å½•";
 			send();
 			return;
 		}
@@ -233,50 +233,50 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 			resultArray = deal.getUserEssay(user.getUserId());
 			check();
 		}catch(Exception e){
-			mess = "»ñÈ¡·¢Éú´íÎó";
+			mess = "è·å–å‘ç”Ÿé”™è¯¯";
 			log.error(e);
 		}
 		send();
-		log.debug("ÓÃ»§Ìû×Ó·½·¨½áÊø");
+		log.debug("ç”¨æˆ·å¸–å­æ–¹æ³•ç»“æŸ");
 	}
-	//Ìø×ª»ñÈ¡ÓÃ»§ÊÕ²ØµÄÌû×Ó
+	//è·³è½¬è·å–ç”¨æˆ·æ”¶è—çš„å¸–å­
 	/*
-	 * ĞèÒª¿Í»§¶Ë´«Èë²ÎÊı£ºpage:²éÑ¯Î»ÖÃ
+	 * éœ€è¦å®¢æˆ·ç«¯ä¼ å…¥å‚æ•°ï¼špage:æŸ¥è¯¢ä½ç½®
 	 */
 	public String collectedEssay(){
-		log.debug("»ñÈ¡ÊÕ²ØµÄÌû×ÓÇëÇópage:"+getPage());
+		log.debug("è·å–æ”¶è—çš„å¸–å­è¯·æ±‚page:"+getPage());
 		init();
-		//»ñÈ¡ÓÃ»§µÇÂ½ĞÅÏ¢
+		//è·å–ç”¨æˆ·ç™»é™†ä¿¡æ¯
 		UserInfo user = (UserInfo) request.getSession().getAttribute("user");
 		if(user==null){
-			mess = "Î´µÇÂ¼";
+			mess = "æœªç™»å½•";
 			send();
 			return null;
 		}
 		try{
-			int index = getPage();//È¡³ö¿Í»§¶Ë´«¹ıÀ´µÄÌû×ÓÎ»ÖÃ
+			int index = getPage();//å–å‡ºå®¢æˆ·ç«¯ä¼ è¿‡æ¥çš„å¸–å­ä½ç½®
 			resultArray = deal.getCollectedEssay(request,user.getUserId(),index);
 			check();
 		}catch(Exception e){
-			mess = "»ñÈ¡·¢Éú´íÎó";
+			mess = "è·å–å‘ç”Ÿé”™è¯¯";
 			log.error(e);
 		}
 		send();
-		log.debug("ÊÕ²Ø·½·¨½áÊø");
+		log.debug("æ”¶è—æ–¹æ³•ç»“æŸ");
 		return null;
 	}
 	
-	//Ìø×ª»ñÈ¡ÓÃ»§ÆÀÂÛµÄÌû×Ó
+	//è·³è½¬è·å–ç”¨æˆ·è¯„è®ºçš„å¸–å­
 		/*
-		 * ĞèÒª¿Í»§¶Ë´«Èë²ÎÊı£ºpage,rows
+		 * éœ€è¦å®¢æˆ·ç«¯ä¼ å…¥å‚æ•°ï¼špage,rows
 		 */
 		public String repliedEssay(){
-			log.debug("»ñÈ¡ÆÀÂÛµÄÌû×ÓÇëÇópage:"+getPage()+":rows:"+getRows());
+			log.debug("è·å–è¯„è®ºçš„å¸–å­è¯·æ±‚page:"+getPage()+":rows:"+getRows());
 			init();
-			//»ñÈ¡ÓÃ»§µÇÂ½ĞÅÏ¢
+			//è·å–ç”¨æˆ·ç™»é™†ä¿¡æ¯
 			UserInfo user = (UserInfo) request.getSession().getAttribute("user");
 			if(user==null){
-				mess = "Î´µÇÂ¼";
+				mess = "æœªç™»å½•";
 				send();
 				return null;
 			}
@@ -284,50 +284,50 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 				resultArray = deal.getRepliedEssay(user.getUserId(),page,rows);
 				check();
 			}catch(Exception e){
-				mess = "»ñÈ¡·¢Éú´íÎó";
+				mess = "è·å–å‘ç”Ÿé”™è¯¯";
 				log.error(e);
 			}
 			send();
-			log.debug("·½·¨½áÊø");
+			log.debug("æ–¹æ³•ç»“æŸ");
 			return null;
 		}
 	
-	//Ìø×ªÓÃ»§·¢²¼µÄÌû×Ó
+	//è·³è½¬ç”¨æˆ·å‘å¸ƒçš„å¸–å­
 	/*
-	 * ĞèÒª¿Í»§¶Ë´«Èë²ÎÊı£ºindex:²éÑ¯Î»ÖÃ
+	 * éœ€è¦å®¢æˆ·ç«¯ä¼ å…¥å‚æ•°ï¼šindex:æŸ¥è¯¢ä½ç½®
 	 */
 	public String publishedEssay(){
-		log.debug("»ñÈ¡·¢²¼µÄÌû×ÓÇëÇó");
+		log.debug("è·å–å‘å¸ƒçš„å¸–å­è¯·æ±‚");
 		init();
 		String userId = id;
-		//ÈôidÎªnull£¬ÔòÊÇ»ñÈ¡ÓÃ»§×Ô¼º·¢²¼µÄÌû×Ó£¬·ñÔòÊÇ»ñÈ¡ÕËºÅÎªidµÄÓÃ»§Ìû×Ó
-		log.debug("ÓÃ»§Ìû×Ó:"+id);
+		//è‹¥idä¸ºnullï¼Œåˆ™æ˜¯è·å–ç”¨æˆ·è‡ªå·±å‘å¸ƒçš„å¸–å­ï¼Œå¦åˆ™æ˜¯è·å–è´¦å·ä¸ºidçš„ç”¨æˆ·å¸–å­
+		log.debug("ç”¨æˆ·å¸–å­:"+id);
 		if(id==null||id.length()==0){
-			//»ñÈ¡ÓÃ»§µÇÂ½ĞÅÏ¢
+			//è·å–ç”¨æˆ·ç™»é™†ä¿¡æ¯
 			UserInfo user = (UserInfo) request.getSession().getAttribute("user");
 			if(user==null){
-				mess = "ÓÃ»§Î´µÇÂ½";
+				mess = "ç”¨æˆ·æœªç™»é™†";
 				send();
 				return null;
 			}
 			userId = user.getUserId();
 		}
 		try{
-			int index = getPage();//È¡³ö¿Í»§¶Ë´«¹ıÀ´µÄÌû×ÓÎ»ÖÃ
+			int index = getPage();//å–å‡ºå®¢æˆ·ç«¯ä¼ è¿‡æ¥çš„å¸–å­ä½ç½®
 			resultArray = deal.getPublishedEssay(request,userId,index);
 			check();
 			
 		}catch(Exception e){
-			mess = "»ñÈ¡·¢Éú´íÎó";
+			mess = "è·å–å‘ç”Ÿé”™è¯¯";
 			log.error(e);
 		}
 		send();
 		return null;
 	}
-	//¿Í»§¶ËÌû×ÓÏêÇéÏà¹Ø²Ù×÷(»ñÈ¡°²×¿¿Ø¼şÏÔÊ¾µÄÊôĞÔ£©
+	//å®¢æˆ·ç«¯å¸–å­è¯¦æƒ…ç›¸å…³æ“ä½œ(è·å–å®‰å“æ§ä»¶æ˜¾ç¤ºçš„å±æ€§ï¼‰
 	public String content(){
-		log.debug("»ñÈ¡Ìû×ÓÏêÇé¿Ø¼ş²ÎÊıÇëÇó");
-		String mess = "Ê§°Ü";
+		log.debug("è·å–å¸–å­è¯¦æƒ…æ§ä»¶å‚æ•°è¯·æ±‚");
+		String mess = "å¤±è´¥";
 		try{
 			UserInfo user = (UserInfo) request.getSession().getAttribute("user");
 			String userId = null;
@@ -337,25 +337,25 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 			JSONObject sendObject = deal.getContent(request,essayId,userId);
 			sendUtil.writeToClient(response, sendObject);
 		}catch(Exception e){
-			log.debug("»ñÈ¡²ÎÊı´íÎó",e);
+			log.debug("è·å–å‚æ•°é”™è¯¯",e);
 			sendUtil.writeToClient(response, errorJson);
 		}
 			return null;
 	}
-	//Ìø×ª½øÈëÌû×ÓÏêÇé(ÍøÒ³£©
+	//è·³è½¬è¿›å…¥å¸–å­è¯¦æƒ…(ç½‘é¡µï¼‰
 	/*
-	 * ĞèÒª´«Èë²ÎÊı£ºessayId:Ìû×Ó±àºÅ
+	 * éœ€è¦ä¼ å…¥å‚æ•°ï¼šessayId:å¸–å­ç¼–å·
 	 */
 	public String detail(){
-		log.debug("»ñÈ¡Ìû×ÓÏêÇéÒ³ÃæÇëÇó");
+		log.debug("è·å–å¸–å­è¯¦æƒ…é¡µé¢è¯·æ±‚");
 		try{
-			log.debug("½øÈëdetail");
+			log.debug("è¿›å…¥detail");
 			String boo = deal.essayDetail(request,getEssayId());
 			if(boo==null){
 				return ERROR;
 			}else if(boo.equals("success")){
-				log.debug("»ñÈ¡Ìû×Ó³É¹¦£¬½øĞĞÌø×ª"+getEssayId());
-				log.debug("ÔÄ¶ÁÁ¿Ôö¼Ó1");
+				log.debug("è·å–å¸–å­æˆåŠŸï¼Œè¿›è¡Œè·³è½¬"+getEssayId());
+				log.debug("é˜…è¯»é‡å¢åŠ 1");
 				changeDeal.updateClickNum(getEssayId());
 				return "essaySuccess";
 			}else{
@@ -367,82 +367,82 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 		}
 	}
 	
-	//Ìø×ªµ½µãÔŞÕßÁĞ±íÒ³Ãæ
+	//è·³è½¬åˆ°ç‚¹èµè€…åˆ—è¡¨é¡µé¢
 	public String clickGoodPeople(){
-		log.debug("»ñÈ¡µãÔŞÕßÁĞ±íÇëÇó");
+		log.debug("è·å–ç‚¹èµè€…åˆ—è¡¨è¯·æ±‚");
 		try{
-			log.debug("»ñÈ¡µãÔŞÕß,index:"+getFirst());
+			log.debug("è·å–ç‚¹èµè€…,index:"+getFirst());
 			deal.getClickGoodPeople(request, getEssayId(),0);
 			return "clickGoodPeople";
 		}catch(Exception e){
-			log.error("»ñÈ¡µãÔŞÕß´íÎó",e);
+			log.error("è·å–ç‚¹èµè€…é”™è¯¯",e);
 			return ERROR;
 		}
 	}
-	//»ñÈ¡¸ü¶àµãÔŞÕß
+	//è·å–æ›´å¤šç‚¹èµè€…
 	public void moreClickGoodPeople(){
 	try{
-		log.debug("»ñÈ¡¸ü¶àµãÔŞÕß"+getEssayId()+":"+getFirst());
+		log.debug("è·å–æ›´å¤šç‚¹èµè€…"+getEssayId()+":"+getFirst());
 		JSONArray resultArray = deal.getMorePeople(getEssayId(), getFirst());
 		sendUtil.writeToClient(response, resultArray);	
 		}catch(Exception e){
-			log.error("»ñÈ¡¸ü¶àµãÔŞÕß´íÎó", e);
+			log.error("è·å–æ›´å¤šç‚¹èµè€…é”™è¯¯", e);
 			sendUtil.writeToClient(response,"[]");
 		}
 	}
 	
-	//TODO µãÔŞ·½·¨
+	//TODO ç‚¹èµæ–¹æ³•
 	public void clickGood(){
-		log.debug("»ñÈ¡µãÔŞÇëÇó");
+		log.debug("è·å–ç‚¹èµè¯·æ±‚");
 		init();
 		UserInfo user = (UserInfo) request.getSession(true).getAttribute("user");
 		if(user==null){
-			mess = "Î´µÇÂ¼";
+			mess = "æœªç™»å½•";
 			send();
 		}else{
 			try {
 				mess = deal.saveOrDeleteClickGood(request, getEssayId(), isClickGood(),user.getUserId());
 				send();
 			} catch (Exception e) {
-				mess = "»ñÈ¡´íÎó";
+				mess = "è·å–é”™è¯¯";
 				log.debug(mess, e);
 				send();
 			} 
 		}
 	}
-	//TODO ÊÕ²Ø·½·¨
+	//TODO æ”¶è—æ–¹æ³•
 	public void collectEssay(){
-		log.debug("»ñÈ¡ÊÕ²ØÇëÇó");
+		log.debug("è·å–æ”¶è—è¯·æ±‚");
 		init();
 		UserInfo user = (UserInfo) request.getSession(true).getAttribute("user");
 		if(user==null){
-			mess = "Î´µÇÂ¼";
+			mess = "æœªç™»å½•";
 			send();
 		}else{
 			try {
 				mess = deal.saveOrDeleteCollect(request, getEssayId(), isCollect(),user.getUserId());
 				send();
 			} catch (Exception e) {
-				mess = "»ñÈ¡´íÎó";
+				mess = "è·å–é”™è¯¯";
 				log.debug(mess, e);
 				send();
 			} 
 		}
 	}
 	
-	//TODO ÅúÁ¿ÊÕ²Ø·½·¨
+	//TODO æ‰¹é‡æ”¶è—æ–¹æ³•
 	public void collectBatch(){
-		log.debug("»ñÈ¡ÅúÁ¿ÊÕ²ØÇëÇó");
+		log.debug("è·å–æ‰¹é‡æ”¶è—è¯·æ±‚");
 		init();
 		UserInfo user = (UserInfo) request.getSession(true).getAttribute("user");
 		if(user==null){
-			mess = "Î´µÇÂ¼";
+			mess = "æœªç™»å½•";
 			send();
 			return;
 		}
 		try {
 			if(ids==null){
-				mess = "Î´Ñ¡ÔñÊÕ²ØµÄÌû×Ó";
+				mess = "æœªé€‰æ‹©æ”¶è—çš„å¸–å­";
 				send("delEssay");
 				return;
 			}
@@ -455,68 +455,68 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 			mess = tempMess==null?mess:tempMess;
 			send();
 		} catch (Exception e) {
-			mess = "»ñÈ¡´íÎó£º"+e.getMessage();
+			mess = "è·å–é”™è¯¯ï¼š"+e.getMessage();
 			log.debug(mess, e);
 			send();
 		} 
 		
 	}
 	
-	//TODO***********************ĞŞ¸ÄÏà¹ØµÄ²Ù×÷
+	//TODO***********************ä¿®æ”¹ç›¸å…³çš„æ“ä½œ
 	
-	//·¢²¼Ìû×Ó
-	//·ÅÆú²»ÓÃ
+	//å‘å¸ƒå¸–å­
+	//æ”¾å¼ƒä¸ç”¨
 	public String publishEssay(){
-		log.debug("»ñÈ¡·¢²¼Ìû×ÓÇëÇó");
+		log.debug("è·å–å‘å¸ƒå¸–å­è¯·æ±‚");
 		init();
 		UserInfo user = (UserInfo) request.getSession().getAttribute("user");
 		if(user==null){
-			mess="Î´µÇÂ¼";
+			mess="æœªç™»å½•";
 			send();
 			return null;
 		}
 		try{
 			mess = changeDeal.saveAEssay(user, type, label, title, department, content,new ArrayList(),"");
 		}catch(Exception e){
-			mess = "Î´Öª´íÎó,·¢²¼Ê§°Ü";
+			mess = "æœªçŸ¥é”™è¯¯,å‘å¸ƒå¤±è´¥";
 			log.error(mess, e);
 		}
 		send();
 		return null;
 	}
-	//TODO É¾³ıÒ»ÌõÌû×Ó
+	//TODO åˆ é™¤ä¸€æ¡å¸–å­
 		public void deleteEssay(){
-			log.debug("»ñÈ¡ÅúÁ¿É¾³ıÌû×ÓÇëÇó"+essayId);
+			log.debug("è·å–æ‰¹é‡åˆ é™¤å¸–å­è¯·æ±‚"+essayId);
 			init();
 			UserInfo user = (UserInfo) request.getSession(true).getAttribute("user");
 			if(user==null){
-				mess = "Î´µÇÂ¼";	
+				mess = "æœªç™»å½•";	
 				send("delEssay");
 				return;
 			}
 			try {
 				mess = changeDeal.deleteEssay(user.getUserId(), essayId);
-				log.debug("É¾³ı½áÊø"+mess);
+				log.debug("åˆ é™¤ç»“æŸ"+mess);
 			} catch (Exception e) {
-				mess = "»ñÈ¡´íÎó";
+				mess = "è·å–é”™è¯¯";
 				log.debug(mess, e);
 			} 
 			send("delEssay");
 		}
 		
-		//TODO ÅúÁ¿É¾³ıÌû×Ó
+		//TODO æ‰¹é‡åˆ é™¤å¸–å­
 		public void deleteBatch(){
-			log.debug("»ñÈ¡É¾³ıÌû×ÓÇëÇó"+ids);
+			log.debug("è·å–åˆ é™¤å¸–å­è¯·æ±‚"+ids);
 			init();
 			UserInfo user = (UserInfo) request.getSession(true).getAttribute("user");
 			if(user==null){
-				mess = "Î´µÇÂ¼";	
+				mess = "æœªç™»å½•";	
 				send("delEssay");
 				return;
 			}
 			try {
 				if(ids==null){
-					mess = "Î´Ñ¡ÔñÉ¾³ıµÄÌû×Ó";
+					mess = "æœªé€‰æ‹©åˆ é™¤çš„å¸–å­";
 					send("delEssay");
 					return;
 				}
@@ -524,15 +524,15 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 				String errorMess = null;
 				for(String oneId:idList){
 					mess = changeDeal.deleteEssay(user.getUserId(), Integer.valueOf(oneId.trim()));
-					log.debug("----------É¾³ıÒ»ÌõÌû×Ó£¨"+oneId+"£º"+mess+")");
+					log.debug("----------åˆ é™¤ä¸€æ¡å¸–å­ï¼ˆ"+oneId+"ï¼š"+mess+")");
 					if(!mess.equals("success")){
 						errorMess = mess;
 					}
 				}
 				mess = errorMess==null?mess:errorMess;
-				log.debug("É¾³ı½áÊø"+mess);
+				log.debug("åˆ é™¤ç»“æŸ"+mess);
 			} catch (Exception e) {
-				mess = "»ñÈ¡´íÎó"+e.getMessage();
+				mess = "è·å–é”™è¯¯"+e.getMessage();
 				log.debug(mess, e);
 			} 
 			send("delEssay");

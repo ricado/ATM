@@ -161,18 +161,20 @@ public class EssayChangeDeal implements ObjectInterface{
 		}
 		
 		//到“我的消息”
-		String[] ids = aiteID.split("//*#");
-		Method m = MyMessageHandler.class.getMethod("sendMyMessage", String.class, int.class,String.class);
-		for(String oneId:ids){
-			JSONObject msgJsonStr = new JSONObject();
-			msgJsonStr.put("essayId",id);
-			msgJsonStr.put("nickname", user.getNickname());
-			msgJsonStr.put("essayTitle", title);
-			msgJsonStr.put("userId",userId);
-			msgJsonStr.put("avatar",user.getHeadImagePath());
-			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			msgJsonStr.put("createTime",df.format(new Date()));	
-			m.invoke(MyMessageHandler.class.newInstance(),oneId,0,msgJsonStr.toString());
+		if(aiteID!=null){
+			String[] ids = aiteID.split("//*#");
+			Method m = MyMessageHandler.class.getMethod("sendMyMessage", String.class, int.class,String.class);
+			for(String oneId:ids){
+				JSONObject msgJsonStr = new JSONObject();
+				msgJsonStr.put("essayId",id);
+				msgJsonStr.put("nickname", user.getNickname());
+				msgJsonStr.put("essayTitle", title);
+				msgJsonStr.put("userId",userId);
+				msgJsonStr.put("avatar",user.getHeadImagePath());
+				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				msgJsonStr.put("createTime",df.format(new Date()));	
+				m.invoke(MyMessageHandler.class.newInstance(),oneId,0,msgJsonStr.toString());
+			}
 		}
 		
 		return mess="success";

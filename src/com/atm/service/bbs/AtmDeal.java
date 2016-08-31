@@ -26,15 +26,15 @@ import com.atm.model.user.UserInfo;
 import com.atm.util.bbs.ObjectInterface;
 
 /**
- * @TODO£ºÔÓÏî
+ * @TODOï¼šæ‚é¡¹
  * @fileName : com.atm.service.AtmDeal.java
  * date | author | version |   
- * 2015Äê8ÔÂ14ÈÕ | Jiong | 1.0 |
+ * 2015å¹´8æœˆ14æ—¥ | Jiong | 1.0 |
  */
 public class AtmDeal implements ObjectInterface{
 	Logger log = Logger.getLogger(getClass()); 
 	
-	//»ñÈ¡Ïµ²¿ÁĞ±í
+	//è·å–ç³»éƒ¨åˆ—è¡¨
 	public JSONArray getDeptList(String scNo) throws JSONException, IOException{
 		DepartmentDAO deptDao = context.getBean("DepartmentDAOImpl",DepartmentDAO.class);
 		List list = deptDao.findDeptList(scNo);
@@ -43,25 +43,25 @@ public class AtmDeal implements ObjectInterface{
 		}
 		return jsonUtil.objectToArray(list,false);
 	}
-	//»ñÈ¡ÈÈÃÅ±êÇ©
+	//è·å–çƒ­é—¨æ ‡ç­¾
 	public JSONArray getHotLabel() throws JSONException, IOException{
 		LabelViewDAO labelDao = 
 				context.getBean("LabelViewDAO",LabelViewDAO.class);
 		List<String> list = labelDao.findHotLabel();
 		return jsonUtil.objectToArray(list);
 	}
-	//¸ù¾İÏµ±ğ»ñÈ¡ÈÈÃÅ±êÇ©
+	//æ ¹æ®ç³»åˆ«è·å–çƒ­é—¨æ ‡ç­¾
 	public JSONArray getHotLabelByDno(String dNo,int maxResult) throws JSONException, IOException{
 		LabelDAO labelDao = context.getBean("LabelDAOImpl",LabelDAO.class);
 		List<String> labelList = labelDao.findByDno(dNo,maxResult);
 		return jsonUtil.objectToArray(labelList);
 	}
 	
-	//TODO »ñÈ¡¹Ø×¢µÄ±êÇ©¼¯ºÏ
+	//TODO è·å–å…³æ³¨çš„æ ‡ç­¾é›†åˆ
 	public JSONArray getAttendedLabelName(String userId) throws JSONException, IOException{
 		LabelRelationViewDAO labelDao = 
 				context.getBean("LabelRelationViewDAO",LabelRelationViewDAO.class);
-		log.debug("»ñÈ¡¹Ø×¢ÕßÕËºÅ¼¯ºÏ"+userId);
+		log.debug("è·å–å…³æ³¨è€…è´¦å·é›†åˆ"+userId);
 		List userList = labelDao.findAttendedLabelName(userId);
 		if(userList.size()==0){
 			return null;
@@ -69,7 +69,7 @@ public class AtmDeal implements ObjectInterface{
 		return jsonUtil.objectToArray(userList,false);
 	}
 	
-	//»ñÈ¡ÈÈÃÅ±êÇ©
+	//è·å–çƒ­é—¨æ ‡ç­¾
 	public JSONArray getUserLabel() throws JSONException, IOException{
 		LabelViewDAO labelDao = 
 				context.getBean("LabelViewDAO",LabelViewDAO.class);
@@ -77,7 +77,7 @@ public class AtmDeal implements ObjectInterface{
 		return jsonUtil.objectToArray(list);
 	}
 	
-	//ËÑË÷ÓÃ»§
+	//æœç´¢ç”¨æˆ·
 	public JSONArray searchPeople(String userName) throws JSONException, IOException{
 		UserInfoDAO userInfoDao = 
 				context.getBean("UserInfoDAOImpl",UserInfoDAO.class);
@@ -88,7 +88,7 @@ public class AtmDeal implements ObjectInterface{
 		return jsonUtil.objectToArray(list,false);
 	}
 	
-	//ËÑË÷Ä³¸ö¹Ø¼ü´ÊµÄÌû×Ó
+	//æœç´¢æŸä¸ªå…³é”®è¯çš„å¸–å­
 	public JSONArray searchEssayByKey(String key,int index) throws JSONException, IOException{
 		EssayOuterDAO essayOuterDao = 
 				context.getBean("EssayOuterDAO",EssayOuterDAO.class);
@@ -99,40 +99,40 @@ public class AtmDeal implements ObjectInterface{
 		return jsonUtil.objectToArray(list,false);
 	}
 	
-	//Ôö¼Ó¾Ù±¨¼ÇÂ¼
+	//å¢åŠ ä¸¾æŠ¥è®°å½•
 	public String saveReport(String userId,int aim,int aimId,String reason){
-		String mess = "Î´Öª´íÎó£¬¾Ù±¨Ê§°Ü";
+		String mess = "æœªçŸ¥é”™è¯¯ï¼Œä¸¾æŠ¥å¤±è´¥";
 		if(reason.length()<=0){
-			return "Î´ÌîĞ´¾Ù±¨Ô­Òò";
+			return "æœªå¡«å†™ä¸¾æŠ¥åŸå› ";
 		}
 		if(aim==-1){
-			return "Î´Ö¸¶¨¾Ù±¨Ä¿±ê";
+			return "æœªæŒ‡å®šä¸¾æŠ¥ç›®æ ‡";
 		}
 		if(aimId == -1){
-			return "Î´Ö¸¶¨¾Ù±¨Ìû×Ó";
+			return "æœªæŒ‡å®šä¸¾æŠ¥å¸–å­";
 		}
-		//¾Ù±¨ÂÛÌ³Ìû×Ó
+		//ä¸¾æŠ¥è®ºå›å¸–å­
 		if(aim==0){
 			EssayDAO essay = (EssayDAO) context.getBean("EssayDAOImpl");
 			Essay es = essay.findById(aimId);
 			if(es==null){
-				return "Ìû×Ó²»´æÔÚ";
+				return "å¸–å­ä¸å­˜åœ¨";
 			}
 		}
-		//¾Ù±¨ÕĞÆ¸Ìû×Ó
+		//ä¸¾æŠ¥æ‹›è˜å¸–å­
 		if(aim==1){
 			RecuitInfoContentDAO contentDAO = 
 					(RecuitInfoContentDAO)context.getBean("RecuitInfoContentDAOImpl");
 			RecuitInfoContent re = contentDAO.findById(aimId);
 			if(re==null){
-				return "Ìû×Ó²»´æÔÚ";
+				return "å¸–å­ä¸å­˜åœ¨";
 			}
 		}
 		ReportDAO reDao = (ReportDAO) context.getBean("ReportDAO");
 		String[] reasons = reason.split("\\*#");
 		for(String r:reasons){
 			if(r.length()>100){
-				return "Ô­Òò×ÖÊı²»ÄÜ³¬¹ı100";
+				return "åŸå› å­—æ•°ä¸èƒ½è¶…è¿‡100";
 			}
 		}
 		for(String r:reasons){
@@ -144,26 +144,26 @@ public class AtmDeal implements ObjectInterface{
 			reDao.save(report);
 		}
 	
-		return "³É¹¦";
+		return "æˆåŠŸ";
 	}
 	
-	//ÓÃ»§¹Ø×¢±êÇ©
+	//ç”¨æˆ·å…³æ³¨æ ‡ç­¾
 	public String saveAttTag(String userId,String tag){
 		JSONArray tagArray = new JSONArray();
 		try {
 			tagArray = new JSONArray(tag);
 		} catch (JSONException e) {
-			return "¸ñÊ½´íÎó";
+			return "æ ¼å¼é”™è¯¯";
 		}
 		if(tagArray.length()==0){
-			return "ÎŞ±êÇ©ÄÚÈİ";
+			return "æ— æ ‡ç­¾å†…å®¹";
 		}
 		for(int i=0; i<tagArray.length();i++){
 			String aTag = "";
 			try {
 				aTag = tagArray.getString(i);
 			} catch (JSONException e) {
-				return "¸ñÊ½´íÎó!";
+				return "æ ¼å¼é”™è¯¯!";
 			}
 			if(aTag==null||aTag.replace(" ","").length()==0){
 				continue;
@@ -175,16 +175,16 @@ public class AtmDeal implements ObjectInterface{
 				newLabel.setLabName(aTag);
 				labelDao.save(newLabel);
 				labelList = labelDao.findByLabName(aTag);
-				log.debug("±£´æ±êÇ©£º"+aTag);
+				log.debug("ä¿å­˜æ ‡ç­¾ï¼š"+aTag);
 			}
-			//±£´æ¹Ø×¢¹ØÏµ
+			//ä¿å­˜å…³æ³¨å…³ç³»
 			Label label = (Label) labelList.get(0);
 			LabelAttentionAssociationDAO tagDao = 
 					(LabelAttentionAssociationDAO) context.getBean("LabelAttentionAssociationDAOImpl");
-			if(tagDao.haveAttend(userId, label.getLabId())!=null){ //ÒÑ¹Ø×¢¹ı¸Ã±êÇ©
+			if(tagDao.haveAttend(userId, label.getLabId())!=null){ //å·²å…³æ³¨è¿‡è¯¥æ ‡ç­¾
 				continue;
 			}
-			log.debug("±£´æ¹Ø×¢¹ØÏµ");
+			log.debug("ä¿å­˜å…³æ³¨å…³ç³»");
 			LabelAttentionAssociation lab = 
 					new LabelAttentionAssociation();
 			lab.setUserId(userId);
@@ -193,44 +193,44 @@ public class AtmDeal implements ObjectInterface{
 		}
 		return "success";
 	}
-	//ÓÃ»§È¡Ïû¹Ø×¢±êÇ©
+	//ç”¨æˆ·å–æ¶ˆå…³æ³¨æ ‡ç­¾
 	public String deleteAttTag(String userId,String tag){
 		JSONArray tagArray = new JSONArray();
 		try {
 			tagArray = new JSONArray(tag);
 		} catch (JSONException e) {
-			return "¸ñÊ½´íÎó";
+			return "æ ¼å¼é”™è¯¯";
 		}
 		if(tagArray.length()==0){
-			return "ÎŞ±êÇ©ÄÚÈİ";
+			return "æ— æ ‡ç­¾å†…å®¹";
 		}
 		for(int i=0; i<tagArray.length();i++){
 			String aTag = "";
 			try {
 				aTag = tagArray.getString(i);
 			} catch (JSONException e) {
-				return "¸ñÊ½´íÎó!";
+				return "æ ¼å¼é”™è¯¯!";
 			}
 			if(aTag==null||aTag.replace(" ","").length()==0){
 				continue;
 			}
 			LabelDAO labelDao = context.getBean("LabelDAOImpl",LabelDAO.class);
 			List labelList = labelDao.findByLabName(aTag);
-			//±êÇ©²»´æÔÚÊ±
+			//æ ‡ç­¾ä¸å­˜åœ¨æ—¶
 			if(labelList.size()==0){
 				continue;
-				//return "±êÇ©:"+aTag+" ²»´æÔÚ";
+				//return "æ ‡ç­¾:"+aTag+" ä¸å­˜åœ¨";
 			}
-			//ÑéÖ¤ÊÇ·ñÓĞ¹Ø×¢¹ØÏµ£¬ÓĞÔòÈ¡Ïû£¬ÎŞÔòÌøµ½ÏÂÒ»Ñ­»·
+			//éªŒè¯æ˜¯å¦æœ‰å…³æ³¨å…³ç³»ï¼Œæœ‰åˆ™å–æ¶ˆï¼Œæ— åˆ™è·³åˆ°ä¸‹ä¸€å¾ªç¯
 			Label label = (Label) labelList.get(0);
 			LabelAttentionAssociationDAO tagDao = 
 					(LabelAttentionAssociationDAO) context.getBean("LabelAttentionAssociationDAOImpl");
 			LabelAttentionAssociation attend = 
 					tagDao.haveAttend(userId, label.getLabId());
-			if(attend==null){ //Ã»ÓĞ¹Ø×¢¹ØÏµ
+			if(attend==null){ //æ²¡æœ‰å…³æ³¨å…³ç³»
 				continue;
 			}
-			log.debug("È¡Ïû¹Ø×¢¹ØÏµ£º"+aTag);
+			log.debug("å–æ¶ˆå…³æ³¨å…³ç³»ï¼š"+aTag);
 			tagDao.delete(attend);
 			
 		}
