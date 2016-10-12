@@ -246,16 +246,22 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 	public String collectedEssay(){
 		log.debug("获取收藏的帖子请求page:"+getPage());
 		init();
-		//获取用户登陆信息
-		UserInfo user = (UserInfo) request.getSession().getAttribute("user");
-		if(user==null){
-			mess = "未登录";
-			send();
-			return null;
+		String userId = id;
+		//若id为null，则是获取用户自己发布的帖子，否则是获取账号为id的用户帖子
+		log.debug("用户帖子:"+id);
+		if(id==null||id.length()==0){
+			//获取用户登陆信息
+			UserInfo user = (UserInfo) request.getSession().getAttribute("user");
+			if(user==null){
+				mess = "用户未登陆";
+				send();
+				return null;
+			}
+			userId = user.getUserId();
 		}
 		try{
 			int index = getPage();//取出客户端传过来的帖子位置
-			resultArray = deal.getCollectedEssay(request,user.getUserId(),index);
+			resultArray = deal.getCollectedEssay(request,userId,index);
 			check();
 		}catch(Exception e){
 			mess = "获取发生错误";
@@ -273,21 +279,15 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 		public String repliedEssay(){
 			log.debug("获取评论的帖子请求page:"+getPage()+":rows:"+getRows());
 			init();
-			String userId = id;
-			//若id为null，则是获取用户自己发布的帖子，否则是获取账号为id的用户帖子
-			log.debug("用户帖子:"+id);
-			if(id==null||id.length()==0){
-				//获取用户登陆信息
-				UserInfo user = (UserInfo) request.getSession().getAttribute("user");
-				if(user==null){
-					mess = "用户未登陆";
-					send();
-					return null;
-				}
-				userId = user.getUserId();
+			//获取用户登陆信息
+			UserInfo user = (UserInfo) request.getSession().getAttribute("user");
+			if(user==null){
+				mess = "未登录";
+				send();
+				return null;
 			}
 			try{
-				resultArray = deal.getRepliedEssay(userId,page,rows);
+				resultArray = deal.getRepliedEssay(user.getUserId(),page,rows);
 				check();
 			}catch(Exception e){
 				mess = "获取发生错误";
