@@ -21,30 +21,30 @@ import com.atm.util.bbs.CommonUtil;
 import com.atm.util.bbs.ObjectInterface;
 
 /**
- * @TODO£º
+ * @TODOï¼š
  * @fileName : com.atm.service.bbs.EssayUpController.java
  * date | author | version |   
- * 2015Äê10ÔÂ4ÈÕ | Jiong | 1.0 |
+ * 2015å¹´10æœˆ4æ—¥ | Jiong | 1.0 |
  */
 @Controller
 @RequestMapping(value="/essay")
 public class EssayUpController implements ObjectInterface{
 	Logger log = Logger.getLogger(getClass());
 	
-	EssayChangeDeal changeDeal = //¸üĞÂ±£´æÏà¹Ø²Ù×÷
+	EssayChangeDeal changeDeal = //æ›´æ–°ä¿å­˜ç›¸å…³æ“ä½œ
 			context.getBean("EssayChangeDeal",EssayChangeDeal.class);
 	
-	//mess:¸øÓÃ»§µÄÌáÊ¾ĞÅÏ¢-----sendJson:×°ÔØmess------resultArray:×°ÔØÌû×Ó
+	//mess:ç»™ç”¨æˆ·çš„æç¤ºä¿¡æ¯-----sendJson:è£…è½½mess------resultArray:è£…è½½å¸–å­
 	String mess;
 	JSONObject sendJson;
 	JSONArray resultArray;
-	//³õÊ¼»¯
+	//åˆå§‹åŒ–
 	private void init(){
-		mess = "»ñÈ¡Ê§°Ü";
+		mess = "è·å–å¤±è´¥";
 		sendJson  = new JSONObject();
 		resultArray = new JSONArray();
 	}
-	//·¢ËÍ½á¹û
+	//å‘é€ç»“æœ
 	private void send(String name,HttpServletResponse response,boolean haveArray){
 		try {
 			sendJson.put("tip", mess);
@@ -59,7 +59,7 @@ public class EssayUpController implements ObjectInterface{
 	}
 	
 	
-	//TODO ·¢²¼Ìû×ÓµÄ·½·¨
+	//TODO å‘å¸ƒå¸–å­çš„æ–¹æ³•
 	@RequestMapping(value="/publish.do",produces = "application/json")
 	@ResponseBody
 	public void publish(@RequestParam("files") MultipartFile[] files,
@@ -71,20 +71,20 @@ public class EssayUpController implements ObjectInterface{
 			String department,
 			String content,
 			String aiteID){
-		log.debug("·¢²¼Ìû×ÓÇëÇó");
-		log.debug("ÄÚÈİ£º"+content);
-		log.debug("Í¼Æ¬£º"+files.length);
+		log.debug("å‘å¸ƒå¸–å­è¯·æ±‚");
+		log.debug("å†…å®¹ï¼š"+content);
+		log.debug("å›¾ç‰‡ï¼š"+files.length);
 		init();
 		UserInfo user = (UserInfo) request.getSession().getAttribute("user");
 		if(user==null){
-			mess="Î´µÇÂ¼";
+			mess="æœªç™»å½•";
 			send("publish",response,false);
 			return;
 		}
 		String userId = user.getUserId();
-		//»ñÈ¡´æ·Å¸ùÂ·¾¶
+		//è·å–å­˜æ”¾æ ¹è·¯å¾„
 		String path = request.getSession().getServletContext().getRealPath("/WebRoot/image");
-		//±£´æÎÄ¼ş
+		//ä¿å­˜æ–‡ä»¶
 		ArrayList savePath = commonUtil.saveFile(files, path, "essay",userId);
 		int size = 0;
 		for(int i=0;i<files.length;i++){
@@ -92,17 +92,17 @@ public class EssayUpController implements ObjectInterface{
 				size++;
 			}
 		}
-		log.debug("½ÓÊÜµ½@£º"+aiteID);
+		log.debug("æ¥å—åˆ°@ï¼š"+aiteID);
 		if(size==savePath.size()){
 			try{
-				//µ÷ÓÃ·¢²¼Ìû×Ó·½·¨
-				mess = changeDeal.saveAEssay(user, type, label, title, department, content,savePath);
+				//è°ƒç”¨å‘å¸ƒå¸–å­æ–¹æ³•
+				mess = changeDeal.saveAEssay(user, type, label, title, department, content,savePath,aiteID);
 			}catch(Exception e){
-				mess = "Î´Öª´íÎó,·¢²¼Ê§°Ü";
+				mess = "æœªçŸ¥é”™è¯¯,å‘å¸ƒå¤±è´¥";
 				log.error(mess, e);
 			}
 		}else{
-			mess = "ÎÄ¼ş±£´æÊ§°Ü";
+			mess = "æ–‡ä»¶ä¿å­˜å¤±è´¥";
 		}
 		send("publish",response,false);
 	}

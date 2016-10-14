@@ -1,5 +1,6 @@
 package com.atm.dao.impl.bbs;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.LockOptions;
@@ -52,11 +53,11 @@ public class ReplyDAOImpl implements ReplyDAO {
 	 * @see com.atm.dao.impl.ReplyDAO#save(com.atm.model.Reply)
 	 */
 	@Override
-	public void save(Reply transientInstance) {
+	public Serializable save(Reply transientInstance) {
 		log.debug("saving Reply instance");
 		try {
-			getCurrentSession().save(transientInstance);
 			log.debug("save successful");
+			return getCurrentSession().save(transientInstance);
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
 			throw re;
@@ -132,7 +133,7 @@ public class ReplyDAOImpl implements ReplyDAO {
 		}
 	}
 	
-	//TODO É¾³ýÕû¸öÂ¥²ã
+	//TODO É¾ï¿½ï¿½ï¿½ï¿½ï¿½Â¥ï¿½ï¿½
 	public void deleteAFloor(int floorId,int essayId){
 		try {
 			String queryString = "delete from Reply as model where "+

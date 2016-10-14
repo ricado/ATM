@@ -17,10 +17,10 @@ import com.atm.util.bbs.ObjectInterface;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
- * @TODO£º
+ * @TODOï¼š
  * @fileName : com.atm.action.ReplyAction.java
  * date | author | version |   
- * 2015Äê8ÔÂ11ÈÕ | Jiong | 1.0 |
+ * 2015å¹´8æœˆ11æ—¥ | Jiong | 1.0 |
  */
 public class ReplyAction extends ActionSupport implements ServletResponseAware,ServletRequestAware,ObjectInterface{
 Logger log = Logger.getLogger(getClass());
@@ -28,11 +28,11 @@ Logger log = Logger.getLogger(getClass());
 	private int essayId;
 	private int first = 0;
 	private int floorId;
-	private int replyIndex;//²éÕÒµÄÆğÊ¼Î»ÖÃ£¬ÈôÎª-1ÔòÊÇ»ñÈ¡ÈÈÃÅµÄÒ»ÌõÆÀÂÛ
+	private int replyIndex;//æŸ¥æ‰¾çš„èµ·å§‹ä½ç½®ï¼Œè‹¥ä¸º-1åˆ™æ˜¯è·å–çƒ­é—¨çš„ä¸€æ¡è¯„è®º
 	private int replyId;
 	private boolean clickGood;
 	
-	private String repliedUserId;//±»»Ø¸´µÄÈËµÄÕËºÅ
+	private String repliedUserId;//è¢«å›å¤çš„äººçš„è´¦å·
 	private String repContent;
 	
 	private HttpServletRequest request;
@@ -42,9 +42,9 @@ Logger log = Logger.getLogger(getClass());
 	String mess;
 	JSONObject sendJson;
 	JSONArray sendArray;
-	//³õÊ¼»¯
+	//åˆå§‹åŒ–
 	private void init(){
-		mess = "»ñÈ¡Ê§°Ü";
+		mess = "è·å–å¤±è´¥";
 		sendJson  = new JSONObject();
 		sendArray = new JSONArray();
 	}
@@ -52,7 +52,7 @@ Logger log = Logger.getLogger(getClass());
 	private void sendTip(){
 		sendTip(true);
 	}
-	//·¢ËÍÌáÊ¾ÏûÏ¢:trueÎª·¢ËÍJSONArray ,falseÎª·¢ËÍJSONObject
+	//å‘é€æç¤ºæ¶ˆæ¯:trueä¸ºå‘é€JSONArray ,falseä¸ºå‘é€JSONObject
 	private void sendTip(boolean method){
 		try {
 			sendJson.put("tip",mess);
@@ -70,14 +70,14 @@ Logger log = Logger.getLogger(getClass());
 		}
 	}
 	public void replyList(){
-		log.debug("»ñÈ¡ÆÀÂÛÁĞ±íÇëÇó");
+		log.debug("è·å–è¯„è®ºåˆ—è¡¨è¯·æ±‚");
 		init();
 		try{
-			log.debug(">>>>>>>>>ÕıÔÚ»ñÈ¡ÆÀÂÛµÄÌû×Ó:"+getEssayId());
+			log.debug(">>>>>>>>>æ­£åœ¨è·å–è¯„è®ºçš„å¸–å­:"+getEssayId());
 			sendArray = deal.getReply(request,getEssayId(),getReplyIndex());
 			sendUtil.writeToClient(response, sendArray);
 		}catch (Exception e) {
-			mess = "»ñÈ¡´íÎó";
+			mess = "è·å–é”™è¯¯";
 			log.debug(mess, e);
 			sendTip();
 		}
@@ -85,60 +85,60 @@ Logger log = Logger.getLogger(getClass());
 	
 	
 	public void replyInnerList(){
-		log.debug("»ñÈ¡ÆÀÂÛÂ¥ÖĞÂ¥ÇëÇó");
+		log.debug("è·å–è¯„è®ºæ¥¼ä¸­æ¥¼è¯·æ±‚");
 		init();
 		try {
-			log.debug(">>>>>>>>>ÕıÔÚ»ñÈ¡ÆÀÂÛµÄÌû×Ó:"+getEssayId());
+			log.debug(">>>>>>>>>æ­£åœ¨è·å–è¯„è®ºçš„å¸–å­:"+getEssayId());
 			sendArray = deal.getInnerReply(getEssayId(),getFloorId(),getFirst());
 			sendUtil.writeToClient(response, sendArray);
 		} catch (Exception e) {
-			mess = "»ñÈ¡´íÎó";
+			mess = "è·å–é”™è¯¯";
 			log.debug(mess, e);
 			sendTip();
 		} 
 		
 	}
 	
-	//TODO µãÔŞ·½·¨
+	//TODO ç‚¹èµæ–¹æ³•
 	public void clickGood(){
-		log.debug("»ñÈ¡µãÔŞÇëÇó");
+		log.debug("è·å–ç‚¹èµè¯·æ±‚");
 		init();
 		UserInfo user = (UserInfo) request.getSession(true).getAttribute("user");
 		if(user==null){
-			mess = "Î´µÇÂ¼";
+			mess = "æœªç™»å½•";
 			sendTip();
 		}else{
 			try {
 				mess = deal.saveOrDeleteClickGood(request, getReplyId(), isClickGood(),user.getUserId());
 				sendTip();
 			} catch (Exception e) {
-				mess = "»ñÈ¡´íÎó";
+				mess = "è·å–é”™è¯¯";
 				log.debug(mess, e);
 				sendTip();
 			} 
 		}
 	}
 	
-	//TODO ·¢²¼Ò»ÌõÆÀÂÛ
+	//TODO å‘å¸ƒä¸€æ¡è¯„è®º
 	public void publishReply(){
-		log.debug("»ñÈ¡·¢²¼ÆÀÂÛÇëÇó");
+		log.debug("è·å–å‘å¸ƒè¯„è®ºè¯·æ±‚");
 		init();
 		UserInfo user = (UserInfo) request.getSession(true).getAttribute("user");
 		if(user==null){
-			mess = "Î´µÇÂ¼";
+			mess = "æœªç™»å½•";
 			sendTip(false);
 			return;
 		}
 		try {
 			String userId = user.getUserId();
 			boolean boo = true;
-			if(floorId!=0){//Â¥²ãÎª²»Îª0ËµÃ÷»Ø¸´µÄÊÇÂ¥ÖĞÂ¥£¬ĞèÅĞ¶Ï»Ø¸´µÄÂ¥²ãÊÇ·ñ´æÔÚ
+			if(floorId!=0){//æ¥¼å±‚ä¸ºä¸ä¸º0è¯´æ˜å›å¤çš„æ˜¯æ¥¼ä¸­æ¥¼ï¼Œéœ€åˆ¤æ–­å›å¤çš„æ¥¼å±‚æ˜¯å¦å­˜åœ¨
 			  boo = deal.haveFloor(floorId);
 			}
-			mess = deal.saveAReply(request, essayId, userId, repliedUserId, repContent, floorId,boo);
+			mess = deal.saveAReply(request, essayId, user, repliedUserId, repContent, floorId,boo);
 			sendTip(false);
 		} catch (Exception e) {
-			mess = "»ñÈ¡´íÎó";
+			mess = "è·å–é”™è¯¯";
 			log.debug(mess, e);
 			sendTip(false);
 		} 
@@ -146,23 +146,23 @@ Logger log = Logger.getLogger(getClass());
 		return;
 	}
 	
-	//TODO É¾³ıÒ»ÌõÆÀÂÛ
+	//TODO åˆ é™¤ä¸€æ¡è¯„è®º
 	public String deleteReply(){
-		log.debug("»ñÈ¡É¾³ıÆÀÂÛÇëÇó"+getReplyId());
+		log.debug("è·å–åˆ é™¤è¯„è®ºè¯·æ±‚"+getReplyId());
 		init();
 		UserInfo user = (UserInfo) request.getSession(true).getAttribute("user");
 		if(user==null){
-			mess = "Î´µÇÂ¼";
+			mess = "æœªç™»å½•";
 			sendTip(false);
 			return null;
 		}
 		try {
-			int position = getFirst();//É¾³ıÆÀÂÛËùÔÚµÄÎ»ÖÃ
+			int position = getFirst();//åˆ é™¤è¯„è®ºæ‰€åœ¨çš„ä½ç½®
 			mess = deal.deleteAReply(user.getUserId(),getReplyId(),position);
-			log.debug("É¾³ı½áÊø"+mess);
+			log.debug("åˆ é™¤ç»“æŸ"+mess);
 			sendTip(false);
 		} catch (Exception e) {
-			mess = "»ñÈ¡´íÎó";
+			mess = "è·å–é”™è¯¯";
 			log.debug(mess, e);
 			sendTip(false);
 		} 

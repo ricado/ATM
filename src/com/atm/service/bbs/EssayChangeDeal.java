@@ -1,12 +1,19 @@
 package com.atm.service.bbs;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import com.atm.chat.nio.server.handler.MyMessageHandler;
 import com.atm.dao.bbs.EssayClickDAO;
 import com.atm.dao.bbs.EssayDAO;
 import com.atm.dao.bbs.EssayPhotoDAO;
@@ -26,17 +33,17 @@ import com.atm.model.user.UserInfo;
 import com.atm.util.bbs.ObjectInterface;
 
 /**
- * @TODO£º¸ºÔğĞŞ¸ÄÌû×Ó£¬°üÀ¨£º·¢Ìû£¬É¾Ìû£¬µãÔŞ
+ * @TODOï¼šè´Ÿè´£ä¿®æ”¹å¸–å­ï¼ŒåŒ…æ‹¬ï¼šå‘å¸–ï¼Œåˆ å¸–ï¼Œç‚¹èµ
  * @fileName : com.atm.service.EssayChangeDeal.java
  * date | author | version |   
- * 2015Äê8ÔÂ6ÈÕ | Jiong | 1.0 |
+ * 2015å¹´8æœˆ6æ—¥ | Jiong | 1.0 |
  */
 public class EssayChangeDeal implements ObjectInterface{
 	Logger log = Logger.getLogger(getClass());
 	
 	
 	
-	//Ôö¼ÓÔÄ¶ÁÊı
+	//å¢åŠ é˜…è¯»æ•°
 	public void updateClickNum(int essayId){
 		EssayClickDAO essayClickDao = 
 					context.getBean("EssayClickDAOImpl",EssayClickDAO.class);
@@ -45,46 +52,46 @@ public class EssayChangeDeal implements ObjectInterface{
 		essayClickDao.attachDirty(essayClick);
 	}
 	
-	//±£´æÒ»¸öÌû×Ó
+	//ä¿å­˜ä¸€ä¸ªå¸–å­
 	/*
-	 * ÏÈ½«ÒÔIDĞÎÊ½´æ´¢µÄ×Ö¶Î´ÓÊı¾İ¿âÖĞ¸ù¾İ»ñÈ¡µÄÃû×ÖÈ¡³ö¶ÔÓ¦ID
-	 * ÔÙ½«ID´æÈëÌû×Ó±íµÄpojo¶ÔÏóÖĞ
-	 * ³Ö¾Ã»¯´Ë¶ÔÏó
+	 * å…ˆå°†ä»¥IDå½¢å¼å­˜å‚¨çš„å­—æ®µä»æ•°æ®åº“ä¸­æ ¹æ®è·å–çš„åå­—å–å‡ºå¯¹åº”ID
+	 * å†å°†IDå­˜å…¥å¸–å­è¡¨çš„pojoå¯¹è±¡ä¸­
+	 * æŒä¹…åŒ–æ­¤å¯¹è±¡
 	 */
-	public String saveAEssay(UserInfo user,String essayType,String labNames,String title,String department,String content,ArrayList imagePath) throws IOException, JSONException{
-		String mess = "·¢²¼Ê§°Ü";
-		log.debug("¡·¡·¡·½øÈë·¢Ìû·½·¨");
+	public String saveAEssay(UserInfo user,String essayType,String labNames,String title,String department,String content,ArrayList imagePath,String aiteID) throws IOException, JSONException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, NoSuchMethodException, SecurityException{
+		String mess = "å‘å¸ƒå¤±è´¥";
+		log.debug("ã€‹ã€‹ã€‹è¿›å…¥å‘å¸–æ–¹æ³•");
 		String userId = user.getUserId();
 		String scNo = user.getScNo();
 		
-		//****************Êı¾İ²Ù×÷¶ÔÏó**********************
+		//****************æ•°æ®æ“ä½œå¯¹è±¡**********************
 		EssayDAO essayDao = context.getBean("EssayDAOImpl",EssayDAO.class);
 		EssayTypeDAO typeDao = context.getBean("EssayTypeDAOImpl",EssayTypeDAO.class);
 		LabelDAO labelDao = context.getBean("LabelDAOImpl",LabelDAO.class);
 		DepartmentDAO deptDao = context.getBean("DepartmentDAOImpl",DepartmentDAO.class);
 		if(labNames==null||labNames.replace(" ","").length()==0){
-			labNames = "Î´ÉèÖÃ±êÇ©";
+			labNames = "æœªè®¾ç½®æ ‡ç­¾";
 		}
-		String[] labName = labNames.split("\\*#");//±êÇ©1*#±êÇ©2
+		String[] labName = labNames.split("\\*#");//æ ‡ç­¾1*#æ ‡ç­¾2
 		
-		//TODO************»ñÈ¡¶ÔÓ¦ID
+		//TODO************è·å–å¯¹åº”ID
 		int typeId ;
 		String labId="" ;
 		String dNo;
 		
 		List typeList = typeDao.findByEssayType(essayType);
 		List deptList = deptDao.findByDNameAndScNo(department, scNo);
-		//TODO ÅĞ¶Ï¸Ã¼ÇÂ¼ÔÚÊı¾İ¿âÖĞÊÇ·ñ´æÔÚ£¬Èô²»´æÔÚÔòÔö¼ÓÒ»Ìõ¼ÇÂ¼
+		//TODO åˆ¤æ–­è¯¥è®°å½•åœ¨æ•°æ®åº“ä¸­æ˜¯å¦å­˜åœ¨ï¼Œè‹¥ä¸å­˜åœ¨åˆ™å¢åŠ ä¸€æ¡è®°å½•
 		if(typeList.size()==0){
 			EssayType newType = new EssayType();
 			newType.setEssayType(essayType);
 			typeDao.save(newType);
-			//»ñÈ¡¸Õ¸Õ²åÈëµÄ¼ÇÂ¼
+			//è·å–åˆšåˆšæ’å…¥çš„è®°å½•
 			typeList = typeDao.findByEssayType(essayType);
 		}
-		EssayType type = (EssayType) typeList.get(0);//´ÓÊı×éÖĞÈ¡³öpojo
+		EssayType type = (EssayType) typeList.get(0);//ä»æ•°ç»„ä¸­å–å‡ºpojo
 		
-		//¶à¸ö±êÇ©ÃûĞèÒªÑ­»·
+		//å¤šä¸ªæ ‡ç­¾åéœ€è¦å¾ªç¯
 		for(int i=0;i<labName.length; i++){
 			List labelList = labelDao.findByLabName(labName[i]);
 			if(labelList.size()==0){
@@ -102,9 +109,9 @@ public class EssayChangeDeal implements ObjectInterface{
 			}
 			
 		}
-		//TODO¡¡´Ë·½·¨×îÖÕÓ¦É¾µô
-		if(deptList.size()==0){//Ïµ±ğ²»´æÔÚÊ±£¬¿¼ÂÇÖ±½ÓÔÚÊı¾İ¿âÖĞÔö¼ÓÒ»Ìõ¼ÇÂ¼£¬Ò»°ã²»»á³öÏÖÕâÖÖÇé¿ö
-			return "Ïµ±ğ£º"+department+"²»´æÔÚ";
+		//TODOã€€æ­¤æ–¹æ³•æœ€ç»ˆåº”åˆ æ‰
+		if(deptList.size()==0){//ç³»åˆ«ä¸å­˜åœ¨æ—¶ï¼Œè€ƒè™‘ç›´æ¥åœ¨æ•°æ®åº“ä¸­å¢åŠ ä¸€æ¡è®°å½•ï¼Œä¸€èˆ¬ä¸ä¼šå‡ºç°è¿™ç§æƒ…å†µ
+			return "ç³»åˆ«ï¼š"+department+"ä¸å­˜åœ¨";
 			/*	
 			Department newDept = new Department();
 			newDept.setDname(department);
@@ -117,17 +124,17 @@ public class EssayChangeDeal implements ObjectInterface{
 			}catch(NullPointerException e){
 				dn = "00001";
 			}
-			newDept.setDno((Integer.valueOf(dn)+1)+"");//Ö÷¼üassignedÎÊÌâ
+			newDept.setDno((Integer.valueOf(dn)+1)+"");//ä¸»é”®assignedé—®é¢˜
 			deptDao.save(newDept);
 			deptList = deptDao.findByDname(department);*/
 		}
 		Department dept = (Department) deptList.get(0);
 		
-		//TODO È¡³ö¶ÔÓ¦×Ö¶ÎµÄID
+		//TODO å–å‡ºå¯¹åº”å­—æ®µçš„ID
 		typeId = type.getTypeId();
 		dNo = dept.getDno();
 		
-		//TODO*******************»ñÈ¡²¢ÍêÉÆessayµÄpojo¶ÔÏó
+		//TODO*******************è·å–å¹¶å®Œå–„essayçš„pojoå¯¹è±¡
 		Essay essay = new Essay();
 		essay.setTypeId(typeId);
 		essay.setLabId(labId);
@@ -136,11 +143,11 @@ public class EssayChangeDeal implements ObjectInterface{
 		essay.setContent(content);
 		essay.setPublisherId(userId);
 		
-		log.debug(">>>>>>>>>>±£´æessay");
-		essayDao.save(essay);
+		log.debug(">>>>>>>>>>ä¿å­˜essay");
+		Serializable id = essayDao.save(essay);
 		
 		if(imagePath.size()>0){
-			log.debug("±£´æÍ¼Æ¬Â·¾¶");
+			log.debug("ä¿å­˜å›¾ç‰‡è·¯å¾„");
 			EssayPhotoDAO dao = 
 					(EssayPhotoDAO) context.getBean("EssayPhotoDAOImpl");
 			for(int i=0;i<imagePath.size();i++){
@@ -152,20 +159,38 @@ public class EssayChangeDeal implements ObjectInterface{
 				dao.save(e);
 			}
 		}
+		
+		//åˆ°â€œæˆ‘çš„æ¶ˆæ¯â€
+		if(aiteID!=null){
+			String[] ids = aiteID.split("\\*#");
+			Method m = MyMessageHandler.class.getMethod("sendMyMessage", String.class, int.class,String.class);
+			for(String oneId:ids){
+				JSONObject msgJsonStr = new JSONObject();
+				msgJsonStr.put("essayId",id);
+				msgJsonStr.put("nickname", user.getNickname());
+				msgJsonStr.put("essayTitle", title);
+				msgJsonStr.put("userId",userId);
+				msgJsonStr.put("avatar",user.getHeadImagePath());
+				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				msgJsonStr.put("createTime",df.format(new Date()));	
+				m.invoke(MyMessageHandler.class.newInstance(),oneId,0,msgJsonStr.toString());
+			}
+		}
+		
 		return mess="success";
 	}
-	//TODO¡¡É¾³ıÆÀÂÛ
+	//TODOã€€åˆ é™¤è¯„è®º
 		public String deleteEssay(String userId,int essayId){
 			EssayDAO essayDao = context.getBean("EssayDAOImpl",EssayDAO.class);
 			Essay essay = essayDao.findById(essayId);
 			if(essay==null){
-				return "Ìû×Ó²»´æÔÚ";
+				return "å¸–å­ä¸å­˜åœ¨";
 			}
 			if(!essay.getPublisherId().equals(userId)){
-				return "ÎŞÈ¨É¾³ı´ËÌû×Ó";
+				return "æ— æƒåˆ é™¤æ­¤å¸–å­";
 			}
 			essayDao.delete(essay);
-			log.debug("É¾³ıÁËÌû×Ó£º"+essayId);
+			log.debug("åˆ é™¤äº†å¸–å­ï¼š"+essayId);
 			return "success";
 		}
 }

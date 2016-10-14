@@ -168,6 +168,12 @@ width:100%;
 .call2:hover{color:#ffffff;background-color:#78c300;border-color:#c5e591;}
 
 	</style>
+	<script type="text/javascript">
+		function communicate(type,phone){
+			window.recuitView.tel(type,phone);
+		}
+	</script>
+	
   </head>
   
   <body>
@@ -247,8 +253,8 @@ name="user_head" width="100%" height="100%" id="user_head" style="background-col
    </table>  
     </div>
 <center>
-    <a class="call" href="tel:<%= recuitBean.getTelephone() %>">打电话</a>
-   <a class="call" href="sms:<%= recuitBean.getTelephone() %>">发短信</a>
+    <a class="call" href="javascript:void(0)"  onclick="communicate('tel','<%= recuitBean.getTelephone() %>')">打电话</a>
+   <a class="call" href="javascript:void(0)" onclick="communicate('sms','<%= recuitBean.getTelephone() %>')">发短信</a>
 </center>
     <div class="baseInform">
     <h3>详细介绍：</h3>

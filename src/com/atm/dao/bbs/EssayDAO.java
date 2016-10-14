@@ -1,5 +1,6 @@
 package com.atm.dao.bbs;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
@@ -22,7 +23,7 @@ public interface EssayDAO {
 
 	public abstract void setSessionFactory(SessionFactory sessionFactory);
 
-	public abstract void save(Essay transientInstance);
+	public abstract Serializable save(Essay transientInstance);
 
 	public abstract void delete(Essay persistentInstance);
 
