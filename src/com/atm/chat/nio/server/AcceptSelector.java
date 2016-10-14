@@ -15,8 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.atm.chat.nio.server.util.ScMap;
 
 public class AcceptSelector implements ScMap {
-	private static final Logger log = LoggerFactory
-			.getLogger(AcceptSelector.class);
+	private static final Logger log = LoggerFactory.getLogger(AcceptSelector.class);
 	private Selector selector;
 	private ServerSocketChannel server = null;
 	static final int port = 23457;
@@ -30,6 +29,9 @@ public class AcceptSelector implements ScMap {
 		this.server = server;
 	}
 
+	//
+	private Object gate = new Object();
+
 	public void receive() throws IOException {
 		log.info("acceptselector 开启 receive");
 		while (true) {
@@ -39,16 +41,18 @@ public class AcceptSelector implements ScMap {
 			Set<SelectionKey> selectedKeys = selector.selectedKeys(); // 可以通过这个方法，知道可用通道的集合
 			Iterator<SelectionKey> keyIterator = selectedKeys.iterator();
 			while (keyIterator.hasNext()) {
-				selectionKey = (SelectionKey) keyIterator.next();
-				keyIterator.remove();
-				// 判断是否接收
-				if (selectionKey.isAcceptable()) {
-					socketChannel = server.accept();
-					managerSelector();
-					// 将此对应的channel设置为准备接受其他客户端请求
-					log.info("将此对应的channel设置为准备接受其他客户端请求");
-					selectionKey.interestOps(SelectionKey.OP_ACCEPT);
-					log.info("----------ok--------");
+				synchronized (gate) {
+					selectionKey = (SelectionKey) keyIterator.next();
+					keyIterator.remove();
+					// 判断是否接收
+					if (selectionKey.isAcceptable()) {
+						socketChannel = server.accept();
+						managerSelector();
+						// 将此对应的channel设置为准备接受其他客户端请求
+						log.info("将此对应的channel设置为准备接受其他客户端请求");
+						selectionKey.interestOps(SelectionKey.OP_ACCEPT);
+						log.info("----------ok--------");
+					}
 				}
 			}
 		}
@@ -62,8 +66,7 @@ public class AcceptSelector implements ScMap {
 	public void managerSelector() throws IOException {
 		boolean flag = true;
 
-		for (Iterator<ReadSelector> readSelectors = selectors.iterator(); readSelectors
-				.hasNext();) {
+		for (Iterator<ReadSelector> readSelectors = selectors.iterator(); readSelectors.hasNext();) {
 			ReadSelector readSelector = (ReadSelector) readSelectors.next();
 			System.out.println("当前readSocketor的数量:" + readSelector.getSize());
 			// readSelector的socketChannel的数量小于40

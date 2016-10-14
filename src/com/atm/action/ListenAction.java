@@ -21,10 +21,10 @@ public class ListenAction implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
 		// TODO Auto-generated method stub
-		log.debug("¿ªÊ¼Ö´ĞĞ³õÊ¼»¯·½·¨....");
+		log.debug("å¼€å§‹æ‰§è¡Œåˆå§‹åŒ–æ–¹æ³•....");
 		Thread thread = new ServerThread();
 		thread.start();
-		log.debug("¿ªÆô³É¹¦¡£¡£¡£¡£");
+		log.debug("å¼€å¯æˆåŠŸã€‚ã€‚ã€‚ã€‚");
 	}
 
 }

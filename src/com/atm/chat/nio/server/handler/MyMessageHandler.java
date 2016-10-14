@@ -1,7 +1,6 @@
 package com.atm.chat.nio.server.handler;
 
 import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,11 +9,11 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSONArray;
 import com.atm.chat.nio.server.util.Config;
 import com.atm.daoDefined.MyMessageDAO;
 import com.atm.model.define.MyMessage;
 import com.atm.util.Application;
-import com.atm.util.JsonUtil;
 
 /**
  * 我的消息 使用json
@@ -85,12 +84,23 @@ public class MyMessageHandler extends BufferHandler implements Application {
 	 * @throws JSONException
 	 */
 	public void sendMyMessage() throws JSONException, Exception {
+		log.info("发送我的消息");
 		JSONObject json = new JSONObject(getString());
 		String userId = json.getString("userId");
+		int type = json.getInt("type");
+		log.info("userId:" + userId + "," + "type:" + type);
 		List<MyMessage> myMessages = new ArrayList<MyMessage>();
-		myMessages = myMessageDAO.findMyMessage(userId, json.getInt("type"));
-		json.put("messgae", JsonUtil.listToJson(myMessages));
-		sendJson(Config.MY_MESSAGE, json.toString(), userId);
+		myMessages = myMessageDAO.findMyMessage(userId, type);
+		log.info("获取到我的消息的数量:" + myMessages.size());
+		JSONArray jsonArray = new JSONArray();
+		for (int i = 0; i < myMessages.size(); i++) {
+			MyMessage message = myMessages.get(i);
+			com.alibaba.fastjson.JSONObject jsonObject = (com.alibaba.fastjson.JSONObject) com.alibaba.fastjson.JSONObject.toJSON(message);
+			jsonObject.put("content", com.alibaba.fastjson.JSONObject.parse(message.getContent()));
+			jsonArray.add(jsonObject);
+		}
+		json.put("message", jsonArray);
+		sendJson(Config.MYMESSAGE, json.toString(), userId);
 	}
 
 	/**

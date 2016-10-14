@@ -14,7 +14,7 @@ import com.atm.service.user.UserService;
 import com.atm.util.FileUtil;
 
 /**
- * ´¦ÀíÓĞ¹ØÓÃ»§µÄÇëÇóÏûÏ¢£¬°üÀ¨Ìí¼Ó£¬È¡Ïû¹Ø×¢¡£»ñÈ¡¹Ø×¢ÈË£¬·ÛË¿ÁĞ±íÒÔ¼°×Ê±¾ÏêÏ¸×ÊÁÏ
+ * å¤„ç†æœ‰å…³ç”¨æˆ·çš„è¯·æ±‚æ¶ˆæ¯ï¼ŒåŒ…æ‹¬æ·»åŠ ï¼Œå–æ¶ˆå…³æ³¨ã€‚è·å–å…³æ³¨äººï¼Œç²‰ä¸åˆ—è¡¨ä»¥åŠèµ„æœ¬è¯¦ç»†èµ„æ–™
  * 
  * @author ye
  * @time 2015.8.17
@@ -28,46 +28,46 @@ public class UserHandler extends BufferHandler {
 	}
 
 	/**
-	 * ²Ù×÷µÄÖĞ×ªÕ¾
+	 * æ“ä½œçš„ä¸­è½¬ç«™
 	 * 
 	 * @param type
 	 * @throws Exception
 	 */
 	public void operate(int type) throws Exception {
 		switch (type) {
-		case Config.USER_ADD_ATTENT:// Ìí¼Ó¹Ø×¢
+		case Config.USER_ADD_ATTENT:// æ·»åŠ å…³æ³¨
 			addAttent();
 			break;
-		case Config.USER_GET_ATTENT:// »ñÈ¡ÎÒ¹Ø×¢µÄ
+		case Config.USER_GET_ATTENT:// è·å–æˆ‘å…³æ³¨çš„
 			myAttented();
 			break;
-		case Config.USER_GET_ATTENTED:// »ñÈ¡ÎÒµÄ
+		case Config.USER_GET_ATTENTED:// è·å–æˆ‘çš„
 			attentMe();
 			break;
 		case Config.USER_OTHER_ATTENT:
-			// TODO ±ğÈË¹Ø×¢µÄÓÃ»§
+			// TODO åˆ«äººå…³æ³¨çš„ç”¨æˆ·
 			otherAttent();
 			break;
 		case Config.USER_OTHER_FANS:
-			// TODO ±ğÈËµÄ·ÛË¿
+			// TODO åˆ«äººçš„ç²‰ä¸
 			otherFans();
 			break;
-		case Config.USER_CANCEL_ATTENT:// È¡Ïû¹Ø×¢
+		case Config.USER_CANCEL_ATTENT:// å–æ¶ˆå…³æ³¨
 			cancelAttent();
 			break;
-		case Config.USER_FIND: // Ñ°ÕÒÓëkeyWordÆ¥ÅäµÄÓÃ»§
+		case Config.USER_FIND: // å¯»æ‰¾ä¸keyWordåŒ¹é…çš„ç”¨æˆ·
 			findUser();
 			break;
-		case Config.USER_FOUND:// ²éÕÒ¿ÉÄÜ¸ĞĞËÈ¤µÄÓÃ»§
+		case Config.USER_FOUND:// æŸ¥æ‰¾å¯èƒ½æ„Ÿå…´è¶£çš„ç”¨æˆ·
 			findInterestingUser();
 			break;
-		case Config.USER_LIST: // Ñ°ÕÒ¿ÉÄÜ¸ĞĞËÈ¤µÄÈË
+		case Config.USER_LIST: // å¯»æ‰¾å¯èƒ½æ„Ÿå…´è¶£çš„äºº
 			findInterestingUser();
 			break;
-		case Config.USER_GET_INFO:// »ñÈ¡ÓÃ»§µÄ»ù±¾×ÊÁÏ
+		case Config.USER_GET_INFO:// è·å–ç”¨æˆ·çš„åŸºæœ¬èµ„æ–™
 			findUserBasicInfo();
 			break;
-		case Config.USER_GET_HEAD:// »ñÈ¡ÓÃ»§Í·Ïñ
+		case Config.USER_GET_HEAD:// è·å–ç”¨æˆ·å¤´åƒ
 			userHead();
 			break;
 		default:
@@ -76,7 +76,7 @@ public class UserHandler extends BufferHandler {
 	}
 
 	/**
-	 * ¸ù¾İ»ñÈ¡µ½µÄkeyWordËÑË÷Ïà¹ØµÄÓÃ»§¡£
+	 * æ ¹æ®è·å–åˆ°çš„keyWordæœç´¢ç›¸å…³çš„ç”¨æˆ·ã€‚
 	 * 
 	 * @throws Exception
 	 */
@@ -84,11 +84,11 @@ public class UserHandler extends BufferHandler {
 		String userId = getString();
 		String keyWord = getString();
 		try {
-			log.info(userId + "ÇëÇóËÑË÷¡¯" + keyWord + "¡®ÓĞ¹ØÓÃ»§");
+			log.info(userId + "è¯·æ±‚æœç´¢â€™" + keyWord + "â€˜æœ‰å…³ç”¨æˆ·");
 			List<UserList> userLists = userService.findUser(keyWord, 0, 20);
 			sendUserList(userLists, Config.USER_RESULT_FIND);
 		} catch (Exception e) {
-			log.info("²éÕÒÊ§°Ü");
+			log.info("æŸ¥æ‰¾å¤±è´¥");
 			buffer = ByteBuffer.allocateDirect(8);
 			buffer.putInt(Config.USER_RESULT_FIND);
 			buffer.putInt(Config.FAILED);
@@ -97,14 +97,14 @@ public class UserHandler extends BufferHandler {
 	}
 
 	/**
-	 * ²éÕÒ¿ÉÄÜ¸ĞĞËÈ¤µÄÓÃ»§
+	 * æŸ¥æ‰¾å¯èƒ½æ„Ÿå…´è¶£çš„ç”¨æˆ·
 	 * 
 	 * @throws Exception
 	 */
 	public void findInterestingUser() throws Exception {
-		String userId = getString();// ½ÓÊÕuserID
+		String userId = getString();// æ¥æ”¶userID
 		try {
-			log.info("½øÈëµ½²éÕÒ¿ÉÄÜ¸ĞĞËÈ¤µÄÓÃ»§");
+			log.info("è¿›å…¥åˆ°æŸ¥æ‰¾å¯èƒ½æ„Ÿå…´è¶£çš„ç”¨æˆ·");
 			List<UserList> userLists = userService.findInterestingUser(userId,
 					0, 10);
 			sendUserList(userLists, Config.USER_RESULT_FIND);
@@ -118,29 +118,29 @@ public class UserHandler extends BufferHandler {
 	}
 
 	/**
-	 * ·¢ËÍÓÃ»§ÁĞ±í
+	 * å‘é€ç”¨æˆ·åˆ—è¡¨
 	 * 
 	 * @param userLists
-	 *            ÓÃ»§ÁĞ±í
+	 *            ç”¨æˆ·åˆ—è¡¨
 	 * @param type
-	 *            ·¢ËÍµÄ½á¹ûÀàĞÍ
+	 *            å‘é€çš„ç»“æœç±»å‹
 	 * @throws IOException
 	 */
 	public void sendUserList(List<UserList> userLists, int type)
 			throws IOException {
 		int count = userLists.size();
 		log.info("count:" + count);
-		// ÅĞ¶ÏuserListsÊÇ·ñÎª¿Õ.Îª¿ÕÔòÎªÃ»ÓĞÕÒµ½
+		// åˆ¤æ–­userListsæ˜¯å¦ä¸ºç©º.ä¸ºç©ºåˆ™ä¸ºæ²¡æœ‰æ‰¾åˆ°
 		if (userLists.size() == 0) {
-			log.info("Ã»ÓĞÕÒµ½");
+			log.info("æ²¡æœ‰æ‰¾åˆ°");
 			buffer = ByteBuffer.allocateDirect(8);
 			buffer.putInt(type);
 			buffer.putInt(Config.NOT_FOUND);
 			writeBuffer();
 			return;
 		}
-		log.info("ÕÒµ½¼ÇÂ¼-------");
-		int length = 0;// buffer µÄÈİÁ¿
+		log.info("æ‰¾åˆ°è®°å½•-------");
+		int length = 0;// buffer çš„å®¹é‡
 		byte[][] images = new byte[count][];
 		try {
 			for (int i = 0; i < count; i++) {
@@ -149,7 +149,7 @@ public class UserHandler extends BufferHandler {
 				String path = this.getClass().getResource("/").getPath()
 						.substring(1).replaceFirst("WEB-INF/classes/", "");
 				log.info(path);
-				// »ñÈ¡ÓÃ»§Í·ÏñËõÂÔÍ¼µÄÍ·Ïñ
+				// è·å–ç”¨æˆ·å¤´åƒç¼©ç•¥å›¾çš„å¤´åƒ
 				images[i] = FileUtil.makeFileToByte(path
 						+ userList.getHeadImagePath());
 				log.info("iamges" + i + ":" + images[i].length);
@@ -165,9 +165,9 @@ public class UserHandler extends BufferHandler {
 			throw e;
 		}
 		length += 12;
-		log.info("¿ªÊ¼·¢ËÍÓÃ»§ÁĞ±í");
+		log.info("å¼€å§‹å‘é€ç”¨æˆ·åˆ—è¡¨");
 		buffer = ByteBuffer.allocateDirect(length);
-		log.info("bufferµÄÈİÁ¿£º" + length);
+		log.info("bufferçš„å®¹é‡ï¼š" + length);
 		buffer.putInt(type);
 		buffer.putInt(Config.SUCCESS);
 		buffer.putInt(count);
@@ -182,33 +182,33 @@ public class UserHandler extends BufferHandler {
 			buffer.put(images[i]);
 		}
 		writeBuffer();
-		log.info("-----------·¢ËÍ½áÊø-------------");
+		log.info("-----------å‘é€ç»“æŸ-------------");
 	}
 
 	/**
-	 * ·¢ËÍÓÃ»§ÁĞ±í
+	 * å‘é€ç”¨æˆ·åˆ—è¡¨
 	 * 
 	 * @param userLists
-	 *            ÓÃ»§ÁĞ±í
+	 *            ç”¨æˆ·åˆ—è¡¨
 	 * @param type
-	 *            ·¢ËÍµÄ½á¹ûÀàĞÍ
+	 *            å‘é€çš„ç»“æœç±»å‹
 	 * @throws IOException
 	 */
 	public void sendUserList(List<UserList> userLists, int type, String userId,
 			String otherUserId) throws IOException {
 		int count = userLists.size();
 		log.info("count:" + count);
-		// ÅĞ¶ÏuserListsÊÇ·ñÎª¿Õ.Îª¿ÕÔòÎªÃ»ÓĞÕÒµ½
+		// åˆ¤æ–­userListsæ˜¯å¦ä¸ºç©º.ä¸ºç©ºåˆ™ä¸ºæ²¡æœ‰æ‰¾åˆ°
 		if (userLists.size() == 0) {
-			log.info("Ã»ÓĞÕÒµ½");
+			log.info("æ²¡æœ‰æ‰¾åˆ°");
 			buffer = ByteBuffer.allocateDirect(8);
 			buffer.putInt(type);
 			buffer.putInt(Config.NOT_FOUND);
 			writeBuffer();
 			return;
 		}
-		log.info("ÕÒµ½¼ÇÂ¼-------");
-		int length = 0;// buffer µÄÈİÁ¿
+		log.info("æ‰¾åˆ°è®°å½•-------");
+		int length = 0;// buffer çš„å®¹é‡
 		byte[][] images = new byte[count][];
 		try {
 			for (int i = 0; i < count; i++) {
@@ -217,12 +217,12 @@ public class UserHandler extends BufferHandler {
 				String path = this.getClass().getResource("/").getPath()
 						.substring(1).replaceFirst("WEB-INF/classes/", "");
 				log.info(path);
-				// »ñÈ¡ÓÃ»§Í·ÏñËõÂÔÍ¼µÄÍ·Ïñ
+				// è·å–ç”¨æˆ·å¤´åƒç¼©ç•¥å›¾çš„å¤´åƒ
 				images[i] = FileUtil.makeFileToByte(path
 						+ userList.getHeadImagePath());
 				log.info("iamges" + i + ":" + images[i].length);
 				length += 24
-						// µ±Ç°ÓÃ»§µÄid
+						// å½“å‰ç”¨æˆ·çš„id
 						+ userList.getUserId().getBytes().length
 						+ userList.getNickname().getBytes().length
 						+ userList.getdName().getBytes().length
@@ -234,16 +234,16 @@ public class UserHandler extends BufferHandler {
 			throw e;
 		}
 		length += userId.getBytes().length + 4
-		// µ±Ç°otherÓÃ»§µÄid
+		// å½“å‰otherç”¨æˆ·çš„id
 				+ otherUserId.getBytes().length + 4 + 12;
-		log.info("¿ªÊ¼·¢ËÍÓÃ»§ÁĞ±í");
+		log.info("å¼€å§‹å‘é€ç”¨æˆ·åˆ—è¡¨");
 		buffer = ByteBuffer.allocateDirect(length);
-		log.info("bufferµÄÈİÁ¿£º" + length);
+		log.info("bufferçš„å®¹é‡ï¼š" + length);
 		buffer.putInt(type);
 		buffer.putInt(Config.SUCCESS);
-		// µ±Ç°ÓÃ»§
+		// å½“å‰ç”¨æˆ·
 		put(userId);
-		// µ±Ç°otherÓÃ»§µÄid
+		// å½“å‰otherç”¨æˆ·çš„id
 		put(otherUserId);
 		buffer.putInt(count);
 		for (int i = 0; i < count; i++) {
@@ -252,66 +252,66 @@ public class UserHandler extends BufferHandler {
 			put(userList.getNickname());
 			put(userList.getdName());
 			put(userList.getSex());
-			// ÊÇ·ñÓĞ¹Ø×¢
+			// æ˜¯å¦æœ‰å…³æ³¨
 			buffer.putInt(userList.getFlag());
 			buffer.putInt(images[i].length);
 			buffer.put(images[i]);
 		}
 		writeBuffer();
-		log.info("-----------·¢ËÍ½áÊø-------------");
+		log.info("-----------å‘é€ç»“æŸ-------------");
 	}
 
-	/****************************** ¹Ø×¢ ***********************/
+	/****************************** å…³æ³¨ ***********************/
 	/**
-	 * Ìí¼Ó¹Ø×¢
+	 * æ·»åŠ å…³æ³¨
 	 * 
 	 * @throws Exception
 	 */
 	public void addAttent() throws Exception {
-		log.info("-----------Ìí¼Ó¹Ø×¢");
+		log.info("-----------æ·»åŠ å…³æ³¨");
 		String userAttentId = getString();
 		String userAttentedId = getString();
 		try {
 			log.info(userAttentId + " attend " + userAttentedId);
 			userService.addAttent(userAttentId, userAttentedId);
-			log.info("Ìí¼Ó³É¹¦");
+			log.info("æ·»åŠ æˆåŠŸ");
 			sendResultAttent(Config.USER_RESULT_ADDATTENT, Config.SUCCESS);
 		} catch (Exception e) {
-			log.info("Ìí¼Ó¹Ø×¢Ê§°Ü");
+			log.info("æ·»åŠ å…³æ³¨å¤±è´¥");
 			sendResultAttent(Config.USER_RESULT_ADDATTENT, Config.FAILED);
 		}
 	}
 
 	/**
-	 * µÃµ½ËùÓĞµÄ¹Ø×¢ÎÒµÄÈË
+	 * å¾—åˆ°æ‰€æœ‰çš„å…³æ³¨æˆ‘çš„äºº
 	 * 
 	 * @throws Exception
 	 */
 	public void attentMe() throws Exception {
-		log.info("-----------¹Ø×¢ÎÒµÄ");
+		log.info("-----------å…³æ³¨æˆ‘çš„");
 		String userAttentedId = getString();
 		try {
 			List<UserList> userLists = userService
 					.findAttentedMe(userAttentedId);
 			sendUserList(userLists, Config.USER_GET_ATTENTED);
 		} catch (Exception e) {
-			log.info("Ê§°Ü");
+			log.info("å¤±è´¥");
 		}
 	}
 
 	/**
-	 * µÃµ½ËùÓĞÎÒ¹Ø×¢µÄ
+	 * å¾—åˆ°æ‰€æœ‰æˆ‘å…³æ³¨çš„
 	 * 
 	 * @throws Exception
 	 */
 	public void myAttented() throws Exception {
-		log.info("-----------ÎÒ¹Ø×¢µÄ");
+		log.info("-----------æˆ‘å…³æ³¨çš„");
 		String userAttentId = getString();
 		try {
 			List<UserList> userLists = userService.findMyAttent(userAttentId);
 			sendUserList(userLists, Config.USER_RESULT_GETATTENT);
 		} catch (Exception e) {
-			log.info("Ê§°Ü");
+			log.info("å¤±è´¥");
 			buffer = ByteBuffer.allocateDirect(8);
 			buffer.putInt(Config.USER_RESULT_GETATTENT);
 			buffer.putInt(Config.FAILED);
@@ -321,43 +321,43 @@ public class UserHandler extends BufferHandler {
 	}
 
 	/**
-	 * È¡Ïû¹Ø×¢
+	 * å–æ¶ˆå…³æ³¨
 	 * 
 	 * @throws Exception
 	 */
 	public void cancelAttent() throws Exception {
-		log.info("---------È¡Ïû¹Ø×¢------------");
-		String userId = getString();// ¹Ø×¢ÈË
-		String attentedId = getString();// ±»¹Ø×¢ÈË
+		log.info("---------å–æ¶ˆå…³æ³¨------------");
+		String userId = getString();// å…³æ³¨äºº
+		String attentedId = getString();// è¢«å…³æ³¨äºº
 		try {
 			userService.cancelAttent(userId, attentedId);
-			log.info("È¡Ïû¹Ø×¢³É¹¦");
+			log.info("å–æ¶ˆå…³æ³¨æˆåŠŸ");
 			sendResultAttent(Config.USER_RESULT_CANCELATTENT, Config.SUCCESS);
 		} catch (Exception e) {
-			log.info("È¡Ïû¹Ø×¢Ê§°Ü");
+			log.info("å–æ¶ˆå…³æ³¨å¤±è´¥");
 			sendResultAttent(Config.USER_RESULT_CANCELATTENT, Config.FAILED);
 		}
 	}
 
 	/**
-	 * »ñÈ¡ÆäËûÓÃ»§¹Ø×¢µÄÁĞ±í
+	 * è·å–å…¶ä»–ç”¨æˆ·å…³æ³¨çš„åˆ—è¡¨
 	 * 
 	 * @throws Exception
 	 */
 	public void otherAttent() throws Exception {
-		log.info("--------»ñÈ¡ÆäËûÓÃ»§¹Ø×¢µÄÁĞ±í----------");
-		// µ±Ç°ÓÃ»§
+		log.info("--------è·å–å…¶ä»–ç”¨æˆ·å…³æ³¨çš„åˆ—è¡¨----------");
+		// å½“å‰ç”¨æˆ·
 		String userId = getString();
-		// ÆäËûÓÃ»§
+		// å…¶ä»–ç”¨æˆ·
 		String otherUserId = getString();
 		try {
 			List<UserList> userLists = userService.findOtherAttented(
 					otherUserId, userId);
-			log.info("»ñÈ¡ÆäËûÓÃ»§µÄ¹Ø×¢ÁĞ±í");
+			log.info("è·å–å…¶ä»–ç”¨æˆ·çš„å…³æ³¨åˆ—è¡¨");
 			sendUserList(userLists, Config.USER_RESULT_OATTENT, userId,
 					otherUserId);
 		} catch (Exception e) {
-			log.info("Ê§°Ü");
+			log.info("å¤±è´¥");
 			buffer = ByteBuffer.allocateDirect(8);
 			buffer.putInt(Config.USER_RESULT_OATTENT);
 			buffer.putInt(Config.FAILED);
@@ -366,24 +366,24 @@ public class UserHandler extends BufferHandler {
 	}
 
 	/**
-	 * »ñÈ¡ÆäËûÓÃ»§µÄ·ÛË¿ÁĞ±í
+	 * è·å–å…¶ä»–ç”¨æˆ·çš„ç²‰ä¸åˆ—è¡¨
 	 * 
 	 * @throws Exception
 	 */
 	public void otherFans() throws Exception {
-		log.info("-------»ñÈ¡ÆäËûÓÃ»§µÄ·ÛË¿ÁĞ±í---------");
-		// µ±Ç°ÓÃ»§
+		log.info("-------è·å–å…¶ä»–ç”¨æˆ·çš„ç²‰ä¸åˆ—è¡¨---------");
+		// å½“å‰ç”¨æˆ·
 		String userId = getString();
-		// ÆäËûÓÃ»§
+		// å…¶ä»–ç”¨æˆ·
 		String otherUserId = getString();
 		try {
 			List<UserList> userLists = userService.findOtherFans(otherUserId,
 					userId);
-			log.info("»ñÈ¡ÆäËûÓÃ»§µÄ¹Ø×¢ÁĞ±í");
+			log.info("è·å–å…¶ä»–ç”¨æˆ·çš„å…³æ³¨åˆ—è¡¨");
 			sendUserList(userLists, Config.USER_RESULT_OFANS, userId,
 					otherUserId);
 		} catch (Exception e) {
-			log.info("Ê§°Ü");
+			log.info("å¤±è´¥");
 			buffer = ByteBuffer.allocateDirect(8);
 			buffer.putInt(Config.USER_RESULT_OFANS);
 			buffer.putInt(Config.FAILED);
@@ -399,7 +399,7 @@ public class UserHandler extends BufferHandler {
 	}
 
 	/**
-	 * »ñÈ¡ÓÃ»§µÄ»ù±¾×ÊÁÏĞÅÏ¢
+	 * è·å–ç”¨æˆ·çš„åŸºæœ¬èµ„æ–™ä¿¡æ¯
 	 * 
 	 * @throws Exception
 	 */
@@ -407,7 +407,7 @@ public class UserHandler extends BufferHandler {
 		String userId = getString();
 		String otherUserId = getString();
 		int relationShip = 0;
-		log.info("====" + userId + "»ñÈ¡" + otherUserId + "µÄ»ù±¾×ÊÁÏ======");
+		log.info("====" + userId + "è·å–" + otherUserId + "çš„åŸºæœ¬èµ„æ–™======");
 		try {
 			UserBasicInfo basicInfo = userService.getUserBasicInfo(otherUserId);
 			relationShip = userService.getRelationShip(userId, otherUserId);
@@ -417,7 +417,7 @@ public class UserHandler extends BufferHandler {
 			}
 		} catch (Exception e) {
 			log.info(e.getMessage());
-			log.info("»ñÈ¡»ù±¾×ÊÁÏÊ§°Ü");
+			log.info("è·å–åŸºæœ¬èµ„æ–™å¤±è´¥");
 		}
 		buffer = ByteBuffer.allocateDirect(8);
 		buffer.putInt(Config.USER_RESULT_GETINFO);
@@ -426,24 +426,24 @@ public class UserHandler extends BufferHandler {
 	}
 
 	/**
-	 * »ñÈ¡ÓÃ»§Í·ÏñµÄ¶ÁÈ¡·½·¨,½ÓÊÕÓÃ»§·¢¹ıÀ´µÄuserId,Ñ°ÕÒuserIdµÄÍ·Ïñ
+	 * è·å–ç”¨æˆ·å¤´åƒçš„è¯»å–æ–¹æ³•,æ¥æ”¶ç”¨æˆ·å‘è¿‡æ¥çš„userId,å¯»æ‰¾userIdçš„å¤´åƒ
 	 * 
 	 * @throws Exception
 	 */
 	public void userHead() throws Exception {
-		log.info("»ñÈ¡ÓÃ»§Í·Ïñ");
-		// »ñÈ¡ÓÃ»§userId
+		log.info("è·å–ç”¨æˆ·å¤´åƒ");
+		// è·å–ç”¨æˆ·userId
 		String userId = getString();
 		try {
-			// »ñÈ¡ÓÃ»§Í·ÏñµÄÂ·¾¶
+			// è·å–ç”¨æˆ·å¤´åƒçš„è·¯å¾„
 			String path = userService.getUserInfo(userId).getHeadImagePath();
-			// »ñÈ¡ÏîÄ¿Â·¾¶
+			// è·å–é¡¹ç›®è·¯å¾„
 			String basicPath = this.getClass().getResource("/").getPath()
 					.substring(1).replaceFirst("WEB-INF/classes/", "");
 			log.info("path:" + basicPath + path);
-			// »ñÈ¡ÓÃ»§Í·ÏñµÄ×Ö½ÚÊı×é
+			// è·å–ç”¨æˆ·å¤´åƒçš„å­—èŠ‚æ•°ç»„
 			byte[] bs = FileUtil.makeFileToByte(basicPath + path);
-			// ·¢ËÍ
+			// å‘é€
 			buffer = ByteBuffer.allocateDirect(8 + bs.length + 4 + 4
 					+ userId.getBytes().length);
 			buffer.putInt(Config.USER_RESULT_GETHEAD);
@@ -463,114 +463,114 @@ public class UserHandler extends BufferHandler {
 	}
 
 	/**
-	 * »ñÈ¡ÓÃ»§×ÊÁÏ³É¹¦¡£·¢ËÍÓÃ»§»ù±¾×ÊÁÏĞÅÏ¢
-	 * °üÀ¨userId,nickname,sign,dname,scname,focusNum,funsNum,image
+	 * è·å–ç”¨æˆ·èµ„æ–™æˆåŠŸã€‚å‘é€ç”¨æˆ·åŸºæœ¬èµ„æ–™ä¿¡æ¯
+	 * åŒ…æ‹¬userId,nickname,sign,dname,scname,focusNum,funsNum,image
 	 * 
 	 * @param userBasicInfo
 	 * @throws IOException
 	 */
 	public void sendUserBasicInfo(UserBasicInfo userBasicInfo, int relationship)
 			throws IOException {
-		// ¹Ø×¢µÄÈËÊı
+		// å…³æ³¨çš„äººæ•°
 		String focusNum = userBasicInfo.getFocusNum() + "";
-		// ·ÛË¿Êı
+		// ç²‰ä¸æ•°
 		String fansNum = userBasicInfo.getFansNum() + "";
 		String path = this.getClass().getResource("/").getPath().substring(1)
 				.replaceFirst("WEB-INF/classes/", "");
 		log.info(path);
-		// »ñÈ¡ÓÃ»§Í·ÏñµÄ×Ö½ÚÊı×é
+		// è·å–ç”¨æˆ·å¤´åƒçš„å­—èŠ‚æ•°ç»„
 		byte[] image = FileUtil.makeFileToByte(path
 				+ userBasicInfo.getHeadImagePath());
 		String publishNum = "24";
-		String publishTitle = "[ÖĞ¹úºÃ±à³Ì]µÚÈıÂÖ¶ØºÀÀÏÊ¦ÎªÇÀÈË¼À³ö·ï½ã";
-		String publishContent = "ºÃ±à³ÌÓ­À´×î»ğ±¬,¹ã½ğÑ§×Ó±à³ÌÒÕÊõ¾ª´ôËÄÎ»µ¼Ê¦...";
+		String publishTitle = "[ä¸­å›½å¥½ç¼–ç¨‹]ç¬¬ä¸‰è½®æ•¦è±ªè€å¸ˆä¸ºæŠ¢äººç¥­å‡ºå‡¤å§";
+		String publishContent = "å¥½ç¼–ç¨‹è¿æ¥æœ€ç«çˆ†,å¹¿é‡‘å­¦å­ç¼–ç¨‹è‰ºæœ¯æƒŠå‘†å››ä½å¯¼å¸ˆ...";
 		String collectNum = "28";
-		String collectTitle = "[×¦ÍÛĞÂÎÅ]¶ØºÀ·Å³öºÀÑÔ£¬ÎÒµÄÑ§ÉúÖÁÉÙbat";
-		String collectContent = "½ñÈÕ£¬¶ØºÀÀÏÊ¦ËµËûµÄÑ§ÉúÄêĞ½ÖÁÉÙÁùÎ»Êı,º®¶¬ËµËûÔÚ·ÅÆ¨...";
+		String collectTitle = "[çˆªå“‡æ–°é—»]æ•¦è±ªæ”¾å‡ºè±ªè¨€ï¼Œæˆ‘çš„å­¦ç”Ÿè‡³å°‘bat";
+		String collectContent = "ä»Šæ—¥ï¼Œæ•¦è±ªè€å¸ˆè¯´ä»–çš„å­¦ç”Ÿå¹´è–ªè‡³å°‘å…­ä½æ•°,å¯’å†¬è¯´ä»–åœ¨æ”¾å±...";
 
-		int length = 8 + 4 // ¹ØÏµ
+		int length = 8 + 4 // å…³ç³»
 				// id
 				+ userBasicInfo.getUserId().getBytes().length + 4
-				// êÇ³Æ
+				// æ˜µç§°
 				+ userBasicInfo.getNickname().getBytes().length + 4
-				// ĞÔ±ğ
+				// æ€§åˆ«
 				+ userBasicInfo.getSex().getBytes().length + 4
 				// focusNum
 				+ 4 + focusNum.getBytes().length
 				// fansNum
 				+ 4 + fansNum.getBytes().length
-				// Ç©Ãû
+				// ç­¾å
 				+ userBasicInfo.getSign().getBytes().length + 4
-				// Ñ§Ğ£
+				// å­¦æ ¡
 				+ userBasicInfo.getScName().getBytes().length + 4
-				// Ïµ±ğ
+				// ç³»åˆ«
 				+ userBasicInfo.getDname().getBytes().length + 4
-				// ·¢ÌûÊıÁ¿
+				// å‘å¸–æ•°é‡
 				+ publishNum.getBytes().length + 4
-				// ·¢Ìû±êÌâ
+				// å‘å¸–æ ‡é¢˜
 				+ publishTitle.getBytes().length + 4
-				// ·¢ÌûÄÚÈİ
+				// å‘å¸–å†…å®¹
 				+ publishContent.getBytes().length + 4
-				// ÊÕ²ØÌùÊıÁ¿
+				// æ”¶è—è´´æ•°é‡
 				+ collectNum.getBytes().length + 4
-				// ÊÕ²ØÌù±êÌâ
+				// æ”¶è—è´´æ ‡é¢˜
 				+ collectTitle.getBytes().length + 4
-				// ÊÕ²ØÌùÄÚÈİ
+				// æ”¶è—è´´å†…å®¹
 				+ collectContent.getBytes().length + 4
-				// Í·Ïñ
+				// å¤´åƒ
 				+ image.length + 4;
 
-		// Éè¶¨bufferµÄ³¤¶È
+		// è®¾å®šbufferçš„é•¿åº¦
 		buffer = ByteBuffer.allocateDirect(length);
 
-		// ÀàĞÍ
+		// ç±»å‹
 		buffer.putInt(Config.USER_RESULT_GETINFO);
-		// ³É¹¦
+		// æˆåŠŸ
 		buffer.putInt(Config.SUCCESS);
 
-		// 1 ÓÃ»§id
+		// 1 ç”¨æˆ·id
 		put(userBasicInfo.getUserId());
-		// 2 ÓÃ»§êÇ³Æ
+		// 2 ç”¨æˆ·æ˜µç§°
 		put(userBasicInfo.getNickname());
-		// 3 ĞÔ±ğ
+		// 3 æ€§åˆ«
 		put(userBasicInfo.getSex());
-		// 4 ÓÃ»§¹Ø×¢µÄÈËÊı
+		// 4 ç”¨æˆ·å…³æ³¨çš„äººæ•°
 		put(focusNum + "");
-		// 5 ÓÃ»§µÄ·ÛË¿
+		// 5 ç”¨æˆ·çš„ç²‰ä¸
 		put(fansNum + "");
-		// 6 ÓÃ»§Ç©Ãû
+		// 6 ç”¨æˆ·ç­¾å
 		put(userBasicInfo.getSign());
-		// 7 ÓÃ»§Ñ§Ğ£
+		// 7 ç”¨æˆ·å­¦æ ¡
 		put(userBasicInfo.getScName());
-		// 8 ÓÃ»§Ïµ±ğ
+		// 8 ç”¨æˆ·ç³»åˆ«
 		put(userBasicInfo.getDname());
-		// ÓÃ»§¹ØÏµ
+		// ç”¨æˆ·å…³ç³»
 		buffer.putInt(relationship);
-		// 9·¢ÌûÊıÁ¿
+		// 9å‘å¸–æ•°é‡
 		put(publishNum);
-		// 10·¢Ìû±êÌâ
+		// 10å‘å¸–æ ‡é¢˜
 		put(publishTitle);
-		// 11·¢ÌûÄÚÈİ
+		// 11å‘å¸–å†…å®¹
 		put(publishContent);
-		// 12ÊÕ²ØÌùÊıÁ¿
+		// 12æ”¶è—è´´æ•°é‡
 		put(collectNum);
-		// 13ÊÕ²ØÌù±êÌâ
+		// 13æ”¶è—è´´æ ‡é¢˜
 		put(collectTitle);
-		// 14ÊÕ²ØÌùÄÚÈİ
+		// 14æ”¶è—è´´å†…å®¹
 		put(collectContent);
-		// 15 Í·Ïñ×Ö½ÚÊı×éµÄ´óĞ¡
+		// 15 å¤´åƒå­—èŠ‚æ•°ç»„çš„å¤§å°
 		buffer.putInt(image.length);
-		// 16 Í·Ïñ×Ö½ÚÊı×é
+		// 16 å¤´åƒå­—èŠ‚æ•°ç»„
 		buffer.put(image);
-		// Ğ´½ø¹ÜµÀ
+		// å†™è¿›ç®¡é“
 
 		writeBuffer();
 	}
 
 	/**
-	 * ĞŞ¸ÄÓÃ»§»ù±¾×ÊÁÏ
+	 * ä¿®æ”¹ç”¨æˆ·åŸºæœ¬èµ„æ–™
 	 */
 	public void changeUserBasicInfo() {
-		// TODO ĞŞ¸Ä¸öÈË×ÊÁÏ
+		// TODO ä¿®æ”¹ä¸ªäººèµ„æ–™
 	}
 }

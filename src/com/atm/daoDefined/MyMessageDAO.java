@@ -176,11 +176,12 @@ public class MyMessageDAO {
 	 * @param type
 	 */
 	public List<MyMessage> findMyMessage(String userId, int type) {
-		List<MyMessage> list = new ArrayList<>();
-		log.debug("finding all MyMessage by userId and type");
+		List list = new ArrayList<>();
+		log.info("finding all MyMessage by userId and type");
 		try {
-			String queryString = "select * from mymessage where userId='" + userId + "' and type=" + type;
+			String queryString = "from MyMessage where userId='" + userId + "' and type=" + type;
 			list = getCurrentSession().createQuery(queryString).list();
+			log.info("list-size:" + list.size());
 			return list;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);

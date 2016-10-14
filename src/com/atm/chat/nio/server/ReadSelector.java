@@ -158,7 +158,7 @@ public class ReadSelector extends ReadThread {
 					crowdHandler.setSocketChannel(socketChannel);
 					crowdHandler.operate(type);
 				} else if (type > 1150) {
-					log.info("------------------转入mymessageHnadler");
+					log.info("------------------转入mymessageHandler");
 					myMessageHandler.setSocketChannel(socketChannel);
 					myMessageHandler.operate(type);
 				} else if (type >= 1000) {
