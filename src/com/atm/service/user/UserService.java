@@ -429,7 +429,7 @@ public class UserService extends AttentService implements Application {
 		}
 		return 0;
 	}
-
+	
 	/**
 	 * 验证在校生与老师的真实身份
 	 * 
@@ -453,7 +453,8 @@ public class UserService extends AttentService implements Application {
 				return 2;
 			}
 
-			name = userConfirm(number, password, "教师");
+//			name = userConfirm(number, password, "教师");
+			name = JWXTSpider.confirmTeach(number, password);
 		} else if (flag.equals("2")) {
 			log.info("进入验证在校学生");
 			// 判断学号是否已经被使用
@@ -461,7 +462,8 @@ public class UserService extends AttentService implements Application {
 				return 2;// ""
 			}
 
-			name = userConfirm(number, password, "学生");
+//			name = userConfirm(number, password, "学生");
+			name = JWXTSpider.confirmTeach(number, password);
 		} else {
 			return 0;
 		}
