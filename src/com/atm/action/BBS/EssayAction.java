@@ -183,9 +183,11 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 		send();
 		return null;
 	}
-	public void test(){
-		System.out.println("收藏: "+APIUtil.getLastCollectedEssay(id));
-		System.out.println("发布："+APIUtil.getLastPublishedEssay(id));
+	public void test() throws JSONException{
+		init();
+		sendJson.put("collect", APIUtil.getLastCollectedEssay(id));
+		sendJson.put("publish", APIUtil.getLastPublishedEssay(id));
+		sendUtil.writeToClient(response,sendJson);
 	}
 	//TODO 获取某一标签的帖子
 	public void tagEssay(){
