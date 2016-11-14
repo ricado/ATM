@@ -21,14 +21,14 @@ import org.json.JSONObject;
 public class JsonUtil {
 	Logger log = Logger.getLogger(getClass());
 	/**
-	 * @·½·¨ ¸ù¾İ´«ÈëµÄrequestÇëÇó·µ»Ø¸ÃÇëÇóµÄJSONArrayÊı×é
+	 * @æ–¹æ³• æ ¹æ®ä¼ å…¥çš„requestè¯·æ±‚è¿”å›è¯¥è¯·æ±‚çš„JSONArrayæ•°ç»„
 	 * @author Jiong
-	 * @²ÎÊı request£ºÇëÇó
-	 * @·µ»Ø JSONArrayÊı×é
-	 * @Ê±¼ä 
+	 * @å‚æ•° requestï¼šè¯·æ±‚
+	 * @è¿”å› JSONArrayæ•°ç»„
+	 * @æ—¶é—´ 
 	 */
 	public JSONArray getJSONArray(HttpServletRequest request) throws IOException, JSONException{
-		//ÊäÈëÁ÷
+		//è¾“å…¥æµ
 		BufferedInputStream buf = new BufferedInputStream(request.getInputStream());
 		String temp="";
 		int i;
@@ -38,24 +38,24 @@ public class JsonUtil {
 			temp += c;
 		}
 		temp = changeString(temp);
-		log.debug("½ÓÊÕ£º"+temp);
-		//temp = "{'userId':'11ceshi','name':'lzlzj','nickname':'‡å','aaa':'bbb','userPwd':'dsa'}";
-		//temp = "{'userId':'ceshi18','name':'lzlzj','nickname':'‡å','aaa':'bbb'}";
+		log.debug("æ¥æ”¶ï¼š"+temp);
+		//temp = "{'userId':'11ceshi','name':'lzlzj','nickname':'å›§','aaa':'bbb','userPwd':'dsa'}";
+		//temp = "{'userId':'ceshi18','name':'lzlzj','nickname':'å›§','aaa':'bbb'}";
 		//temp = "";
-		/*temp="{'essayType':'ÈíÃÃ×Ó´óÈü','title':'ÌıËµÌâÄ¿Òª³¤²ÅÓĞÈËÀ´','content':'¼ÆËã»úÏµ<ÈíÃÃÖ½´óÈü>ÕıÊ½Æô¶¯£¬²ÎÈüÑ¡ÊÖÓĞÀ´×Ô£º\\r\\n"+
-				"¼ÆËã»ú×¨ÒµµÄÖÓsirÒÔ¼°À´×Ôµç×ÓÉÌÎñµÄµ¤Ï¼É½\\r\\nÍ¶ÖÓsirÇëÑ¡1£¬Í¶µ¤Ï¼É½ÇëÑ¡2:\\r\\n[3][4]',"+
-				"'department':'¼ÆËã»ú¿ÆÑ§Óë¼¼ÊõÏµ','labName':'Å®ºº×Ó*#Ã»ÓĞÑ¡Ïî1*#Ã»ÓĞÑ¡Ïî2'}";*/
-		if(temp.length()==0){ //¿ÕÊı¾İ£¬·µ»Ø¿ÕÊı×é
+		/*temp="{'essayType':'è½¯å¦¹å­å¤§èµ›','title':'å¬è¯´é¢˜ç›®è¦é•¿æ‰æœ‰äººæ¥','content':'è®¡ç®—æœºç³»<è½¯å¦¹çº¸å¤§èµ›>æ­£å¼å¯åŠ¨ï¼Œå‚èµ›é€‰æ‰‹æœ‰æ¥è‡ªï¼š\\r\\n"+
+				"è®¡ç®—æœºä¸“ä¸šçš„é’Ÿsirä»¥åŠæ¥è‡ªç”µå­å•†åŠ¡çš„ä¸¹éœå±±\\r\\næŠ•é’Ÿsirè¯·é€‰1ï¼ŒæŠ•ä¸¹éœå±±è¯·é€‰2:\\r\\n[3][4]',"+
+				"'department':'è®¡ç®—æœºç§‘å­¦ä¸æŠ€æœ¯ç³»','labName':'å¥³æ±‰å­*#æ²¡æœ‰é€‰é¡¹1*#æ²¡æœ‰é€‰é¡¹2'}";*/
+		if(temp.length()==0){ //ç©ºæ•°æ®ï¼Œè¿”å›ç©ºæ•°ç»„
 			temp = "[]";
 		}
-		if(temp.charAt(0)!='['){ //²»ÊÇarray¸ñÊ½»»³Éarray¸ñÊ½
+		if(temp.charAt(0)!='['){ //ä¸æ˜¯arrayæ ¼å¼æ¢æˆarrayæ ¼å¼
 			temp = "["+temp+"]";
 		}
 		return new JSONArray(temp);
 	}
 	
 	/**
-     * ½«json×ª»¯ÎªÊµÌåPOJO
+     * å°†jsonè½¬åŒ–ä¸ºå®ä½“POJO
      * @param jsonStr
      * @param obj
      * @return
@@ -63,7 +63,7 @@ public class JsonUtil {
     public <T> Object JSONToObj(String jsonObject,Class<T> obj) {
         T t = null;
         try {  
-        	//ºöÂÔÊµÌåÖĞÎ´¶¨ÒåµÄÊôĞÔ
+        	//å¿½ç•¥å®ä½“ä¸­æœªå®šä¹‰çš„å±æ€§
             ObjectMapper objectMapper = new ObjectMapper().setVisibility(JsonMethod.FIELD,Visibility.ANY);
             objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             t = objectMapper.readValue(jsonObject,
@@ -74,17 +74,17 @@ public class JsonUtil {
         return t;
     }
     /**
-     * ½«ÊµÌåPOJO×ª»¯ÎªJSON
+     * å°†å®ä½“POJOè½¬åŒ–ä¸ºJSON
      * @param obj
      * @return
      * @throws JSONException
      * @throws IOException
-     * @flag ture:²»ºöÂÔ¿ÕÖµ»ò¡°¡±£» false£ººöÂÔ¿ÕÖµ»ò¡°¡±
+     * @flag ture:ä¸å¿½ç•¥ç©ºå€¼æˆ–â€œâ€ï¼› falseï¼šå¿½ç•¥ç©ºå€¼æˆ–â€œâ€
      */
     public <T> JSONObject objectToJson(T obj,boolean flag) throws JSONException, IOException {
         ObjectMapper mapper = new ObjectMapper(); 
         if(!flag){
-        	//Include.NON_EMPTY ÊôĞÔÎª ¿Õ£¨""£©  »òÕßÎª NULL ¶¼²»ĞòÁĞ»¯ 
+        	//Include.NON_EMPTY å±æ€§ä¸º ç©ºï¼ˆ""ï¼‰  æˆ–è€…ä¸º NULL éƒ½ä¸åºåˆ—åŒ– 
 	        mapper.setSerializationInclusion(Inclusion.NON_EMPTY);
         }
         String jsonStr = "";
@@ -95,18 +95,18 @@ public class JsonUtil {
         }
         return new JSONObject(jsonStr);
     }
-    //Ä¬ÈÏ²»ºöÂÔ¿ÕÊôĞÔ
+    //é»˜è®¤ä¸å¿½ç•¥ç©ºå±æ€§
     public <T> JSONObject objectToJson(T obj) throws JSONException, IOException {
     	return objectToJson(obj,true);
     }
     
    /**
-    * ½«list¶ÔÏó×ªÎªJSONArray
+    * å°†listå¯¹è±¡è½¬ä¸ºJSONArray
     * @param list
     * @return
     * @throws JSONException
     * @throws IOException
-    * @flag ture:²»ºöÂÔ¿ÕÖµ»ò¡°¡±£» false£ººöÂÔ¿ÕÖµ»ò¡°¡±
+    * @flag ture:ä¸å¿½ç•¥ç©ºå€¼æˆ–â€œâ€ï¼› falseï¼šå¿½ç•¥ç©ºå€¼æˆ–â€œâ€
     */
     public <T> JSONArray objectToArray(List<T> list,boolean flag) throws JSONException, IOException{
     	JSONArray jsonArray = new JSONArray();
@@ -120,18 +120,18 @@ public class JsonUtil {
 	    		}
     		jsonArray.put(jsonObject);
     		}catch(JSONException e){
-    			//²»ÊÇJson¸ñÊ½£¬Ö±½Óput
+    			//ä¸æ˜¯Jsonæ ¼å¼ï¼Œç›´æ¥put
     			jsonArray.put(list.get(i).toString());
     		}
     	}
     	return jsonArray;
     }
-    //½«list¶ÔÏó×ªÎªJSONArray(²»ºöÂÔ¿ÕÖµÊôĞÔ£©
+    //å°†listå¯¹è±¡è½¬ä¸ºJSONArray(ä¸å¿½ç•¥ç©ºå€¼å±æ€§ï¼‰
     public <T> JSONArray objectToArray(List<T> list) throws JSONException, IOException{
     	return objectToArray(list,true);
     }
     
-    //×¢²á¸ñÊ½¼ì²é
+    //æ³¨å†Œæ ¼å¼æ£€æŸ¥
     public boolean registerCheck(JSONObject jsonObject) throws JSONException{
     	boolean ok = false;
     	int flag = 0;
@@ -148,7 +148,7 @@ public class JsonUtil {
     
     /**
      * 
-     * ×ª»»×Ö·û±àÂë£¬½â¾öÖĞÎÄÂÒÂë
+     * è½¬æ¢å­—ç¬¦ç¼–ç ï¼Œè§£å†³ä¸­æ–‡ä¹±ç 
      * @param str
      * @return
      */

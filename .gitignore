@@ -4,3 +4,8 @@ Test.txt
 *.class
 *.class
 *.class
+*.class
+*.class
+*.prefs
+.settings/org.eclipse.wst.common.component
+*.classpath

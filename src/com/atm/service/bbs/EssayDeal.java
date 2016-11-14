@@ -230,6 +230,32 @@ public class EssayDeal implements ObjectInterface{
 		
 	}
 	
+	//TODO 获取用户最新收藏帖子及帖子数
+	public JSONObject getLastCollectedEssay(String userId) throws JSONException, IOException{
+		CollectEssayViewDAO collectEssayDao =
+				context.getBean("CollectEssayViewDAO",CollectEssayViewDAO.class);
+		java.util.Map<String,String> map = collectEssayDao.getLastCollectedEssay(userId);
+		if(map==null){
+			JSONObject obj = new JSONObject();
+			obj.put("collectNum","0");
+			return obj;
+		}
+		return jsonUtil.objectToJson(map);
+	}
+	//TODO 获取用户最新发布的帖子及帖子数
+	public JSONObject getLastPublishedEssay(String userId) throws IOException, JSONException{
+		EssayOuterDAO essayOuterDao = 
+				context.getBean("EssayOuterDAO",EssayOuterDAO.class);
+		java.util.Map<String,String> map = essayOuterDao.getLastPublishedEssay(userId);
+		
+		if(map==null){
+			JSONObject obj = new JSONObject();
+			obj.put("publishNum","0");
+			return obj;
+		}
+		return jsonUtil.objectToJson(map);
+	}
+	
 	//TODO  获取用户（userId)收藏的帖子
 	public JSONArray getCollectedEssay(HttpServletRequest request,String userId,int index) throws IOException, JSONException {
 		init();

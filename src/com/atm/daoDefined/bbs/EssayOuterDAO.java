@@ -4,11 +4,13 @@
 package com.atm.daoDefined.bbs;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.transform.Transformers;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.atm.model.define.bbs.EssayOuter;
@@ -16,10 +18,10 @@ import com.atm.model.define.bbs.EssayOuter;
 
 
 /**
- * @TODO£ºEssayOuterÊµÌåµÄÊı¾İ²Ù×÷¶ÔÏó£¬¶ÔÓ¦±í£¨ÊÓÍ¼£©essayOuterView
+ * @TODOï¼šEssayOuterå®ä½“çš„æ•°æ®æ“ä½œå¯¹è±¡ï¼Œå¯¹åº”è¡¨ï¼ˆè§†å›¾ï¼‰essayOuterView
  * @fileName : com.atm.daoDefined.EssayOuterDAO.java
  * date | author | version |   
- * 2015Äê7ÔÂ30ÈÕ | Jiong | 1.0 |
+ * 2015å¹´7æœˆ30æ—¥ | Jiong | 1.0 |
  */
 @Transactional
 public class EssayOuterDAO {
@@ -38,13 +40,13 @@ public class EssayOuterDAO {
 			//do nothing
 	  }
 	  /*
-	   * »ñÈ¡¸ù¾İ´«ÈëµÄ²ÎÊı»ñÈ¡Ìû×Ó
-	   * @first:ÆğÊ¼²éÑ¯µã
-	   * @num£º²éÑ¯ÌõÊı
-	   * @propertyName£º²éÑ¯ÒÀ¾İ£¨½µĞò£©
+	   * è·å–æ ¹æ®ä¼ å…¥çš„å‚æ•°è·å–å¸–å­
+	   * @first:èµ·å§‹æŸ¥è¯¢ç‚¹
+	   * @numï¼šæŸ¥è¯¢æ¡æ•°
+	   * @propertyNameï¼šæŸ¥è¯¢ä¾æ®ï¼ˆé™åºï¼‰
 	   */
 	  public List getSomeEssay(int first,int num,String sort) {
-	        log.debug("»ñÈ¡µÚ"+(first+1)+"µ½µÚ"+(num+first)+"Ìõ¼ÇÂ¼ing");
+	        log.debug("è·å–ç¬¬"+(first+1)+"åˆ°ç¬¬"+(num+first)+"æ¡è®°å½•ing");
 	        try {
 	            String queryString = "select new EssayOuter(essayId,essayType,"+
 	            		"title,labName,labColor,someContent,nickname,publishTime,clickGoodNum,"+
@@ -56,12 +58,12 @@ public class EssayOuterDAO {
 	   		 	queryObject.setMaxResults(num);
 	   		 return queryObject.list();
 	         } catch (RuntimeException re) {
-	            log.error("»ñÈ¡Ìû×ÓÊ§°Ü", re);
+	            log.error("è·å–å¸–å­å¤±è´¥", re);
 	            throw re;
 	         }
 	  }
 	  
-	  //»ñÈ¡Ìû×Ó·¢²¼ÕßID
+	  //è·å–å¸–å­å‘å¸ƒè€…ID
 	  public String getPublisher(int essayId) {
 	        try {
 	            String queryString = "select publisherId "+
@@ -69,11 +71,11 @@ public class EssayOuterDAO {
 	            Query queryObject = getCurrentSession().createQuery(queryString);
 	            return queryObject.uniqueResult().toString();
 	         } catch (RuntimeException re) {
-	            log.error("»ñÈ¡Ìû×ÓÊ§°Ü", re);
+	            log.error("è·å–å¸–å­å¤±è´¥", re);
 	            throw re;
 	         }
 	  }
-	  //TODO¡¡»ñÈ¡ÓÃ»§·¢²¼µÄÌû×ÓÊı
+	  //TODOã€€è·å–ç”¨æˆ·å‘å¸ƒçš„å¸–å­æ•°
 		public int getPublishedEssayNum(Object userId){
 			try {
 				String queryString = 
@@ -89,25 +91,25 @@ public class EssayOuterDAO {
 		}
 	  
 	  /*
-	   * ·µ»ØÆÀÂÛÊıÇ°ÎåµÄÈÈÃÅÌù
+	   * è¿”å›è¯„è®ºæ•°å‰äº”çš„çƒ­é—¨è´´
 	   */
 	  public List getHotEssay(){
-		  log.debug("»ñÈ¡ÈÈÃÅÌùing");
-		  return getSomeEssay(0,5,"replyNum");//·µ»ØÇ°5Ìõ¼ÇÂ¼
+		  log.debug("è·å–çƒ­é—¨è´´ing");
+		  return getSomeEssay(0,5,"replyNum");//è¿”å›å‰5æ¡è®°å½•
 	  }
 	  
 	  /*
-	   * ·µ»Ø×îĞÂµÄÊ®ÌõÌû×Ó£¨ÒÔÓÃ»§Ë¢ĞÂ´¦ÎªÆğµã)
+	   * è¿”å›æœ€æ–°çš„åæ¡å¸–å­ï¼ˆä»¥ç”¨æˆ·åˆ·æ–°å¤„ä¸ºèµ·ç‚¹)
 	   */
 	  public List getCurrentEssay(int first){
-		  log.debug("»ñÈ¡µ±Ç°×îĞÂÌù£¬´ÓµÚ"+(first+1)+"Ìõ¿ªÊ¼");
+		  log.debug("è·å–å½“å‰æœ€æ–°è´´ï¼Œä»ç¬¬"+(first+1)+"æ¡å¼€å§‹");
 		  return getSomeEssay(first,10,"publishTime");
 	  }
 	  
 	  /*
-	   * ¸ù¾İ×Ö¶Î²éÑ¯
-	   * @propertyName:Ìõ¼ş×Ö¶Î--------value:×Ö¶ÎÖµ
-	   * @first£º²éÑ¯ÆğÊ¼Î»ÖÃ----------sort£ºÅÅĞò·½Ê½
+	   * æ ¹æ®å­—æ®µæŸ¥è¯¢
+	   * @propertyName:æ¡ä»¶å­—æ®µ--------value:å­—æ®µå€¼
+	   * @firstï¼šæŸ¥è¯¢èµ·å§‹ä½ç½®----------sortï¼šæ’åºæ–¹å¼
 	   */
 	  public List getByProperty(String propertyName,Object value,int first,String sort,int num){
 		  try {
@@ -124,24 +126,39 @@ public class EssayOuterDAO {
 	   		 	queryObject.setMaxResults(num);
 	   		 return queryObject.list();
 	         } catch (RuntimeException re) {
-	            log.error("»ñÈ¡Ìû×ÓÊ§°Ü", re);
+	            log.error("è·å–å¸–å­å¤±è´¥", re);
 	            throw re;
 	         }
 	  }
+	  
+	//TODO è·å–ç”¨æˆ·æœ€æ–°å‘å¸ƒçš„å¸–å­åŠå¸–å­æ•°
+		@SuppressWarnings("unchecked")
+		public java.util.Map<String,String> getLastPublishedEssay(Object userId){
+			String sql = "select count(t.essayId) as publishNum,"
+					+" t.essayId as publishEssayId, t.title as publishTitle,"
+					+" t.someContent as publishContent from "
+					+" (select publisherId,essayId,title,someContent from EssayOuterView"
+					+" where publisherId= ?  order by publishTime desc) t  "
+					+"group by t.publisherId";
+			Query queryObject = getCurrentSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+			queryObject.setParameter(0, userId);
+			return (Map<String, String>) queryObject.uniqueResult();
+		}
+	  
 	 /*
-	  * ·µ»ØÓÃ»§·¢²¼µÄÊ®ÌõÌû×Ó
+	  * è¿”å›ç”¨æˆ·å‘å¸ƒçš„åæ¡å¸–å­
 	  */
 	  public List getPublishedEssay(String userId,int first,int num){
 		  return getByProperty("publisherId",userId,first,"publishTime",num);
 	  }
-	  //»ñÈ¡Ä³Ïµ²¿µÄÌû×Ó
+	  //è·å–æŸç³»éƒ¨çš„å¸–å­
 	 /* 
-	   * @first:ÆğÊ¼²éÑ¯µã
-	   *@ dNo :Ïµ²¿±àºÅ
+	   * @first:èµ·å§‹æŸ¥è¯¢ç‚¹
+	   *@ dNo :ç³»éƒ¨ç¼–å·
 	   *
 	   */
 	  public List getDeptEssay(int first,Object dNo) {
-	        log.debug("Ïµ²¿"+dNo+"»ñÈ¡µÚ"+(first+1)+"Ìõ¼ÇÂ¼¿ªÊ¼");
+	        log.debug("ç³»éƒ¨"+dNo+"è·å–ç¬¬"+(first+1)+"æ¡è®°å½•å¼€å§‹");
 	        try {
 	            String queryString = "select new EssayOuter(essayId,essayType,"+
 	            		"title,labName,labColor,someContent,nickname,publishTime,clickGoodNum,"+
@@ -153,19 +170,19 @@ public class EssayOuterDAO {
 	   		 	queryObject.setMaxResults(10);
 	   		 return queryObject.list();
 	         } catch (RuntimeException re) {
-	            log.error("»ñÈ¡Ìû×ÓÊ§°Ü", re);
+	            log.error("è·å–å¸–å­å¤±è´¥", re);
 	            throw re;
 	         }
 	  }
 	  
-	  //»ñÈ¡ÓÃ»§¹Ø×¢µÄÈËºÍ±êÇ©µÄÌû×Ó
+	  //è·å–ç”¨æˆ·å…³æ³¨çš„äººå’Œæ ‡ç­¾çš„å¸–å­
 		 /* 
-		   * @first:ÆğÊ¼²éÑ¯µã
-		   *@ ¹Ø×¢ÈËºÍ±êÇ©¼¯ºÏ
+		   * @first:èµ·å§‹æŸ¥è¯¢ç‚¹
+		   *@ å…³æ³¨äººå’Œæ ‡ç­¾é›†åˆ
 		   *
 		   */
 		  public List getAttendEssay(int first,List<String> ids,Object labelCondition) {
-		        log.debug("¹Ø×¢µÄÈËµÄÌû×Ó£º»ñÈ¡µÚ"+(first+1)+"Ìõ¼ÇÂ¼¿ªÊ¼");
+		        log.debug("å…³æ³¨çš„äººçš„å¸–å­ï¼šè·å–ç¬¬"+(first+1)+"æ¡è®°å½•å¼€å§‹");
 		        String condition="";
 		        if(ids!=null&&ids.size()>0){
 		        	condition += " publisherId in (:userID) ";
@@ -176,7 +193,7 @@ public class EssayOuterDAO {
 		        	condition = labelCondition+"";
 		        }
 		        try {
-		        	//ÒòÎªÊ¹ÓÃÁËfind_in_setËùÒÔÓÃ±¾µØsql(È«²¿×Ö¶Î¶¼¼ÓÔØÁË)
+		        	//å› ä¸ºä½¿ç”¨äº†find_in_setæ‰€ä»¥ç”¨æœ¬åœ°sql(å…¨éƒ¨å­—æ®µéƒ½åŠ è½½äº†)
 		            String queryString = "select essayId,essayType,"+
 		            		"title,labName,labColor,someContent,nickname,publishTime,clickGoodNum,"+
 		            		"replyNum,publisherId,headImagePath,department,dNo,labId,content "+
@@ -190,26 +207,26 @@ public class EssayOuterDAO {
 		   		 	queryObject.setMaxResults(10);
 		   		 return queryObject.list();
 		         } catch (RuntimeException re) {
-		            log.error("»ñÈ¡Ìû×ÓÊ§°Ü", re);
+		            log.error("è·å–å¸–å­å¤±è´¥", re);
 		            throw re;
 		         }
 		  }
 
-	//¸ù¾İ¹Ø¼ü´ÊËÑË÷Ìû×Ó
+	//æ ¹æ®å…³é”®è¯æœç´¢å¸–å­
   public List searchPeople(Object condition,int index){
  	try {
 	  		String queryString = "select new EssayOuter(essayId,essayType,"+
 	  							"title,labName,labColor,someContent,nickname,publishTime,clickGoodNum,"+
 	  							"replyNum,publisherId,headImagePath) "+
 	  				"from EssayOuter as model where model." +
-    	       						"labName like ? or model." +//±êÇ©Ãû
-    	       						"essayType like ? or model."+//Ìû×ÓÀàĞÍ
-    	       						"title like ? or model."+//±êÌâ
-    	       						"fullContent like ? "+//ÕıÎÄ
+    	       						"labName like ? or model." +//æ ‡ç­¾å
+    	       						"essayType like ? or model."+//å¸–å­ç±»å‹
+    	       						"title like ? or model."+//æ ‡é¢˜
+    	       						"fullContent like ? "+//æ­£æ–‡
     	       						"order by "+
     	       						"case "+
     	       						"when labName like ? "+
-    	       						//±êÇ©ÏÈÏÔÊ¾
+    	       						//æ ‡ç­¾å…ˆæ˜¾ç¤º
     	       							"then 1 "+
     	       						"when essayType like ? "+
     	       							"then (length(essayType)-length('"+condition+"')) "+
@@ -217,7 +234,7 @@ public class EssayOuterDAO {
     	    	       					"then (length(title)-length('"+condition+"')) "+
     	       						"else "+
     	    	       					"case when (length(fullContent)-length('"+condition+"'))>50 "+
-    	    	       					//ÕıÎÄ¼õÈ¥¹Ø¼ü´Ê³¤¶ÈÔÚ50ÒÔÉÏµÄ°´Ê±¼äµ¹Ğò
+    	    	       					//æ­£æ–‡å‡å»å…³é”®è¯é•¿åº¦åœ¨50ä»¥ä¸Šçš„æŒ‰æ—¶é—´å€’åº
     	    	       					"then 100 else (length(fullContent)-length('"+condition+"')) end "+
     	       						"end,publishTime desc";
     	       Query queryObject = getCurrentSession().createQuery(queryString);
@@ -237,9 +254,9 @@ public class EssayOuterDAO {
     	   }
     }
   
-  //TODO »ñÈ¡ÓÃ»§»Ø¸´¹ıµÄÌû×Ó
+  //TODO è·å–ç”¨æˆ·å›å¤è¿‡çš„å¸–å­
 	public List getRepliedEssay(Object userId,int rows,int page){
-		log.debug("»ñÈ¡»Ø¸´¹ıµÄÌû×Ó£ºuserId:"+userId);
+		log.debug("è·å–å›å¤è¿‡çš„å¸–å­ï¼šuserId:"+userId);
 		try {
 			String queryString = "select new map(e.essayId as essayId,e.essayType as essayType,"
 					+"e.title as title,e.labName as labName,e.labColor as labColor,"

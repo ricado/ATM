@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import com.atm.model.user.UserInfo;
 import com.atm.service.bbs.EssayChangeDeal;
 import com.atm.service.bbs.EssayDeal;
+import com.atm.util.bbs.APIUtil;
 import com.atm.util.bbs.ObjectInterface;
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -182,7 +183,10 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 		send();
 		return null;
 	}
-	
+	public void test(){
+		System.out.println("收藏: "+APIUtil.getLastCollectedEssay(id));
+		System.out.println("发布："+APIUtil.getLastPublishedEssay(id));
+	}
 	//TODO 获取某一标签的帖子
 	public void tagEssay(){
 		init();

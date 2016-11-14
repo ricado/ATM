@@ -113,6 +113,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </form>
  <input type="button" value="注销当前用户" id="exit" /><br/>
  
+ <form action="<%= basePath %>essay_test.action" method="post">
+ 	用户id：<input type="text" name="id"/>
+ 	<input type="submit" value="测试"/>
+ </form>
+ 
   <form action="<%= basePath %>atm_getUserHead.action" method="post">
  	<input type="submit" value="用户头像路径"/>
  </form>

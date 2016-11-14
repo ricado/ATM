@@ -1,12 +1,15 @@
 package com.atm.daoDefined.bbs;
 
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.LockOptions;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
+import org.hibernate.transform.ResultTransformer;
+import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -111,12 +114,12 @@ public class CollectEssayViewDAO {
 	public List findByProperty(String propertyName, Object value,int first){
 		return findByProperty(propertyName, value,first,10);
 	}
-	//first:²éÑ¯ÆğÊ¼Î»ÖÃ
+	//first:æŸ¥è¯¢èµ·å§‹ä½ç½®
 	public List findByProperty(String propertyName, Object value,int first,int num) {
 		log.debug("finding CollectEssayView instance with property: "
 				+ propertyName + ", value: " + value);
 		try {
-			//Ö»È¡³öĞèÒªÏÔÊ¾µÄ²¿·Ö
+			//åªå–å‡ºéœ€è¦æ˜¾ç¤ºçš„éƒ¨åˆ†
 //			String queryString = 
 //					"select new CollectEssayView(essayId,essayType,title,"+
 //			"labName,labColor,nickname,clickGoodNum,replyNum,someContent,publishTime) "+
@@ -129,14 +132,33 @@ public class CollectEssayViewDAO {
 			Query queryObject = getCurrentSession().createQuery(queryString);
 			queryObject.setParameter(0, value);
 			queryObject.setFirstResult(first);
-			queryObject.setMaxResults(num);//²éÑ¯Ê®Ìõ¼ÇÂ¼
+			queryObject.setMaxResults(num);//æŸ¥è¯¢åæ¡è®°å½•
 			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
 		}
 	}
-	//TODO »ñÈ¡ÓÃ»§ÊÕ²ØµÄÌû×ÓÊı
+	//TODO è·å–ç”¨æˆ·æœ€æ–°æ”¶è—å¸–å­åŠå¸–å­æ•°
+	@SuppressWarnings("unchecked")
+	public java.util.Map<String,String> getLastCollectedEssay(Object userId){
+//		String queryString = 
+//				"select new map(count(essayId) as collectNum,"
+//				+" essayId as collectEssayId, title as collectTitle,"
+//				+" someContent as collectContent) from CollectEssayView "
+//				+" where userId= ? order by collectTime desc group by userId";
+		String sql = "select count(t.essayId) as collectNum,"
+				+" t.essayId as collectEssayId, t.title as collectTitle,"
+				+" t.someContent as collectContent from "
+				+" (select userId,essayId,title,someContent from CollectEssayView"
+				+" where userId= ?  order by collectTime desc) t  "
+				+"group by t.userId";
+		Query queryObject = getCurrentSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+		queryObject.setParameter(0, userId);
+		return (Map<String, String>) queryObject.uniqueResult();
+	}
+	
+	//TODO è·å–ç”¨æˆ·æ”¶è—çš„å¸–å­æ•°
 	public int getCollectEssayNum(Object userId){
 		try {
 			String queryString = 
@@ -151,7 +173,7 @@ public class CollectEssayViewDAO {
 		}
 	}
 	
-	//×¼±¸»ñÈ¡ÊÕ²ØÌù
+	//å‡†å¤‡è·å–æ”¶è—è´´
 	public List findByUserId(Object userId,int first) {
 		return findByProperty(USER_ID, userId,first);
 	}
