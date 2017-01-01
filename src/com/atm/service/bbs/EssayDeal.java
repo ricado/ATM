@@ -84,6 +84,18 @@ public class EssayDeal implements ObjectInterface{
 		return new JSONArray(essay);
 	}
 	
+	public JSONArray getHotEssay(int index) throws JSONException, IOException{
+		EssayOuterDAO essayOuterDao = 
+				context.getBean("EssayOuterDAO",EssayOuterDAO.class);
+		
+		//获取热门贴
+		List<EssayOuter> list = essayOuterDao.getSomeEssay(index,10,"replyNum");
+		if(list.size()==0){//取不到值
+			return null;
+		}
+		return jsonUtil.objectToArray(list);
+		
+	}
 	
 	//TODO 获取十条从用户刷新处(index)算起的最新贴
 	public JSONArray getTenEssay(HttpServletRequest request,int index) throws IOException, JSONException{

@@ -136,6 +136,25 @@ public class EssayAction extends ActionSupport implements ServletResponseAware,S
 		return null;
 	}
 	
+	public String hotEssay(){
+		log.debug("获取热门帖子请求");
+
+		init();
+		try {
+			
+			int index = getPage();//取出客户端传过来的帖子位置
+			log.debug(">>>>>>>>>>>>>第"+index+"条");
+			resultArray = deal.getHotEssay(index);
+			
+			check();
+		} catch(Exception e){
+			mess = "获取帖子发生错误";
+			log.error(mess, e);
+		}
+		send();
+		return null;
+	}
+	
 	public String deptEssay(){
 		log.debug("获取院系帖子请求");
 		init();

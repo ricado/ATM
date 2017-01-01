@@ -163,6 +163,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	<input type="submit" value="进入用户帖子"/>
  </form>
  
+   <form action="<%= basePath %>essay_hotEssay.action" method="post">
+ 	索引：<input type ="text" name = "page"/>
+ 	<input type="submit" value="热门帖子测试"/>
+ </form>
+ 
  <form action="<%= basePath %>atm_searchEssay.action" method="post">
  	<input type="text" name="id" id="id"/>
  	<input type="submit" value="搜索帖子"/>
